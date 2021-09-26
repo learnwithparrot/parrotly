@@ -57,6 +57,9 @@
     "popup-e2e": {
       "tags": [],
       "implicitDependencies": ["popup"]
+    },
+    "ui": {
+      "tags": []
     }
   }
 }

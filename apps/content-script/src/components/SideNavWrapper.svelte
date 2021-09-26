@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SideNav from './SideNav.svelte';
+  import {ExtensionSideNav} from '@parrotly.io/ui';
   // import browser from 'webextension-polyfill';
   import browser from 'webextension-polyfill';
   import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
@@ -22,7 +22,7 @@
 
 <template>
   {#if isModalVisible}
-    <SideNav onClose={() => (isModalVisible = false)} />
+    <ExtensionSideNav onClose={() => (isModalVisible = false)} />
   {/if}
 </template>
 
