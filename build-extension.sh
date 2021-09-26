@@ -1,0 +1,26 @@
+#!/bin/bash
+
+build() {
+    echo 'Building extension'
+
+    rm -rf ./dist/extension
+
+    echo 'Building content-script'
+    nx build content-script
+    echo 'Building popup'
+    nx build popup
+    echo 'Building background'
+    nx build background
+
+
+    echo 'Packaging everything up in ./dist/extension'
+    mkdir -p ./dist/extension
+    cp -r ./dist/apps/popup/* ./dist/extension
+    cp ./dist/apps/content-script/bundle.js ./dist/extension/content-script.js
+    cp ./dist/apps/background/main.js ./dist/extension/background.js
+    cp ./manifest.json ./dist/extension
+    cp -r ./fonts ./dist/extension
+    mv ./dist/extension/index.html ./dist/extension/popup.html
+}
+
+build

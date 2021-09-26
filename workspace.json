@@ -1,7 +1,479 @@
 {
   "version": 2,
-  "projects": {},
+  "projects": {
+    "background": {
+      "projectType": "application",
+      "root": "apps/background",
+      "sourceRoot": "apps/background/src",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/background",
+            "index": "apps/background/src/index.html",
+            "main": "apps/background/src/main.ts",
+            "tsConfig": "apps/background/tsconfig.app.json",
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "apps/background/webpackConfig.js"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/background/src/environments/environment.ts",
+                  "with": "apps/background/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "background:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "background:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/background/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/background"
+          ],
+          "options": {
+            "jestConfig": "apps/background/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "background-e2e": {
+      "root": "apps/background-e2e",
+      "sourceRoot": "apps/background-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/background-e2e/cypress.json",
+            "devServerTarget": "background:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "background:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/background-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    },
+    "constants": {
+      "root": "libs/constants",
+      "sourceRoot": "libs/constants/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "libs/constants/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/constants"
+          ],
+          "options": {
+            "jestConfig": "libs/constants/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "content-script": {
+      "root": "apps/content-script",
+      "sourceRoot": "apps/content-script/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nxext/svelte:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/content-script",
+            "entryFile": "apps/content-script/src/main.ts",
+            "tsConfig": "apps/content-script/tsconfig.app.json",
+            "svelteConfig": "apps/content-script/svelte.config.cjs",
+            "assets": [
+              {
+                "glob": "/*",
+                "input": "apps/content-script/public/**",
+                "output": "./"
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "dev": false
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nxext/svelte:build",
+          "options": {
+            "outputPath": "dist/apps/content-script",
+            "entryFile": "apps/content-script/src/main.ts",
+            "tsConfig": "apps/content-script/tsconfig.app.json",
+            "svelteConfig": "apps/content-script/svelte.config.cjs",
+            "assets": [
+              {
+                "glob": "/*",
+                "input": "apps/content-script/public/**",
+                "output": "./"
+              }
+            ],
+            "watch": true,
+            "serve": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/content-script/**/*.{ts,svelte,spec.ts}"
+            ]
+          }
+        },
+        "check": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "svelte-check",
+            "cwd": "apps/content-script"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/content-script"
+          ],
+          "options": {
+            "jestConfig": "apps/content-script/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "content-script-e2e": {
+      "root": "apps/content-script-e2e",
+      "sourceRoot": "apps/content-script-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/content-script-e2e/cypress.json",
+            "devServerTarget": "content-script:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "content-script:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/content-script-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    },
+    "dashboard": {
+      "root": "apps/dashboard",
+      "sourceRoot": "apps/dashboard/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nxext/svelte:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/dashboard",
+            "entryFile": "apps/dashboard/src/main.ts",
+            "tsConfig": "apps/dashboard/tsconfig.app.json",
+            "svelteConfig": "apps/dashboard/svelte.config.cjs",
+            "assets": [
+              {
+                "glob": "/*",
+                "input": "apps/dashboard/public/**",
+                "output": "./"
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "dev": false
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nxext/svelte:build",
+          "options": {
+            "outputPath": "dist/apps/dashboard",
+            "entryFile": "apps/dashboard/src/main.ts",
+            "tsConfig": "apps/dashboard/tsconfig.app.json",
+            "svelteConfig": "apps/dashboard/svelte.config.cjs",
+            "assets": [
+              {
+                "glob": "/*",
+                "input": "apps/dashboard/public/**",
+                "output": "./"
+              }
+            ],
+            "watch": true,
+            "serve": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/dashboard/**/*.{ts,svelte,spec.ts}"
+            ]
+          }
+        },
+        "check": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "svelte-check",
+            "cwd": "apps/dashboard"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/dashboard"
+          ],
+          "options": {
+            "jestConfig": "apps/dashboard/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "dashboard-e2e": {
+      "root": "apps/dashboard-e2e",
+      "sourceRoot": "apps/dashboard-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/dashboard-e2e/cypress.json",
+            "devServerTarget": "dashboard:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "dashboard:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/dashboard-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    },
+    "popup": {
+      "root": "apps/popup",
+      "sourceRoot": "apps/popup/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nxext/svelte:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/popup",
+            "entryFile": "apps/popup/src/main.ts",
+            "tsConfig": "apps/popup/tsconfig.app.json",
+            "svelteConfig": "apps/popup/svelte.config.cjs",
+            "assets": [
+              {
+                "glob": "/*",
+                "input": "apps/popup/public/**",
+                "output": "./"
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "dev": false
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nxext/svelte:build",
+          "options": {
+            "outputPath": "dist/apps/popup",
+            "entryFile": "apps/popup/src/main.ts",
+            "tsConfig": "apps/popup/tsconfig.app.json",
+            "svelteConfig": "apps/popup/svelte.config.cjs",
+            "assets": [
+              {
+                "glob": "/*",
+                "input": "apps/popup/public/**",
+                "output": "./"
+              }
+            ],
+            "watch": true,
+            "serve": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/popup/**/*.{ts,svelte,spec.ts}"
+            ]
+          }
+        },
+        "check": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "svelte-check",
+            "cwd": "apps/popup"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/popup"
+          ],
+          "options": {
+            "jestConfig": "apps/popup/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "popup-e2e": {
+      "root": "apps/popup-e2e",
+      "sourceRoot": "apps/popup-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/popup-e2e/cypress.json",
+            "devServerTarget": "popup:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "popup:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "apps/popup-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
+    "defaultCollection": "@nrwl/web"
+  },
+  "defaultProject": "background",
+  "generators": {
+    "@nrwl/web:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/web:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    }
   }
 }
