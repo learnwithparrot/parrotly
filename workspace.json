@@ -1,6 +1,60 @@
 {
   "version": 2,
   "projects": {
+    "backend-functions": {
+      "root": "apps/backend-functions",
+      "sourceRoot": "apps/backend-functions/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/backend-functions",
+            "main": "apps/backend-functions/src/main.ts",
+            "tsConfig": "apps/backend-functions/tsconfig.app.json",
+            "assets": [
+              "apps/backend-functions/src/assets",
+              "apps/backend-functions/src/package.json"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/backend-functions/src/environments/environment.ts",
+                  "with": "apps/backend-functions/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "backend-functions:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/backend-functions/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/backend-functions"],
+          "options": {
+            "jestConfig": "apps/backend-functions/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "background": {
       "projectType": "application",
       "root": "apps/background",
@@ -8,9 +62,7 @@
       "targets": {
         "build": {
           "executor": "@nrwl/web:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/background",
             "index": "apps/background/src/index.html",
@@ -58,20 +110,14 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/background/**/*.ts"
-            ]
+            "lintFilePatterns": ["apps/background/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/background"
-          ],
+          "outputs": ["coverage/apps/background"],
           "options": {
             "jestConfig": "apps/background/jest.config.js",
             "passWithNoTests": true
@@ -98,13 +144,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/background-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/background-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -116,9 +158,7 @@
       "targets": {
         "build": {
           "executor": "@nxext/svelte:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/component-playgroun",
             "entryFile": "apps/component-playgroun/src/main.ts",
@@ -158,9 +198,7 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
             "lintFilePatterns": [
               "apps/component-playgroun/**/*.{ts,svelte,spec.ts}"
@@ -176,9 +214,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/component-playgroun"
-          ],
+          "outputs": ["coverage/apps/component-playgroun"],
           "options": {
             "jestConfig": "apps/component-playgroun/jest.config.js",
             "passWithNoTests": true
@@ -205,13 +241,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/component-playgroun-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/component-playgroun-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -223,20 +255,14 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "libs/constants/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/constants/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/constants"
-          ],
+          "outputs": ["coverage/libs/constants"],
           "options": {
             "jestConfig": "libs/constants/jest.config.js",
             "passWithNoTests": true
@@ -251,9 +277,7 @@
       "targets": {
         "build": {
           "executor": "@nxext/svelte:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/content-script",
             "entryFile": "apps/content-script/src/main.ts",
@@ -293,13 +317,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/content-script/**/*.{ts,svelte,spec.ts}"
-            ]
+            "lintFilePatterns": ["apps/content-script/**/*.{ts,svelte,spec.ts}"]
           }
         },
         "check": {
@@ -311,9 +331,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/content-script"
-          ],
+          "outputs": ["coverage/apps/content-script"],
           "options": {
             "jestConfig": "apps/content-script/jest.config.js",
             "passWithNoTests": true
@@ -340,13 +358,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/content-script-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/content-script-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -358,9 +372,7 @@
       "targets": {
         "build": {
           "executor": "@nxext/svelte:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/dashboard",
             "entryFile": "apps/dashboard/src/main.ts",
@@ -400,13 +412,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/dashboard/**/*.{ts,svelte,spec.ts}"
-            ]
+            "lintFilePatterns": ["apps/dashboard/**/*.{ts,svelte,spec.ts}"]
           }
         },
         "check": {
@@ -418,9 +426,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/dashboard"
-          ],
+          "outputs": ["coverage/apps/dashboard"],
           "options": {
             "jestConfig": "apps/dashboard/jest.config.js",
             "passWithNoTests": true
@@ -447,13 +453,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/dashboard-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/dashboard-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -465,9 +467,7 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
             "lintFilePatterns": [
               "libs/extension-components/**/*.{ts,svelte,spec.ts}"
@@ -483,9 +483,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/extension-components"
-          ],
+          "outputs": ["coverage/libs/extension-components"],
           "options": {
             "jestConfig": "libs/extension-components/jest.config.js",
             "passWithNoTests": true
@@ -500,9 +498,7 @@
       "targets": {
         "build": {
           "executor": "@nxext/svelte:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/popup",
             "entryFile": "apps/popup/src/main.ts",
@@ -542,13 +538,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/popup/**/*.{ts,svelte,spec.ts}"
-            ]
+            "lintFilePatterns": ["apps/popup/**/*.{ts,svelte,spec.ts}"]
           }
         },
         "check": {
@@ -560,9 +552,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/popup"
-          ],
+          "outputs": ["coverage/apps/popup"],
           "options": {
             "jestConfig": "apps/popup/jest.config.js",
             "passWithNoTests": true
@@ -589,13 +579,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/popup-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/popup-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -607,13 +593,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "libs/ui/**/*.{ts,svelte,spec.ts}"
-            ]
+            "lintFilePatterns": ["libs/ui/**/*.{ts,svelte,spec.ts}"]
           }
         },
         "check": {
@@ -625,9 +607,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/ui"
-          ],
+          "outputs": ["coverage/libs/ui"],
           "options": {
             "jestConfig": "libs/ui/jest.config.js",
             "passWithNoTests": true

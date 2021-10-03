@@ -16,11 +16,11 @@
     "baseUrl": ".",
     "paths": {
       "@parrotly.io/constants": ["libs/constants/src/index.ts"],
+      "@parrotly.io/env": ["env.ts"],
       "@parrotly.io/extension-components": [
         "libs/extension-components/src/index.ts"
       ],
-      "@parrotly.io/ui": ["libs/ui/src/index.ts"],
-      "@parrotly.io/env": ["env.ts"]
+      "@parrotly.io/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

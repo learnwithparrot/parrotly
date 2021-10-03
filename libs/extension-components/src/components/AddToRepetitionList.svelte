@@ -24,8 +24,8 @@
     right: '0px',
   };
 
+  //Find position of window
   $: {
-    //Find position of window
     if (selection.rangeCount > 0 && section) {
       let selectionCoords = selection.getRangeAt(0).getBoundingClientRect();
       let windowWidth = section.clientWidth;

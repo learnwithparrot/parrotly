@@ -1,0 +1,26 @@
+{
+  "name": "parrotly-functions",
+  "version": "0.0.2",
+  "license": "MIT",
+  "main": "./main.js",
+  "engines": {
+    "node": "12"
+  },
+  "private": true,
+  "scripts": {
+    "firebase:serve": "concurrently --kill-others \"npm run build functions --watch\" \"firebase serve --only functions\"",
+    "firebase:shell": "concurrently --kill-others \"npm run build functions --watch\" \"firebase functions:shell\" --raw",
+    "firebase:deploy": "firebase deploy"
+  },
+  "dependencies": {
+    "@firebase/rules-unit-testing": "^1.0.9",
+    "algoliasearch": "^3.33.0",
+    "core-js": "^3.3.2",
+    "firebase": "^9.1.1",
+    "firebase-admin": "^9.12.0",
+    "firebase-functions": "^3.15.7",
+    "faker": "5.1.0",
+    "generate-password": "^1.4.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
