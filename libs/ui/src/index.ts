@@ -1,6 +1,6 @@
-import ExtensionSideNav from './ExtensionSideNav.svelte'
+import Button from './Button.svelte'
 
 
 export {
-  ExtensionSideNav
+  Button
 }

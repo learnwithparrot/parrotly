@@ -1,28 +1,29 @@
 <script lang="ts">
-  import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
   import { fly } from 'svelte/transition';
-  import browser from 'webextension-polyfill';
+  import { createEventDispatcher } from 'svelte';
 
-  export let onClose: () => {};
+  export let translation: string;
+  let selected_words: string;
 
-  let text = '';
-  let popper;
+  const dispatch = createEventDispatcher();
+
   const onWindowClick = (e: Event) => {
-    console.log({ e });
-
     //@ts-ignore
     if (!section.contains(e.target)) {
-      onClose();
+      dispatch('close');
     }
   };
 
   let section: HTMLElement;
 
   let selection = window.getSelection();
+  selected_words = selection.toString().trim();
+
   let dimens: any = {
     left: '0px',
     right: '0px',
   };
+
   $: {
     //Find position of window
     if (selection.rangeCount > 0 && section) {
@@ -58,15 +59,24 @@
     }
   }
 
-  const saveToFirestore = async () => {
-    browser.runtime.sendMessage({
-      type: EXTENSION_MESSAGES.ADD_WORD_TO_SELECTION_LIST,
-      word: selection.toString(),
+  const addToRepetitionList = async () => {
+    dispatch('addToRepetitionList', {
+      text: selected_words,
+      translation,
+    });
+    dispatch('close');
+  };
+
+  const playWords = async () => {
+    dispatch('playWord', {
+      translation,
     });
   };
+
 </script>
 
 <svelte:window on:click={onWindowClick} />
+
 <template>
   <div
     class="flex absolute bg-white rounded-md p-6 shadow-xl z-modal w-popup"
@@ -75,17 +85,21 @@
     on:click|stopPropagation
     transition:fly={{ y: 20, duration: 300 }}
   >
-    <form class="flex-auto">
+    <!-- on:click|stopPropagation -->
+    <form
+      class="flex-auto"
+      on:submit|preventDefault|stopPropagation={addToRepetitionList}
+    >
       <div class="flex flex-wrap">
         <input
           type="text"
-          value={selection.toString().trim()}
+          bind:value={selected_words}
           class="flex-auto font-roboto text-base px-2 transition duration-300 py-2 outline-none capitalize focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2"
         />
 
         <input
           type="text"
-          value="Hello world"
+          bind:value={translation}
           class="flex-auto font-roboto text-base px-2 transition duration-300 py-2 capitalize outline-none focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2"
         />
       </div>
@@ -94,9 +108,10 @@
           <div>
             <div
               class=" text-sm text-gray-500 underline height align-baseline flex items-end"
-              aria-expanded="true" aria-haspopup="true"
+              aria-expanded="true"
+              aria-haspopup="true"
             >
-              Default Category
+              Default category
             </div>
           </div>
 
@@ -110,23 +125,55 @@
               From: "transform opacity-100 scale-100"
               To: "transform opacity-0 scale-95"
           -->
-          <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-            <div class="py-1" role="none">
-              <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-              <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
-              <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Support</a>
-              <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">License</a>
-              <form method="POST" action="#" role="none">
-                <button type="submit" class="text-gray-700 block w-full text-left px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">
-                  Sign out
-                </button>
-              </form>
+          {#if false}
+            <div
+              class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div class="py-1" role="none">
+                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                <a
+                  href="#"
+                  class="text-gray-700 block px-4 py-2 text-sm"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0">Account settings</a
+                >
+                <a
+                  href="#"
+                  class="text-gray-700 block px-4 py-2 text-sm"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-1">Support</a
+                >
+                <a
+                  href="#"
+                  class="text-gray-700 block px-4 py-2 text-sm"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-2">License</a
+                >
+                <form method="POST" action="#" role="none">
+                  <button
+                    type="submit"
+                    class="text-gray-700 block w-full text-left px-4 py-2 text-sm"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3"
+                  >
+                    Sign out
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
+          {/if}
         </div>
         <div class="flex-auto flex space-x-3 justify-end">
           <button
-            on:click|stopPropagation={saveToFirestore}
+            on:click|stopPropagation={playWords}
             class="flex-none flex text-base items-center justify-center w-9 h-9 rounded-sm text-gray-900 border hover:bg-gray-200 hover:text-black transition duration-300"
             type="button"
             aria-label="like"
@@ -136,7 +183,6 @@
           <button
             class="w-1/2 flex text-base items-center justify-center font-alegreya rounded-sm bg-black text-white hover:bg-gray-800"
             type="submit"
-            on:click|stopPropagation={saveToFirestore}
           >
             Save
           </button>

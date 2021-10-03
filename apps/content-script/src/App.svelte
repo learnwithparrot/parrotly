@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import AddToRepetitionListWrapper from './components/AddToRepetitionListWrapper.svelte';
   import SideNavWrapper from './components/SideNavWrapper.svelte';
   import browser from 'webextension-polyfill';
@@ -17,7 +16,6 @@
     if (event.source != window) return;
 
     if (event.data.type && event.data.type == 'FROM_PAGE') {
-      console.log({ data: event.data });
       browser.runtime.sendMessage({
         type: EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS,
         credential: event.data.credential,

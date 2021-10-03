@@ -34,6 +34,13 @@
       "tags": [],
       "implicitDependencies": ["background"]
     },
+    "component-playgroun": {
+      "tags": []
+    },
+    "component-playgroun-e2e": {
+      "tags": [],
+      "implicitDependencies": ["component-playgroun"]
+    },
     "constants": {
       "tags": []
     },
@@ -50,6 +57,9 @@
     "dashboard-e2e": {
       "tags": [],
       "implicitDependencies": ["dashboard"]
+    },
+    "extension-components": {
+      "tags": []
     },
     "popup": {
       "tags": []

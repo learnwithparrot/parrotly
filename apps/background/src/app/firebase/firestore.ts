@@ -1,9 +1,9 @@
-// import {friestore as db} from './firestore-init'
-import { setDoc, getFirestore, doc, } from '@firebase/firestore'
+import { addDoc, getFirestore, collection, } from 'firebase/firestore'
 
 const db = getFirestore();
 
-export const saveToRepetitionList = (word: string) => {
-  const cityRef = doc(db, 'repetition_list', 'repetition_list_id');
-  return setDoc(cityRef, { word, count: 0 })
+export const saveToRepetitionList = (word: string, translation: string) => {
+  const data = { word, count: 0, translation, quiz_mcq_pass_count: 0, quiz_translate_pass: 0 };
+  const cityRef = collection(db, 'repetition_list');
+  return addDoc(cityRef, data)
 }

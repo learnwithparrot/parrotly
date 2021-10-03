@@ -1,18 +1,19 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
+	import { createEventDispatcher } from 'svelte';
 
-  export let onClose: () => {};
+  const dispatch = createEventDispatcher();
 
   let text = '';
   let popper;
   const onWindowClick = (e: Event) => {
-    console.log({ e });
-
     //@ts-ignore
-    if (!section.contains(e.target)) {
-      onClose();
-    }
+    if (!section.contains(e.target)) {onClose()}
   };
+
+  function onClose(){
+    dispatch('close');
+  }
 
   let section: HTMLElement;
 </script>
@@ -25,7 +26,7 @@
     on:click|stopPropagation
     transition:fly={{ x: 20, duration: 300 }}
   >
-    <span>This is the sidenav</span>
+    <span>This is the sidenav from ui nx lib</span>
     <button class="px-2 py-2 bg-gray-500 rounded-sm" on:click={onClose}
       >Close</button
     >

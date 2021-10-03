@@ -1,10 +1,10 @@
-import {AuthCredential, getAuth, signInWithCredential, GoogleAuthProvider, OAuthCredential} from "firebase/auth";
+import { getAuth, signInWithCredential, GoogleAuthProvider, OAuthCredential } from "firebase/auth";
 
 export function signInWithGoogle(credential: OAuthCredential) {
   const auth = getAuth();
 
   //https://github.com/firebase/firebase-js-sdk/issues/4002#issuecomment-857796894
-  const _credential = GoogleAuthProvider.credential(credential.idToken) ;
+  const _credential = GoogleAuthProvider.credential(credential.idToken);
 
   setTimeout(() => {
     signInWithCredential(auth, _credential)

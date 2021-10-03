@@ -6,11 +6,11 @@ build() {
     rm -rf ./dist/extension
 
     echo 'Building content-script'
-    nx build content-script
+    nx build content-script --skip-nx-cache
     echo 'Building popup'
-    nx build popup
+    nx build popup --skip-nx-cache
     echo 'Building background'
-    nx build background
+    nx build background --skip-nx-cache
 
 
     echo 'Packaging everything up in ./dist/extension'

@@ -1,6 +1,5 @@
 <script lang="ts">
-  import {ExtensionSideNav} from '@parrotly.io/ui';
-  // import browser from 'webextension-polyfill';
+  import { ExtensionSideNav } from '@parrotly.io/extension-components';
   import browser from 'webextension-polyfill';
   import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
 
@@ -22,7 +21,7 @@
 
 <template>
   {#if isModalVisible}
-    <ExtensionSideNav onClose={() => (isModalVisible = false)} />
+    <ExtensionSideNav on:close={() => (isModalVisible = false)} />
   {/if}
 </template>
 

@@ -39,19 +39,7 @@ const fonts = [
   },
 ]
 
-// const googleFonts = [
-//   {
-//     id: 'parrotly-alegreya',
-//     font: 'https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400;500&display=swap',
-//   },
-//   {
-//     id: 'parrotly-roboto',
-//     font: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap',
-//   },
-// ]
-
 export function createFonts() {
-  // linkGoogleFonts();
   const fontStyle = document.createElement("style");
   fontStyle.id = "fontStyle8730011";
   fontStyle.innerHTML = fonts.map(font => {
@@ -74,18 +62,3 @@ export function createFonts() {
   document.head.appendChild(fontStyle);
 
 }
-
-// const linkGoogleFonts = () => {
-//   googleFonts.forEach(font => {
-//     if (document.getElementById(font.id)) {
-//       return;
-//     }
-//     const link = document.createElement('link');
-//     link.id = font.id;
-//     link.rel = 'stylesheet';
-//     link.type = 'text/css';
-//     link.href = font.font;
-//     document.head.appendChild(link);
-//   })
-// };
-
