@@ -90,7 +90,7 @@
       class="flex-auto"
       on:submit|preventDefault|stopPropagation={addToRepetitionList}
     >
-      <div class="flex flex-wrap">
+      <div class="flex flex-wrap -ml-2">
         <input
           type="text"
           bind:value={selected_words}
@@ -104,10 +104,10 @@
         />
       </div>
       <div class="flex space-x-3 font-medium">
-        <div class="relative inline-block text-left ml-auto">
+        <div class="relative inline-block text-left ml-auto flex items-baseline">
           <div>
             <div
-              class=" text-sm text-gray-500 underline height align-baseline flex items-end"
+              class=" text-sm text-gray-500 underline height flex items-end"
               aria-expanded="true"
               aria-haspopup="true"
             >

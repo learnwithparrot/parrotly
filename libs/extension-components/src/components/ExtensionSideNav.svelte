@@ -27,8 +27,10 @@
     transition:fly={{ x: 20, duration: 300 }}
   >
     <span>This is the sidenav from ui nx lib</span>
-    <button class="px-2 py-2 bg-gray-500 rounded-sm" on:click={onClose}
-      >Close</button
+    <button
+      class="px-2 py-2 bg-gray-500 rounded-sm"
+      on:click={onClose}
+    >Close</button
     >
   </div>
 </template>

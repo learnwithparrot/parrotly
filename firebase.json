@@ -1,7 +1,7 @@
 {
   "functions": {
     "predeploy": [
-      "npm run build backend-functions --prod"
+      "nx build backend-functions --skip-nx-cache --prod"
     ],
     "source": "dist/apps/backend-functions"
   }

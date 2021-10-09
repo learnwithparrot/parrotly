@@ -20,7 +20,7 @@
 
   const addToRepetitionList = async (text: string, translation: string) => {
     browser.runtime.sendMessage({
-      type: EXTENSION_MESSAGES.ADD_WORD_TO_SELECTION_LIST,
+      type: EXTENSION_MESSAGES.ADD_WORD_TO_REPETITION_LIST,
       text,      translation,
     });
   };

@@ -14,6 +14,7 @@ module.exports = {
   },
   plugins: [],
   purge: [
-    './libs/**/src/**/**/*.svelte'
+    './libs/**/src/**/*.svelte',
+    './libs/**/src/**/**/*.svelte',
   ]
 }

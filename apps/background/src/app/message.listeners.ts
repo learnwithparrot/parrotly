@@ -5,7 +5,7 @@ import { saveToRepetitionList, signInWithGoogle } from './firebase'
 
 
 browser.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
+  async function (request, sender, sendResponse) {
     switch (request.type) {
       case EXTENSION_MESSAGES.PLAY_TEXT:
         playWord(request.translation, 'de');
@@ -21,11 +21,19 @@ browser.runtime.onMessage.addListener(
             })
           });
         break;
-      case EXTENSION_MESSAGES.ADD_WORD_TO_SELECTION_LIST:
+      case EXTENSION_MESSAGES.ADD_WORD_TO_REPETITION_LIST:
         saveToRepetitionList(request.text, request.translation);
         break;
       case EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS:
         signInWithGoogle(request.credential);
+        break;
+      case EXTENSION_MESSAGES.TRIGGER_SHOW_WORD:
+        browser.tabs.query({ "active": true, "currentWindow": true }).then(tabs => {
+          browser.tabs.sendMessage(tabs[0].id, {
+            type: EXTENSION_MESSAGES.SHOW_WORD,
+            // text: translation,
+          });
+        })
         break;
 
     }
