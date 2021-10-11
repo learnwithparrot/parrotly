@@ -20,6 +20,7 @@
       "@parrotly.io/extension-components": [
         "libs/extension-components/src/index.ts"
       ],
+      "@parrotly.io/types": ["libs/types/src/index.ts"],
       "@parrotly.io/ui": ["libs/ui/src/index.ts"]
     }
   },

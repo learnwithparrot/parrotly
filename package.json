@@ -76,6 +76,7 @@
     "gsap": "^3.8.0",
     "node-sass": "^6.0.1",
     "regenerator-runtime": "0.13.7",
+    "rxfire": "^6.0.2",
     "rxjs": "^6.6.7",
     "svelte-routing": "^1.6.0",
     "tslib": "^2.0.0"

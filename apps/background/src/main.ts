@@ -7,6 +7,7 @@ import { getStorageItem } from './app/storage';
 import { StorageKeys } from './app/constants';
 import { GoogleAuthProvider } from '@firebase/auth';
 import { signInWithCredentialInfo } from './app/firebase';
+import {initBackgroundProcess} from './app/background-process'
 
 
 (async function init() {
@@ -14,5 +15,7 @@ import { signInWithCredentialInfo } from './app/firebase';
   const idToken = await getStorageItem({ storageKey: StorageKeys.auth_id_token });
   if(!idToken)return;
   const _credential = GoogleAuthProvider.credential(idToken);
-  signInWithCredentialInfo(_credential)
+  await signInWithCredentialInfo(_credential)
+  initBackgroundProcess()
 })()
+

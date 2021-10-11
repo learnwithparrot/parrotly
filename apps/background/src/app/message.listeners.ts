@@ -8,7 +8,7 @@ browser.runtime.onMessage.addListener(
   async function (request, sender, sendResponse) {
     switch (request.type) {
       case EXTENSION_MESSAGES.PLAY_TEXT:
-        playWord(request.translation, 'de');
+        playWord(request.translation, request.lang ?? 'de');
         break;
       case EXTENSION_MESSAGES.TRANSLATE_TEXT:
         translate(
@@ -31,7 +31,6 @@ browser.runtime.onMessage.addListener(
         browser.tabs.query({ "active": true, "currentWindow": true }).then(tabs => {
           browser.tabs.sendMessage(tabs[0].id, {
             type: EXTENSION_MESSAGES.SHOW_WORD,
-            // text: translation,
           });
         })
         break;

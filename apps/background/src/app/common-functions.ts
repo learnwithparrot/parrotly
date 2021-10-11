@@ -1,3 +1,5 @@
+import { LanguageType } from "@parrotly.io/constants";
+
 /**
  * Function that transfer text to speech.
  *
@@ -14,12 +16,12 @@
 /**
 * Translate word from one language to another.
 *
-* @param {string} from
-* @param {string} into
+* @param {string} from: LanguageType
+* @param {string} into: LanguageType
 * @param {string} text Word to translate
 * @param {function} after Function that will be executed after translation is fetched
 */
-export function translate(from, into, text, after) {
+export function translate(from:LanguageType, into:LanguageType, text, after) {
   // text.toLowerCase() gives more variants of result in some cases.
   const googleTranslator = "https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&dt=bd&hl=" +
       encodeURIComponent(from) + "&sl=" + encodeURIComponent(from) + "&tl=" +

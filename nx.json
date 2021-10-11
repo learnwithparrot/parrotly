@@ -71,6 +71,9 @@
       "tags": [],
       "implicitDependencies": ["popup"]
     },
+    "types": {
+      "tags": []
+    },
     "ui": {
       "tags": []
     }

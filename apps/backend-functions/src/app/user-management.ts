@@ -1,16 +1,18 @@
 import { AuthFunctionType } from './utils';
 import * as admin from 'firebase-admin'
-import { IRepetitionList, IUser } from './types';
+import { IRepetitionList, IUser, IUserSettings } from '@parrotly.io/types';
+import { FirebaseRefs } from '@parrotly.io/constants';
 
 /**
  * 1. create user and increments counter count.
- * 2. Creates default repetition list and increments counter stat.
- * 3. @todo: send welcome email.
+ * 2. Creates settings doc.
+ * 3. Creates default repetition list and increments counter stat.
+ * 4. @todo: send welcome email.
  */
 export const onNewUser: AuthFunctionType = async (user, context) => {
   const db = admin.firestore()
-  const userStatsDocPath = db.doc('users/--stats--')
-  const listStatsDocPath = db.doc('repetition_lists/--stats--')
+  const userStatsDocPath = db.doc(`${FirebaseRefs.users}/${FirebaseRefs.stats}`)
+  const listStatsDocPath = db.doc(`${FirebaseRefs.repetition_lists}/${FirebaseRefs.stats}`)
   const id = user.uid
   const batch = db.batch()
   const increment = admin.firestore.FieldValue.increment(1);
@@ -19,16 +21,28 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
     email: user.email,
     displayName: user.displayName,
     photoUrl: user.photoURL,
-    languageSpoken: 'en',
-    languageLearned: 'de',
     id,
   }
 
-  batch.set(db.doc(`users/${id}`), userData)
-  batch.update(userStatsDocPath, {count:increment},)
+  const defaultUserSettings: IUserSettings = {
+    id, forbiddenUrls: [],
+    languageLearned: 'de',
+    languageSpoken: 'en',
+    maximumMCQs: 50,
+    maximumQuizzes: 50,
+    maximumRepetition: 100,
+    showCardDurationSeconds: 6,
+    showCardIntervalDurationSeconds: 60 * 30, // Every 30 mins.
+    showNotifications: true,
+    theme: 'rotate'
+  }
+
+  batch.set(db.doc(`${FirebaseRefs.users}/${id}`), userData)
+  batch.set(db.doc(`${FirebaseRefs.settings}/${id}`), defaultUserSettings)
+  batch.update(userStatsDocPath, { count: increment },)
 
 
-  //2. create default list and increments list counter stat
+  //3. create default list and increments list counter stat
   const listId = `${user.uid}_default`
   const defaultList: IRepetitionList = {
     wordCount: 0,
@@ -44,8 +58,8 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
     creatorPhotoUrl: user.photoURL
   }
 
-  batch.set(db.doc(`list/${listId}`), defaultList)
-  batch.update(listStatsDocPath, {count:increment},)
+  batch.set(db.doc(`${FirebaseRefs.repetition_lists}/${listId}`), defaultList)
+  batch.update(listStatsDocPath, { count: increment },)
 
   return batch.commit()
 }

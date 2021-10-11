@@ -7,7 +7,6 @@
   import browser from 'webextension-polyfill';
   import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
   import { shortcut } from './actions';
-  import ShowWordCard from 'libs/extension-components/src/components/ShowWordCard.svelte';
 
   // let globalHref = browser.extension.getURL('global.css');
   let lineAwesomeHref = browser.extension.getURL('line-awesome.min.css');

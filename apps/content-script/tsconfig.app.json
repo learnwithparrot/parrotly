@@ -1,10 +1,16 @@
 {
   "extends": "./tsconfig.json",
-
   "compilerOptions": {
     "outDir": "../../dist/out-tsc"
   },
-
-  "include": ["src/**/*"],
-  "exclude": ["**/*.spec.ts", "**/*_spec.ts", "public/*"]
+  "include": [
+    "src/**/*",
+    //For some funny reason, this include is required for
+    "../../libs/*/src/lib/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*_spec.ts",
+    "public/*"
+  ]
 }

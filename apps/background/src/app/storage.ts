@@ -1,12 +1,6 @@
 import browser, { StorageValue, StorageObject } from 'webextension-polyfill';
 import { StorageKeys } from './constants';
 
-/**
- * Storage methods
- * TODO: We need to make some type of abstraction that will allow use to these connections
- * for graphQL subscriptions.
- */
-
 export const setStorageItem = async <V extends StorageValue>(key: StorageKeys, value: V) => {
   const resp = await browser.storage.local.set({ [key]: value });
   return resp;

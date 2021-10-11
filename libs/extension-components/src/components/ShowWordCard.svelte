@@ -3,13 +3,13 @@
   import { createEventDispatcher } from 'svelte';
   import { timer, merge, Subject } from 'rxjs';
   import { take, map, toArray } from 'rxjs/operators';
+  import { LanguageType } from '@parrotly.io/constants';
 
   // bind props
   export let showWordDurationSeconds = 4;
   export let word: string;
   export let translation: string;
-  export let languageTo;
-  export let id: string; //id of the word doc in db
+  export let languageTo: LanguageType; //id of the word doc in db
 
   //variable declarations
   let section: HTMLElement;
@@ -40,11 +40,11 @@
   }
 
   function onPlaySound() {
-    dispatch('playSound', { translation });
+    dispatch('playSound');
   }
 
   function onKnowWord() {
-    dispatch('knowWord', { id });
+    dispatch('knowWord');
   }
 </script>
 
