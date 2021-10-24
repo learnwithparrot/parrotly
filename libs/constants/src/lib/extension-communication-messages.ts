@@ -9,6 +9,7 @@ const EXTENSION_MESSAGES = {
   TRANSLATE_TEXT: 'translate_text',
   TRANSLATION_COMPLETE: 'translation_complete',
   KNOW_WORD: 'know_word',
+  UPDATE_USER_SETTINGS:'update_user_settings',
 }
 
 export {

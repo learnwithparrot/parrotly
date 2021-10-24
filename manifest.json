@@ -12,6 +12,7 @@
   },
   "web_accessible_resources": [
     "fonts/*",
+    "images/*",
     "line-awesome.min.css"
   ],
   "content_scripts": [

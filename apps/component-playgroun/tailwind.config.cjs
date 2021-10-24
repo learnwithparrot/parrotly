@@ -8,9 +8,6 @@ module.exports = {
     ...theme,
     extend: {
       ...theme.extend,
-      zIndex: {
-        modal: '600000000'
-      },
       width: {
         popup: 300,
       },
@@ -80,6 +77,6 @@ module.exports = {
     ...purge,
     './apps/component-playgroun/public/index.html',
     './apps/component-playgroun/src/**/*.svelte',
-    './apps/component-playgroun/src/**/*.svelte',
+    './apps/component-playgroun/src/*.svelte',
   ]
 }

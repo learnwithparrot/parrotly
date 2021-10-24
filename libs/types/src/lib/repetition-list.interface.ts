@@ -31,7 +31,6 @@ export interface IRepetitionWord {
   },
   languageWord: LanguageType,
   languageTranslation: LanguageType,
-  // lastRepetitionStyle: RepetitionStyle
   isExpression: boolean,
 }
 

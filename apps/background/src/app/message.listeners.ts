@@ -1,7 +1,10 @@
 import browser from 'webextension-polyfill';
 import { EXTENSION_MESSAGES } from "@parrotly.io/constants"
 import { playWord, translate } from './common-functions';
-import { saveToRepetitionList, signInWithGoogle } from './firebase'
+import {
+  deleteRepetitionWord, saveToRepetitionList, signInWithGoogle,
+  updateUserSettings,
+} from './firebase'
 
 
 browser.runtime.onMessage.addListener(
@@ -33,6 +36,12 @@ browser.runtime.onMessage.addListener(
             type: EXTENSION_MESSAGES.SHOW_WORD,
           });
         })
+        break;
+      case EXTENSION_MESSAGES.KNOW_WORD:
+        deleteRepetitionWord(request.id, request.categoryId)
+        break;
+      case EXTENSION_MESSAGES.UPDATE_USER_SETTINGS:
+        updateUserSettings(request.settings, request.id)
         break;
 
     }

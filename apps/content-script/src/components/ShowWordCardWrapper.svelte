@@ -7,6 +7,7 @@
     IUserSettings,
     IRepetitionList,
   } from '@parrotly.io/types';
+
   let _word: IRepetitionWord;
   let _category: IRepetitionList;
   let _settings: IUserSettings;
@@ -55,7 +56,7 @@
   const knowWord = async () => {
     browser.runtime.sendMessage({
       type: EXTENSION_MESSAGES.KNOW_WORD,
-      id: _word.id,
+      id: _word.id, categoryId:_category.id,
     });
   };
 </script>

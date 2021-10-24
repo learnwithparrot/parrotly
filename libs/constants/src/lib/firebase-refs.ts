@@ -5,3 +5,5 @@ export enum FirebaseRefs {
   settings = 'settings',
   stats = '--stats--',
 }
+
+export const userSettingsPath = (userId) => `${FirebaseRefs.settings}/${userId}`

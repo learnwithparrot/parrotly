@@ -27,7 +27,7 @@ export function signInWithCredentialInfo(credential: OAuthCredential) {
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       // ...
-      console.log({message:'Signing in with google credentials successful', result})
+      console.log({ message: 'Signing in with google credentials successful', result })
     })
     .catch((error) => {
       // Handle Errors here.

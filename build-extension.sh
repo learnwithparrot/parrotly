@@ -20,6 +20,8 @@ build() {
     cp ./dist/apps/background/main.js ./dist/extension/background.js
     cp ./manifest.json ./dist/extension
     cp -r ./fonts ./dist/extension
+    cp -r ./extension-images ./dist/extension
+    mv ./dist/extension/extension-images ./dist/extension/images
     mv ./dist/extension/index.html ./dist/extension/popup.html
 }
 

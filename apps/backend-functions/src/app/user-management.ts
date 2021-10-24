@@ -30,10 +30,11 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
     languageSpoken: 'en',
     maximumMCQs: 50,
     maximumQuizzes: 50,
+    quantityOfTranslations: 'small',
     maximumRepetition: 100,
     showCardDurationSeconds: 6,
-    showCardIntervalDurationSeconds: 60 * 30, // Every 30 mins.
-    showNotifications: true,
+    showCardIntervalDurationMinutes: 30,
+    enableNotifications: true,
     theme: 'rotate'
   }
 

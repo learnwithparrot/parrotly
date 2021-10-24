@@ -8,9 +8,6 @@ module.exports = {
     ...theme,
     extend: {
       ...theme.extend,
-      zIndex: {
-        modal: '600000000'
-      },
       width: {
         popup: 300,
       },

@@ -8,16 +8,26 @@ export interface IUser {
   id: string;
 }
 
-export interface IUserSettings {
-  languageSpoken: LanguageType;
-  languageLearned: LanguageType;
-  id: string,
-  showCardIntervalDurationSeconds: number,
-  theme: 'light' | 'dark' | 'auto' | 'rotate',
+export interface IUserReptitionListSettings {
+  showCardIntervalDurationMinutes: number,
   maximumRepetition: number,
   maximumQuizzes: number,
   maximumMCQs: number,
   showCardDurationSeconds: number,
-  showNotifications: boolean,
+  enableNotifications: boolean,
+}
+
+export interface IUserAutoTranslationSettings {
+  quantityOfTranslations: 'small' | 'medium' | 'large' | 'extra-large';
+}
+
+export interface IUserLanguageSettings {
+  languageSpoken: LanguageType;
+  languageLearned: LanguageType;
+}
+
+export interface IUserSettings extends IUserLanguageSettings, IUserReptitionListSettings, IUserAutoTranslationSettings {
+  id: string,
+  theme: 'light' | 'dark' | 'auto' | 'rotate',
   forbiddenUrls: string[],
 }

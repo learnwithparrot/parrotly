@@ -1,27 +1,25 @@
-import { switchMap, mapTo } from 'rxjs/operators';
+import { switchMap, mapTo, first } from 'rxjs/operators';
 import { interval } from 'rxjs';
-import { idToken$, userAndSettings$, categoriesAndLists$ } from './firebase';
-import { IUserSettings } from '@parrotly.io/types';
+import { userAndSettings$, categoriesAndLists$, incrementWordShowCount } from './firebase';
+import { IRepetitionList, IRepetitionWord, IUserSettings } from '@parrotly.io/types';
 import { setStorageItem, getStorageItem } from './storage';
 import { StorageKeys } from './constants';
 import browser from 'webextension-polyfill'
 import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
+import { NOTIFICATION_TITLE } from '@parrotly.io/env';
 /**
  * This is the background process that collects the user/settings and runs determination of word/showCard
  * depending on user settings.
  */
 export function initBackgroundProcess() {
-  const triggerShowCard$ = userAndSettings$.pipe(
+  const triggerShowCardSub = userAndSettings$.pipe(
     switchMap(
-      (settings) => interval(20 * 1000).pipe(
-        // (settings) => interval(settings.showCardIntervalDurationSeconds * 1000).pipe(
+      ([user,settings]) => interval((settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000).pipe(
         mapTo(settings)
       )
     )
   )
     .subscribe(triggerShowCard)
-
-  idToken$.subscribe(token => setStorageItem(StorageKeys.auth_id_token, token))
 }
 
 /**
@@ -31,10 +29,8 @@ export function initBackgroundProcess() {
  * @returns
  */
 async function triggerShowCard(settings: IUserSettings) {
-  const categoriesAndLists = await categoriesAndLists$.toPromise()
-  console.log('triggering showCard', categoriesAndLists)
+  const categoriesAndLists = await categoriesAndLists$.pipe(first()).toPromise()
   if (categoriesAndLists.map(([_, list]) => list.length).every(count => !count)) {
-    console.log('Repetition List is empty returning quietly.')
     return;
   }
   const lastWordDocId = await getStorageItem({ storageKey: StorageKeys.last_word })
@@ -52,12 +48,39 @@ async function triggerShowCard(settings: IUserSettings) {
   setStorageItem(StorageKeys.last_word, word.id)
 
   const tabs = await browser.tabs.query({ "active": true, "currentWindow": true });
-  browser.tabs.sendMessage(
-    tabs[0].id,
-    { type: EXTENSION_MESSAGES.SHOW_WORD, word, category, settings }
-  );
+  if (tabs?.length)
+    browser.tabs.sendMessage(
+      tabs[0].id,
+      { type: EXTENSION_MESSAGES.SHOW_WORD, word, category, settings }
+    )
+      .then(() => {
+        //@TODO: implement logic too for quiz and mcq fails and passes count
+        incrementWordShowCount(word.id, category.id, 'show')
+      })
+      .catch(err => {
+        /**
+         * User is on a page within which content script can't be loaded.
+         * example:
+         * -firefox: about:addons
+         * -chrome: chrome://extensions
+         */
+        console.log({ err })
+        showNotification(word, category)
+      });
+  /**Browser window isn't the active window */
+  else showNotification(word, category)
+}
 
-
-
-
+function showNotification(word: IRepetitionWord, category: IRepetitionList) {
+  const options = {
+    type: "basic",
+    title: NOTIFICATION_TITLE,
+    message: `${word.word} - ${word.translation}`,
+    iconUrl: "images/icon128.png",
+    // requireInteraction: true,
+    priority: 2
+  }
+  const _notificationId = "parrotly.io" + Math.floor(Math.random() * 9999999);
+  browser.notifications.create(_notificationId, options);
+  incrementWordShowCount(word.id, category.id, 'show')
 }

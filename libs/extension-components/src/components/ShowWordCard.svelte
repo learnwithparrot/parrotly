@@ -3,7 +3,7 @@
   import { createEventDispatcher } from 'svelte';
   import { timer, merge, Subject } from 'rxjs';
   import { take, map, toArray } from 'rxjs/operators';
-  import { LanguageType } from '@parrotly.io/constants';
+  import type { LanguageType } from '@parrotly.io/constants';
 
   // bind props
   export let showWordDurationSeconds = 4;
@@ -17,7 +17,7 @@
   const dispatch = createEventDispatcher();
   const durationPlusAnimationDuration = showWordDurationSeconds + 2;
   const countDown$ = timer(0, 1000).pipe(
-    take(durationPlusAnimationDuration + 2),
+    take(durationPlusAnimationDuration + 1),
     map((count) => durationPlusAnimationDuration - count)
   );
   const closeSubject = new Subject<null>();
@@ -45,6 +45,7 @@
 
   function onKnowWord() {
     dispatch('knowWord');
+    closeSubject.next()
   }
 </script>
 
@@ -57,7 +58,7 @@
   >
     <div class="flex-initial flex ">
       <a
-        class="outline-none font-alegreya text-lg flex-none flex text-base items-center justify-center px-5 h-9 rounded-sm border-0 text-gray-900 border hover:bg-gray-200 focus:bg-gray-200 hover:text-black transition duration-300 -translate-x-6 -translate-y-4"
+        class="outline-none font-alegreya text-base flex-none flex items-center justify-center px-5 h-9 rounded-sm border-0 text-gray-900 hover:bg-gray-200 focus:bg-gray-200 hover:text-black transition duration-300 -translate-x-6 -translate-y-4"
         href="https://learnwithparrot.io"
         target="_blank"
       >
@@ -82,9 +83,8 @@
         >I know this word</button
       >
       <span class="flex-1" />
-      <!-- on:click|stopPropagation={playWords} -->
       <button
-        class="outline-none font-roboto flex-none flex text-base items-center justify-center w-9 h-9 rounded-sm text-black border hover:bg-gray-200 focus:bg-gray-200 transition duration-300"
+        class="outline-none font-roboto flex-none flex text-base items-center justify-center w-9 h-9 rounded-sm text-black border-0 hover:bg-gray-200 focus:bg-gray-200 transition duration-300"
         type="button"
         aria-label="Play sound"
         on:click={onPlaySound}
