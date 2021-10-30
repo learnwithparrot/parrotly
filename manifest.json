@@ -4,11 +4,11 @@
   "manifest_version": 2,
   "description": "Parrotly",
   "icons": {
-    "512": "logo512.jpg",
-    "16": "favicon.png"
+    "512": "images/parrot_4.png",
+    "16": "images/parrot_1.png"
   },
   "browser_action": {
-    "default_icon": "logo512.jpg"
+    "default_icon": "images/parrot_4.png"
   },
   "web_accessible_resources": [
     "fonts/*",

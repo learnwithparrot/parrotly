@@ -9,8 +9,8 @@ module.exports = {
   preprocess: sveltePreprocess({
     postcss: {
       plugins: [
+        autoprefixer,
         tailwind('./apps/content-script/tailwind.config.cjs'), //Relative to root of project.
-        autoprefixer
       ]
     }
   }),

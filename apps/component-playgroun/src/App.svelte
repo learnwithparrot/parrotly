@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ExtensionSideNavPage, WelcomePage, ShowWordPage } from './pages';
-  import { Router, Route, Link } from 'svelte-routing';
+  import { Router, Route, Link } from 'svelte-navigator';
 
   export let url = '';
 </script>

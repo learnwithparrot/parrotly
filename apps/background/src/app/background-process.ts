@@ -76,7 +76,7 @@ function showNotification(word: IRepetitionWord, category: IRepetitionList) {
     type: "basic",
     title: NOTIFICATION_TITLE,
     message: `${word.word} - ${word.translation}`,
-    iconUrl: "images/icon128.png",
+    iconUrl: "images/parrot_4.png",
     // requireInteraction: true,
     priority: 2
   }

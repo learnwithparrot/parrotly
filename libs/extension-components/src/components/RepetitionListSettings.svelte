@@ -93,7 +93,7 @@
       </div>
       <input
         type="range"
-        min="15"
+        min="5"
         max="120"
         step="1"
         class="h-8"

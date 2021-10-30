@@ -17,7 +17,9 @@
   });
 
   const toggleShowModal = () => {
+    console.log({ isModalVisible });
     isModalVisible = !isModalVisible;
+    console.log({ isModalVisible });
   };
 
   function saveUserSettings(data: IUserSettings, id: string) {

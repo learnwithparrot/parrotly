@@ -105,7 +105,7 @@
       target: { value: userSettings.languageLearned },
     });
 
-    return sub.unsubscribe;
+    return () => sub.unsubscribe();
   });
 </script>
 
