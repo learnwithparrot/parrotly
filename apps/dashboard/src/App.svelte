@@ -6,7 +6,7 @@
   export let url = '';
 </script>
 
-<main class="flex items-stretch dark:bg-primary-700 bg-primary-100 w-screen">
+<main class="flex items-stretch dark:bg-primary-800 bg-primary-100 w-screen p-3 pr-0 h-screen">
   <Router {url}>
     <Route path="/about" component={About} />
     <Route path="/dashboard/*"  component={Dashboard} />

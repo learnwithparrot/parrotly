@@ -1,18 +1,20 @@
 <script lang="ts">
   import { Route, Link } from 'svelte-navigator';
   import { Sidenav } from '../../components';
-import Redirect from '../../components/Redirect.svelte';
+  import Redirect from '../../components/Redirect.svelte';
   import Settings from './Settings.svelte';
-  import WordList from './WordList.svelte';
+  import RepetitionLists from './RepetitionLists.svelte';
   // import '../app.css';
 
   export let url = '';
 </script>
 
-  <Sidenav />
+<Sidenav />
+<div class="flex flex-col max-w-screen-lg mx-auto">
   <Route path="settings" component={Settings} />
-  <Route path="word_list" component={WordList} />
+  <Route path="word_list" component={RepetitionLists} />
   <Route component={Redirect} to="word_list" />
+</div>
 
 <style global>
   @tailwind base;

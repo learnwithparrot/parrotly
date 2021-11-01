@@ -12,6 +12,8 @@ export interface IRepetitionList {
   creatorId: string;
   creatorDisplayName: string;
   creatorPhotoUrl: string;
+  languageWord: LanguageType,
+  languageTranslation: LanguageType,
 }
 
 export type RepetitionStyle = 'show' | 'mcq' | 'quiz'

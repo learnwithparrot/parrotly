@@ -19,31 +19,47 @@
       label: 'Sign Out',
     },
   ];
+
+
+  function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
+    const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent;
+
+    // The object returned here is spread on the anchor element's attributes
+    const defaultClass = "hover:text-primary-800 hover:bg-primary-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-primary-800 duration-200  dark:focus:bg-primary-800 duration-200  text-primary-600 dark:text-primary-400 rounded-sm font-alegreya";
+    if (isActive) {
+      return { class: `${defaultClass} bg-primary-800 text-primary-400` };
+    }
+    return {class:defaultClass};
+  }
 </script>
 
 <template>
-  <section class="relative bg-white dark:bg-primary-800 w-72">
+  <section
+    class="relative bg-white dark:bg-primary-700 w-72 rounded-[3px]"
+  >
     <div class="flex flex-col sm:flex-row sm:justify-around">
-      <div class="w-72 h-screen">
+      <div class="w-72">
         <div class="flex items-center justify-start mx-6 mt-10">
           <div class="h-10 w-10 bg-primary-300 block" />
-          <span
-            class="text-primary-600 dark:text-primary-300 ml-4 text-2xl font-bold"
+          <h1
+            class="text-primary-600 dark:text-white ml-4 text-3xl font-bold font-alegreya"
           >
             Tail-Kit
-          </span>
+          </h1>
         </div>
         <nav class="mt-10 px-6 ">
           {#each menuItems as menuItem}
-          <Link to={menuItem.path} >
-            <a
-              class="hover:text-primary-800 hover:bg-primary-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-primary-600 duration-200  text-primary-600 dark:text-primary-400 rounded-sm "
-              >
-              <!-- href={menuItem.path} -->
-              <i class="{menuItem.icon} h-[20] w-[20] text-current text-2xl" />
-              <span class="mx-4 text-lg font-normal"> {menuItem.label} </span>
-              <span class="flex-grow text-right" />
-            </a>
+            <Link to={menuItem.path} {getProps}>
+              <!-- <a
+                class="hover:text-primary-800 hover:bg-primary-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-primary-800 duration-200  dark:focus:bg-primary-800 duration-200  text-primary-600 dark:text-primary-400 rounded-sm font-alegreya"
+              > -->
+                <!-- href={menuItem.path} -->
+                <i
+                  class="{menuItem.icon} h-[20] w-[20] text-current text-2xl"
+                />
+                <span class="mx-4 text-lg"> {menuItem.label} </span>
+                <span class="flex-grow text-right" />
+              <!-- </a> -->
             </Link>
           {/each}
         </nav>
