@@ -1,7 +1,7 @@
 import { AuthFunctionType } from './utils';
 import * as admin from 'firebase-admin'
 import { IRepetitionList, IUser, IUserSettings } from '@parrotly.io/types';
-import { FirebaseRefs } from '@parrotly.io/constants';
+import { defaultUserList, FirebaseRefs } from '@parrotly.io/constants';
 
 /**
  * 1. create user and increments counter count.
@@ -44,7 +44,7 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
 
 
   //3. create default list and increments list counter stat
-  const listId = `${user.uid}_default`
+  const listId = defaultUserList(user.uid)
   const defaultList: IRepetitionList = {
     wordCount: 0,
     wordsSample: [],
@@ -52,6 +52,8 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
     rating: 2.5,
     id: listId,
     public: false,
+    languageWord: defaultUserSettings.languageSpoken,
+    languageTranslation: defaultUserSettings.languageLearned,
     default: true,
     name: 'Default List',
     creatorId: id,

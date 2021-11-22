@@ -1,23 +1,16 @@
 <script lang="ts">
-  import { Route, Link } from 'svelte-navigator';
+  import { Route } from 'svelte-navigator';
   import { Sidenav } from '../../components';
   import Redirect from '../../components/Redirect.svelte';
-  import Settings from './Settings.svelte';
-  import RepetitionLists from './RepetitionLists.svelte';
-  // import '../app.css';
-
-  export let url = '';
+  import MyRepetitionLists from './MyRepetitionLists.svelte';
+  import PublicRepetitionLists from './PublicRepetitionLists.svelte';
+  import RepetitionListDetails from './RepetitionListDetails.svelte';
 </script>
 
 <Sidenav />
-<div class="flex flex-col max-w-screen-lg mx-auto">
-  <Route path="settings" component={Settings} />
-  <Route path="word_list" component={RepetitionLists} />
-  <Route component={Redirect} to="word_list" />
+<div class="flex flex-col max-w-screen-lg mx-auto w-full">
+  <Route path="my_list" component={MyRepetitionLists} />
+  <Route path="my_list/:id" component={RepetitionListDetails} />
+  <Route path="public_list" component={PublicRepetitionLists} />
+  <Route component={Redirect} to="my_list" />
 </div>
-
-<style global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

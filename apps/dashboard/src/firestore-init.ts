@@ -13,6 +13,4 @@ const firebaseConfig = {
   measurementId: FIREBASE_MEASUREMENT_ID
 };
 
-export const initFirebase = () => {
-  const app = initializeApp(firebaseConfig);
-}
+export const initFirebase = () => initializeApp(firebaseConfig)

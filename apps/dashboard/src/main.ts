@@ -1,13 +1,12 @@
-import App from './App.svelte';
-import type { IRepetitionList } from '@parrotly.io/types'
+import "./app.css";
+import App from './App.svelte'
+import { initFirebase } from './firestore-init';
 
-let word: IRepetitionList;
+initFirebase();
+console.log("firebase initialised")
 
 const app = new App({
-  target: document.body,
-  props: {
-    name: 'dashboard',
-  },
-});
+  target: document.getElementById('app')
+})
 
-export default app;
+export default app

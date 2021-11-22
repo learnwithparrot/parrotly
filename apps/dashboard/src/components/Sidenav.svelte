@@ -1,42 +1,50 @@
 <script lang="ts">
-  import { each } from 'svelte/internal';
   import { Link } from 'svelte-navigator';
+  import { getAuth } from 'firebase/auth';
+  import { authState } from 'rxfire/auth';
+  import { map, startWith } from 'rxjs/operators';
 
-  const menuItems = [
-    {
-      path: './word_list',
-      icon: 'lar la-copy',
-      label: 'Repetition List',
-    },
-    {
-      path: './settings',
-      icon: 'las la-cog',
-      label: 'Settings',
-    },
-    {
-      path: '/signout',
-      icon: 'las la-sign-out-alt',
-      label: 'Sign Out',
-    },
-  ];
-
+  const menuItems$ = authState(getAuth()).pipe(
+    map((user) => [
+      {
+        path: `./my_list/${user?.uid}_default`,
+        icon: 'lar la-copy',
+        label: 'My List',
+      },
+      {
+        path: './public_list',
+        icon: 'las la-users',
+        label: 'Public List',
+      },
+      {
+        path: './settings',
+        icon: 'las la-cog',
+        label: 'Settings',
+      },
+      {
+        path: '/auth/signout',
+        icon: 'las la-sign-out-alt',
+        label: 'Sign Out',
+      },
+    ]),
+    startWith([])
+  );
 
   function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
-    const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent;
+    const isActive = href === '/' ? isCurrent : isPartiallyCurrent || isCurrent;
 
     // The object returned here is spread on the anchor element's attributes
-    const defaultClass = "hover:text-primary-800 hover:bg-primary-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-primary-800 duration-200  dark:focus:bg-primary-800 duration-200  text-primary-600 dark:text-primary-400 rounded-sm font-alegreya";
+    const defaultClass =
+      'hover:text-primary-800 hover:bg-primary-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-primary-800 duration-200  dark:focus:bg-primary-800 duration-200  text-primary-600 dark:text-primary-400 rounded-sm font-alegreya';
     if (isActive) {
       return { class: `${defaultClass} bg-primary-800 text-primary-400` };
     }
-    return {class:defaultClass};
+    return { class: defaultClass };
   }
 </script>
 
 <template>
-  <section
-    class="relative bg-white dark:bg-primary-700 w-72 rounded-[3px]"
-  >
+  <section class="relative bg-white dark:bg-primary-700 w-72 rounded-[3px]">
     <div class="flex flex-col sm:flex-row sm:justify-around">
       <div class="w-72">
         <div class="flex items-center justify-start mx-6 mt-10">
@@ -48,18 +56,11 @@
           </h1>
         </div>
         <nav class="mt-10 px-6 ">
-          {#each menuItems as menuItem}
+          {#each $menuItems$ as menuItem}
             <Link to={menuItem.path} {getProps}>
-              <!-- <a
-                class="hover:text-primary-800 hover:bg-primary-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-primary-800 duration-200  dark:focus:bg-primary-800 duration-200  text-primary-600 dark:text-primary-400 rounded-sm font-alegreya"
-              > -->
-                <!-- href={menuItem.path} -->
-                <i
-                  class="{menuItem.icon} h-[20] w-[20] text-current text-2xl"
-                />
-                <span class="mx-4 text-lg"> {menuItem.label} </span>
-                <span class="flex-grow text-right" />
-              <!-- </a> -->
+              <i class="{menuItem.icon} h-[20] w-[20] text-current text-2xl" />
+              <span class="mx-4 text-lg"> {menuItem.label} </span>
+              <span class="flex-grow text-right" />
             </Link>
           {/each}
         </nav>

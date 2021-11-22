@@ -1,4 +1,4 @@
-import { LanguageType } from '@parrotly.io/constants'
+import type { LanguageType } from '@parrotly.io/constants'
 
 export interface IRepetitionList {
   wordCount: number;
