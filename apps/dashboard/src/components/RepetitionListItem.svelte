@@ -42,9 +42,10 @@
     </div>
   </div>
   <span>
-    {SUPPORTED_LANGUAGES[repetitionList.languageWord]} -> {SUPPORTED_LANGUAGES[
-      repetitionList.languageTranslation
-    ]} ({repetitionList.wordCount} word:s)
+    {SUPPORTED_LANGUAGES[repetitionList.languageWord]}
+    ->
+    {SUPPORTED_LANGUAGES[repetitionList.languageTranslation]}
+    ({repetitionList.wordCount} word:s)
   </span>
   <div class="flex gap-2 flex-wrap flex-1">
     {#each repetitionList.wordsSample as item}

@@ -1,9 +1,10 @@
 import {
-  collection, doc, deleteDoc,
-  getFirestore, query, DocumentReference
+  collection, doc, deleteDoc, getDoc, setDoc,
+  getFirestore, query, DocumentReference,
 } from "firebase/firestore";
+import type { PartialWithFieldValue } from "firebase/firestore";
 import type { CollectionReference, Query } from 'firebase/firestore'
-import { collectionData, docData } from 'rxfire/firestore'
+import { collectionData, docData, } from 'rxfire/firestore'
 import { combineLatest, Subject } from "rxjs";
 import type { Observable } from 'rxjs'
 import { map, takeUntil } from 'rxjs/operators'
@@ -11,6 +12,11 @@ import { map, takeUntil } from 'rxjs/operators'
 export type GetQuery<T> = (query: Query<T>) => Query<T>
 export type ValueChanges<S, T = any> = T extends string ? Observable<S> : Observable<S[]>
 
+/**
+ * T: Type of the object in the application.
+ * S: Type of the object in firebase
+ * hint: in app we use Date and in firbase we use Timestamp
+ */
 export abstract class CollectionService<T, S = T> {
   private unsubscribe = new Subject<boolean>()
   public db = getFirestore()
@@ -24,15 +30,19 @@ export abstract class CollectionService<T, S = T> {
       ).subscribe(_ => this.initializeBaseRef(_))
   }
 
-  abstract formatFromFirestore(_: S): T;
-  abstract formatForFirestore(_: S): T;
+  formatFromFirestore(_: S): T { return _ as unknown as T };
+  formatForFirestore(_: Partial<T>): PartialWithFieldValue<S> { return _ as PartialWithFieldValue<S> };
 
   initializeBaseRef(path: string) {
     this.baseRef = collection(this.db, path) as CollectionReference<S>;
   }
 
-  docData$(id: string, relativeToBaseRef = true) {
+  verifyBaseRef() {
     if (!this.baseRef) throw new Error(`Initial ref isn't setup, perhaps the constructor observable hasn't yet emitted.`)
+  }
+
+  docData$(id: string, relativeToBaseRef = true) {
+    this.verifyBaseRef()
     let docRef = doc(this.baseRef, id)
     if (!relativeToBaseRef)
       docRef = doc(this.db, id) as DocumentReference<S>
@@ -41,6 +51,18 @@ export abstract class CollectionService<T, S = T> {
       map(_ => this.formatFromFirestore(_)),
       takeUntil(this.unsubscribe.asObservable())
     )
+  }
+
+  async getDocData(id: string, relativeToBaseRef = true) {
+    this.verifyBaseRef()
+    let docRef = doc(this.baseRef, id)
+    if (!relativeToBaseRef)
+      docRef = doc(this.db, id) as DocumentReference<S>
+
+    const data = await getDoc(docRef).then(
+      _ => this.formatFromFirestore(_.data())
+    )
+    return data;
   }
 
   documentChanges(id: string) {
@@ -52,7 +74,7 @@ export abstract class CollectionService<T, S = T> {
   valueChanges(getQuery: GetQuery<S>): Observable<T[]>;
   valueChanges(ids: string[]): Observable<T[]>;
   valueChanges(paramOne?: string | string[] | GetQuery<S>): ValueChanges<T> {
-    if (!this.baseRef) throw new Error(`Initial ref isn't setup, perhaps the constructor observable hasn't yet emitted.`)
+    this.verifyBaseRef()
 
     let collectionQuery = query<S>(this.baseRef)
 
@@ -85,7 +107,7 @@ export abstract class CollectionService<T, S = T> {
    */
   delete(docPath: string | string[], relativeToBaseRef = true) {
     const paths = []
-    if (!this.baseRef) throw new Error(`Initial ref isn't setup, perhaps the constructor observable hasn't yet emitted.`)
+    this.verifyBaseRef()
     if (typeof docPath === 'string') paths.push(docPath)
     else paths.push(...docPath)
 
@@ -97,6 +119,16 @@ export abstract class CollectionService<T, S = T> {
       })
         .map(_ => deleteDoc(_))
     )
+  }
+
+  update(id: string, data: Partial<T>, relativeToBaseRef = true) {
+    this.verifyBaseRef()
+    const forFirestore = this.formatForFirestore(data)
+    let docRef = doc(this.baseRef, id)
+    if (!relativeToBaseRef)
+      docRef = doc(this.db, id) as DocumentReference<S>
+
+    setDoc(docRef, forFirestore, { merge: true })
   }
 
   unsubscribeAll() {

@@ -63,7 +63,7 @@
 <template>
   <section class="flex flex-col flex-1 pt-1 justify-start gap-4">
     <header class="flex justify-between">
-      <h1 class="font-alegreya text-3xl font-semibold dark:text-white">
+      <h1 class="font-alegreya text-3xl font-semibold dark:text-primary-300">
         Public Repetition Lists
       </h1>
       <input

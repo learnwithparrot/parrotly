@@ -1,4 +1,6 @@
 <script lang="ts">
+import { SUPPORTED_LANGUAGES } from '@parrotly.io/constants';
+
   import type { IRepetitionWord } from '@parrotly.io/types';
   import { Button, Chip } from '@parrotly.io/ui';
   import { createEventDispatcher } from 'svelte';
@@ -18,7 +20,7 @@
 
 <template>
   <li
-    class="border border-primary-500 rounded-sm flex flex-col gap-2 p-4 hover:bg-primary-500 focus:bg-primary-500  dark:hover:bg-primary-700 dark:focus:bg-primary-700 duration-300 dark:text-primary-300 dark:focus:text-white"
+    class="border border-primary-500 rounded-sm flex flex-col gap-2 p-4 pb-2 hover:bg-primary-500 focus:bg-primary-500  dark:hover:bg-primary-700 dark:focus:bg-primary-700 duration-300 dark:text-primary-300 dark:focus:text-white"
   >
     <span class="font-bold">{word.word}</span>
     <span>{word.translation}</span>

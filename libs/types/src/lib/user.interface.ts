@@ -28,6 +28,6 @@ export interface IUserLanguageSettings {
 
 export interface IUserSettings extends IUserLanguageSettings, IUserReptitionListSettings, IUserAutoTranslationSettings {
   id: string,
-  theme: 'light' | 'dark' | 'auto' | 'rotate',
+  theme: 'light' | 'dark' ,
   forbiddenUrls: string[],
 }

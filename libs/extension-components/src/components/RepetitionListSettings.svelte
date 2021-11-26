@@ -1,30 +1,31 @@
 <script lang="ts">
-  import type { IUserSettings } from '@parrotly.io/types';
+  import type { IUserReptitionListSettings } from '@parrotly.io/types';
   import { onMount } from 'svelte';
   import { Toggle } from '@parrotly.io/ui';
   import { createEventDispatcher } from 'svelte';
 
-  export let initialData: IUserSettings;
+  export let settings: IUserReptitionListSettings;
   const dispatch = createEventDispatcher();
 
-  let maximumMCQs = initialData.maximumMCQs;
-  let maximumQuizzes = initialData.maximumQuizzes;
-  let maximumRepetition = initialData.maximumRepetition;
-  let showCardIntervalDurationMinutes =
-    initialData.showCardIntervalDurationMinutes;
-  let showCardDurationSeconds = initialData.showCardDurationSeconds;
-  let enableNotifications = initialData.enableNotifications;
+  // let maximumMCQs = settings.maximumMCQs;
+  // let maximumQuizzes = settings.maximumQuizzes;
+  // let maximumRepetition = settings.maximumRepetition;
+  // let showCardIntervalDurationMinutes =
+  //   settings.showCardIntervalDurationMinutes;
+  // let showCardDurationSeconds = settings.showCardDurationSeconds;
+  // let enableNotifications = settings.enableNotifications;
 
-  $: {
-    dispatch('settings', {
-      maximumMCQs,
-      maximumQuizzes,
-      maximumRepetition,
-      showCardIntervalDurationMinutes,
-      showCardDurationSeconds,
-      enableNotifications,
-    });
-  }
+  // $: {
+  //   settings = {
+  //     maximumMCQs,
+  //     maximumQuizzes,
+  //     maximumRepetition,
+  //     showCardIntervalDurationMinutes,
+  //     showCardDurationSeconds,
+  //     enableNotifications,
+  //   };
+  //   dispatch('settings', settings);
+  // }
 </script>
 
 <template>
@@ -36,7 +37,7 @@
         >
           Number of word displays:
         </span>
-        <span>{maximumRepetition} Displays</span>
+        <span>{settings.maximumRepetition} Displays</span>
       </div>
       <input
         type="range"
@@ -44,7 +45,7 @@
         max="300"
         step="1"
         class="h-8"
-        bind:value={maximumRepetition}
+        bind:value={settings.maximumRepetition}
       />
     </div>
     <div class="flex flex-col items-start justify-stretch mt-6">
@@ -54,7 +55,7 @@
         >
           Number of MCQ displays:
         </span>
-        <span>{maximumMCQs} Displays</span>
+        <span>{settings.maximumMCQs} Displays</span>
       </div>
       <input
         type="range"
@@ -62,7 +63,7 @@
         max="300"
         step="1"
         class="h-8"
-        bind:value={maximumMCQs}
+        bind:value={settings.maximumMCQs}
       />
     </div>
     <div class="flex flex-col items-start justify-stretch mt-6">
@@ -72,7 +73,7 @@
         >
           Number of quiz displays:
         </span>
-        <span>{maximumQuizzes} Displays</span>
+        <span>{settings.maximumQuizzes} Displays</span>
       </div>
       <input
         type="range"
@@ -80,7 +81,7 @@
         max="300"
         step="1"
         class="h-8"
-        bind:value={maximumQuizzes}
+        bind:value={settings.maximumQuizzes}
       />
     </div>
 
@@ -89,7 +90,7 @@
         <span title="Interval between 2 consecutive words shown.">
           Interval between cards:
         </span>
-        <span>{showCardIntervalDurationMinutes} Minutes</span>
+        <span>{settings.showCardIntervalDurationMinutes} Minutes</span>
       </div>
       <input
         type="range"
@@ -97,7 +98,7 @@
         max="120"
         step="1"
         class="h-8"
-        bind:value={showCardIntervalDurationMinutes}
+        bind:value={settings.showCardIntervalDurationMinutes}
       />
     </div>
     <div class="flex flex-col items-start justify-stretch mt-6">
@@ -107,7 +108,7 @@
         >
           Duration show card:
         </span>
-        <span>{showCardDurationSeconds} Seconds</span>
+        <span>{settings.showCardDurationSeconds} Seconds</span>
       </div>
       <input
         type="range"
@@ -115,20 +116,25 @@
         max="60"
         step="1"
         class="h-8"
-        bind:value={showCardDurationSeconds}
+        bind:value={settings.showCardDurationSeconds}
       />
     </div>
     <div class="flex justify-between items-start justify-stretch mt-2">
       <span
         title="Show browser notification when the browser is not the active window."
       >
-        Enable notifications: {enableNotifications}
+        Enable notifications:
       </span>
       <Toggle
-        on:change={(event) => (enableNotifications = event.detail.checked)}
-        defaultChecked={enableNotifications}
-        statusText={{ on: 'On', off: 'OFF' }}
-      />
+        on:change={(event) =>
+          (settings.enableNotifications = event.detail.checked)}
+        bind:checked={settings.enableNotifications}
+        let:checked
+      >
+        <slot name="left">
+          {#if checked} ON {:else} OFF {/if}
+        </slot>
+      </Toggle>
     </div>
   </div>
 </template>

@@ -102,4 +102,4 @@ export const SUPPORTED_LANGUAGES = {
   "zu": "Zulu",
 } as const
 
-export type LanguageType = keyof typeof SUPPORTED_LANGUAGES;
+export type Language = keyof typeof SUPPORTED_LANGUAGES;

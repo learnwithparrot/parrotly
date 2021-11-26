@@ -10,7 +10,7 @@
     IUserSettings,
   } from '@parrotly.io/types';
   import { combineLatest, Subject } from 'rxjs';
-  import { debounceTime, skip } from 'rxjs/operators';
+  import { debounceTime } from 'rxjs/operators';
   import type { LanguageType } from '@parrotly.io/constants';
   import { onMount } from 'svelte';
   import SideNavLogin from './SideNavLogin.svelte';
@@ -19,7 +19,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let section: HTMLElement;
+  let container: HTMLElement;
   let currentTab: 'showWord' | 'autoTranslation' = 'showWord';
   const repetitionListSettings = new Subject<IUserReptitionListSettings>();
   const languageSettings = new Subject<IUserLanguageSettings>();
@@ -75,7 +75,7 @@
 
   const onWindowClick = (e: Event) => {
     //@ts-ignore
-    if (!section.contains(e.target)) {
+    if (!container.contains(e.target)) {
       dispatch('close');
     }
   };
@@ -113,7 +113,7 @@
 <template>
   <div
     class="fixed flex items-stretch right-0 top-0 z-modal max-w-popup h-full w-[350px]"
-    bind:this={section}
+    bind:this={container}
     on:click|stopPropagation
     transition:fly={{ x: 30, duration: 300 }}
   >
@@ -123,7 +123,7 @@
     >
       <div class="flex items-center justify-start mb-4">
         <a
-          class="outline-none font-alegreya text-2xl font-medium flex-none flex items-center justify-center text-gray-900"
+          class="outline-none font-alegreya text-2xl font-medium flex-none flex items-center justify-center dark:text-primary-300"
           href="https://learnwithparrot.io"
           target="_blank"
         >
@@ -186,7 +186,7 @@
         </div>
         {#if currentTab === 'showWord'}
           <RepetitionListSettings
-            initialData={userSettings}
+            settings={userSettings}
             on:settings={(event) => nextRepetitionListSettings(event.detail)}
           />
         {:else}

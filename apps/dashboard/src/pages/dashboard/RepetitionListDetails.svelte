@@ -1,17 +1,18 @@
 <script lang="ts">
-  import { map, startWith, tap } from 'rxjs/operators';
-  import { of, Subject } from 'rxjs';
-  import { onMount } from 'svelte';
+  import { debounceTime, map, startWith } from 'rxjs/operators';
+  import { combineLatest, pipe, Subject } from 'rxjs';
+  import { onDestroy } from 'svelte';
   import { RepetitionWord, Modal } from '../../components';
   import { RepetitionWordService } from './../../services';
   import type { IRepetitionWord } from '@parrotly.io/types';
   import { Button, Chip } from '@parrotly.io/ui';
   import { useParams } from 'svelte-navigator';
-  import { storeToObservable } from '../../utils';
+  import { storeToObservable, SvelteSubject } from '../../utils';
 
   let toDelete: IRepetitionWord = null;
   let toView: IRepetitionWord = null;
   const unsubscribe = new Subject<boolean>();
+  const search = new SvelteSubject<string>('');
 
   const params = useParams();
 
@@ -19,14 +20,19 @@
     map((_) => `repetition_lists/${_.id}/list`)
   );
   const service = new RepetitionWordService(path$);
-  const words$ = service.valueChanges().pipe(startWith([]));
+  const words$ = combineLatest([
+    service.valueChanges().pipe(startWith<IRepetitionWord[]>([])),
+    search.asObservable().pipe(debounceTime(300), startWith('')),
+  ]).pipe(
+    map(([words, searchKey]) => {
+      return words.filter(word => word.word.indexOf(searchKey) !== -1)
+    })
+  );
 
   //continue working from here.
-  onMount(() => {
-    return () => {
-      service.unsubscribeAll();
-      unsubscribe.next(false);
-    };
+  onDestroy(() => {
+    service.unsubscribeAll();
+    unsubscribe.next(false);
   });
 
   function deleteWord(word: IRepetitionWord) {
@@ -47,12 +53,13 @@
 <template>
   <section class="flex flex-col flex-1 pt-1 justify-start gap-4 w-full">
     <header class="flex justify-between w-full">
-      <h1 class="font-alegreya text-3xl font-semibold dark:text-white">
+      <h1 class="font-alegreya text-2xl font-semibold dark:text-primary-300">
         Repetition List Default
       </h1>
       <input
         type="text"
         placeholder="search"
+        bind:value={$search}
         class="outline-none bg-primary-600 min-w-[200px] bg-opacity-30 p-2"
       />
     </header>
@@ -90,7 +97,7 @@
           on:click={(_) => handleView(toDelete)}
         />
         <Button
-          iconPrefix={'la-trash'}
+          iconPrefix={'la-trash mb-[2px]'}
           text="Delete"
           on:click={(_) => deleteWord(toDelete)}
         />

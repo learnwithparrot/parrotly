@@ -6,10 +6,6 @@
   export let open = false;
   export let title = '';
 
-  $: {
-    console.log({ open });
-  }
-
   const dispatch = createEventDispatcher();
 </script>
 
@@ -24,20 +20,20 @@
         <div
           transition:fly={{ y: 30, duration: 300 }}
           on:click|stopPropagation
-          class="min-w-[600px] bg-white dark:bg-primary-700 rounded-sm shadow-md p-4 flex flex-col dark:text-primary-400"
+          class="xs:min-w-[336px] sm:min-w-[600px] bg-white dark:bg-primary-700 rounded-sm shadow-md p-4 flex flex-col dark:text-primary-400"
         >
           <slot name="header">
             <nav class="flex justify-between mb-2 items-center">
               {#if title}
-                <h2 class="text-2xl">{title}</h2>
+                <h2 class="text-2xl font-alegreya font-semibold">{title}</h2>
               {/if}
-                <Button
-                  iconPrefix="la-times"
-                  on:click={() => dispatch('close')}
-                />
+              <Button
+                iconPrefix="la-times"
+                on:click={() => dispatch('close')}
+              />
             </nav>
           </slot>
-          <slot name="content" />
+          <slot name="content"/>
           <slot name="footer" />
         </div>
       </slot>

@@ -12,12 +12,12 @@
 
   onMount(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) navigate('/dashboard');
+      if (user) navigate(`/dashboard/my_list/${user.uid}_default`);
     });
   });
 </script>
 
-<div class="flex flex-col max-w-screen-lg mx-auto w-full">
+<div class="flex flex-col max-w-screen-xl mx-auto w-full">
   <Route path="login" component={Login} />
   <Route path="signout" component={SignOut} />
   <Route component={Redirect} to="login" />

@@ -1,2 +1,2 @@
 export * from './string.utils'
-export * from './storeToObservable'
+export * from './rxjs-utils'

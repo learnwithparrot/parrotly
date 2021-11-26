@@ -88,8 +88,8 @@ export const saveToRepetitionList = async (word: string, translation: string, ca
         },
         countShows: 0,
         isExpression: false,
-        languageTranslation: 'de',
-        languageWord: 'en',
+        // languageTranslation: 'de',
+        // languageWord: 'en',
       };
       transaction.update(repetitionListRef, { wordCount, wordsSample })
       transaction.set(repetitionWordRef, data)

@@ -1,4 +1,4 @@
-import type { LanguageType } from '@parrotly.io/constants'
+import type { Language } from '@parrotly.io/constants'
 
 export interface IRepetitionList {
   wordCount: number;
@@ -12,8 +12,8 @@ export interface IRepetitionList {
   creatorId: string;
   creatorDisplayName: string;
   creatorPhotoUrl: string;
-  languageWord: LanguageType,
-  languageTranslation: LanguageType,
+  languageWord: Language,
+  languageTranslation: Language,
 }
 
 export type RepetitionStyle = 'show' | 'mcq' | 'quiz'
@@ -31,8 +31,6 @@ export interface IRepetitionWord {
     passed: number,
     failed: number
   },
-  languageWord: LanguageType,
-  languageTranslation: LanguageType,
   isExpression: boolean,
 }
 

@@ -33,6 +33,9 @@
       "@parrotly.io/ui": [
         "libs/ui/src/index.ts"
       ],
+      "@parrotly.io/ui/utils": [
+        "libs/ui/src/utils/index.ts"
+      ],
       "@parrotly.io/ui/popup": [
         "libs/ui/src/popup/index.ts"
       ]

@@ -20,8 +20,8 @@
   $: {
     if (_word) {
       word = _word.word;
-      translation = _word.translation;
-      languageTo = _word.languageTranslation;
+      // translation = _word.translation;
+      // languageTo = _word.languageTranslation;
     }
   }
 
