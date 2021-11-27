@@ -75,10 +75,10 @@
 
         <Toggle bind:checked={$userTheme} let:checked let:labelFor>
           <label for={labelFor} class="inline" slot="left">
-            <i class="las la-2x la-moon" />
+            <i class="las text-[25px] la-moon" />
           </label>
           <label for={labelFor} class="inline" slot="right">
-            <i class="las la-2x la-sun" />
+            <i class="las text-[25px] la-sun" />
           </label>
         </Toggle>
       </div>

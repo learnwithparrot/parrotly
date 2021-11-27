@@ -1,7 +1,3 @@
-<script>
-  import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
-</script>
-
 <template>
   <div class="flex flex-col gap-2 items-center justify-center bg-success-100">
     <span> You are not connected. </span>

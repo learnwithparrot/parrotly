@@ -171,97 +171,45 @@
         }
       }
     },
-    "component-playgroun": {
-      "root": "apps/component-playgroun",
-      "sourceRoot": "apps/component-playgroun/src",
+    "component-playground": {
+      "root": "apps/component-playground",
       "projectType": "application",
+      "sourceRoot": "apps/component-playground",
       "targets": {
         "build": {
-          "executor": "@nxext/svelte:build",
-          "outputs": [
-            "{options.outputPath}"
+          "executor": "@nrwl/workspace:run-script",
+          "output": [
+            "apps/component-playground/node_modules/.vite"
           ],
           "options": {
-            "outputPath": "dist/apps/component-playgroun",
-            "entryFile": "apps/component-playgroun/src/main.ts",
-            "tsConfig": "apps/component-playgroun/tsconfig.app.json",
-            "svelteConfig": "apps/component-playgroun/svelte.config.cjs",
-            "assets": [
-              {
-                "glob": "/*",
-                "input": "apps/component-playgroun/public/**",
-                "output": "./"
-              }
-            ]
-          },
-          "configurations": {
-            "production": {
-              "dev": false
-            }
+            "script": "build"
           }
         },
         "serve": {
-          "executor": "@nxext/svelte:build",
-          "options": {
-            "outputPath": "dist/apps/component-playgroun",
-            "entryFile": "apps/component-playgroun/src/main.ts",
-            "tsConfig": "apps/component-playgroun/tsconfig.app.json",
-            "svelteConfig": "apps/component-playgroun/svelte.config.cjs",
-            "assets": [
-              {
-                "glob": "/*",
-                "input": "apps/component-playgroun/public/**",
-                "output": "./"
-              }
-            ],
-            "watch": true,
-            "serve": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
+          "executor": "@nrwl/workspace:run-script",
+          "output": [
+            "apps/component-playground/node_modules/.vite"
           ],
           "options": {
-            "lintFilePatterns": [
-              "apps/component-playgroun/**/*.{ts,svelte,spec.ts}"
-            ]
-          }
-        },
-        "check": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "svelte-check",
-            "cwd": "apps/component-playgroun"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/component-playgroun"
-          ],
-          "options": {
-            "jestConfig": "apps/component-playgroun/jest.config.js",
-            "passWithNoTests": true
+            "script": "dev"
           }
         }
       }
     },
-    "component-playgroun-e2e": {
-      "root": "apps/component-playgroun-e2e",
-      "sourceRoot": "apps/component-playgroun-e2e/src",
+    "component-playground-e2e": {
+      "root": "apps/component-playground-e2e",
+      "sourceRoot": "apps/component-playground-e2e/src",
       "projectType": "application",
       "targets": {
         "e2e": {
           "executor": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/component-playgroun-e2e/cypress.json",
-            "devServerTarget": "component-playgroun:serve"
+            "cypressConfig": "apps/component-playground-e2e/cypress.json",
+            "devServerTarget": "component-playground:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "component-playgroun:serve:production"
+              "devServerTarget": "component-playground:serve:production"
             }
           }
         },
@@ -272,7 +220,7 @@
           ],
           "options": {
             "lintFilePatterns": [
-              "apps/component-playgroun-e2e/**/*.{js,ts}"
+              "apps/component-playground-e2e/**/*.{js,ts}"
             ]
           }
         }

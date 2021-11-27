@@ -37,12 +37,12 @@
       "tags": [],
       "implicitDependencies": ["background"]
     },
-    "component-playgroun": {
+    "component-playground": {
       "tags": []
     },
-    "component-playgroun-e2e": {
+    "component-playground-e2e": {
       "tags": [],
-      "implicitDependencies": ["component-playgroun"]
+      "implicitDependencies": ["component-playground"]
     },
     "constants": {
       "tags": []

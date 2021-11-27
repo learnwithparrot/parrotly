@@ -3,75 +3,33 @@
   import { createEventDispatcher } from 'svelte';
   import RepetitionListSettings from './RepetitionListSettings.svelte';
   import AutoTranslationSettings from './AutoTranslationSettings.svelte';
-  import type { IMenuItem } from '@parrotly.io/ui/popup';
+  import { Toggle } from '@parrotly.io/ui';
   import type {
     IUserReptitionListSettings,
-    IUserLanguageSettings,
     IUserSettings,
   } from '@parrotly.io/types';
-  import { combineLatest, Subject } from 'rxjs';
-  import { debounceTime } from 'rxjs/operators';
-  import type { LanguageType } from '@parrotly.io/constants';
+  import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+  import { debounceTime, takeUntil } from 'rxjs/operators';
+  import { SUPPORTED_LANGUAGES } from '@parrotly.io/constants';
+  import type { Language } from '@parrotly.io/constants';
   import { onMount } from 'svelte';
   import SideNavLogin from './SideNavLogin.svelte';
 
-  export let userSettings: IUserSettings;
+  export let userSettings = {} as IUserSettings;
 
   const dispatch = createEventDispatcher();
-
+  const destroy = new Subject<boolean>();
   let container: HTMLElement;
   let currentTab: 'showWord' | 'autoTranslation' = 'showWord';
-  const repetitionListSettings = new Subject<IUserReptitionListSettings>();
-  const languageSettings = new Subject<IUserLanguageSettings>();
-
-  let nativeLanguages: IMenuItem[] = [
-    { label: 'English', value: 'en', active: true },
-    { label: 'Deutsch', value: 'de' },
-    { label: 'Français', value: 'fr' },
-  ];
-
-  let desiredLanguages: IMenuItem[] = [
-    { label: 'English', value: 'en' },
-    { label: 'Deutsch', value: 'de', active: true },
-    { label: 'Français', value: 'fr' },
-  ];
-
-  function mapSelectedItem(items: IMenuItem[], selectedItem: string) {
-    let selectedLanguage: LanguageType;
-    let nativeLanguages = items.map((_) => {
-      if (_.value === selectedItem) {
-        if (_.active) _.active = false;
-        else {
-          _.active = true;
-          selectedLanguage = _.value;
-        }
-      } else _.active = false;
-      return _;
-    });
-    return { nativeLanguages, selectedLanguage };
-  }
-
-  function nativeLanguageSelected(event) {
-    const { selectedLanguage, nativeLanguages: mappedLanguages } =
-      mapSelectedItem(nativeLanguages, event.target.value);
-    nativeLanguages = mappedLanguages;
-    const languageLearned = desiredLanguages.find((lang) => lang.active)?.value;
-    languageSettings.next({
-      languageSpoken: selectedLanguage,
-      languageLearned,
-    });
-  }
-
-  function desiredLanguageSelected(event) {
-    const { selectedLanguage, nativeLanguages: mappedLanguages } =
-      mapSelectedItem(desiredLanguages, event.target.value);
-    desiredLanguages = mappedLanguages;
-    const languageSpoken = nativeLanguages.find((lang) => lang.active)?.value;
-    languageSettings.next({
-      languageSpoken,
-      languageLearned: selectedLanguage,
-    });
-  }
+  const repetitionListSettings =
+    new BehaviorSubject<IUserReptitionListSettings>(userSettings);
+  const nativeLanguage = new BehaviorSubject<Language>('en');
+  const desiredLanguage = new BehaviorSubject<Language>('de');
+  const userTheme = new BehaviorSubject<boolean>(true);
+  const supportedLanguages = Object.keys(SUPPORTED_LANGUAGES).map((key) => ({
+    value: key,
+    label: SUPPORTED_LANGUAGES[key],
+  }));
 
   const onWindowClick = (e: Event) => {
     //@ts-ignore
@@ -80,32 +38,29 @@
     }
   };
 
-  function nextRepetitionListSettings(data: IUserReptitionListSettings) {
-    repetitionListSettings.next(data);
-  }
-
   onMount(() => {
     const sub = combineLatest([
-      repetitionListSettings.asObservable(),
-      languageSettings.asObservable(),
+      repetitionListSettings,
+      nativeLanguage,
+      desiredLanguage,
+      userTheme,
     ])
-      .pipe(debounceTime(1500))
-      .subscribe(([repetitionList, languages]) => {
-        const _settings = { ...repetitionList, ...languages };
-        dispatch('settings', _settings);
-        Object.keys(_settings).forEach((key) => {
-          userSettings[key] = _settings[key];
-        });
-      });
-
-    nativeLanguageSelected({
-      target: { value: userSettings.languageSpoken },
-    });
-    desiredLanguageSelected({
-      target: { value: userSettings.languageLearned },
-    });
-
-    return () => sub.unsubscribe();
+      .pipe(debounceTime(1500), takeUntil(destroy))
+      .subscribe(
+        ([repetitionList, languageSpoken, languageLearned, isDarkMode]) => {
+          const _settings = {
+            ...repetitionList,
+            theme: isDarkMode ? 'dark' : 'light',
+            languageSpoken,
+            languageLearned,
+          };
+          dispatch('settings', _settings);
+          Object.keys(_settings).forEach((key) => {
+            userSettings[key] = _settings[key];
+          });
+        }
+      );
+    return destroy.next;
   });
 </script>
 
@@ -128,32 +83,43 @@
           target="_blank"
         >
           <span>Learn with Parrot</span>
-          <i class="lab la-earlybirds text-[30]" />
+          <i class="lab la-earlybirds text-[30px]" />
         </a>
       </div>
       {#if !userSettings}
         <SideNavLogin />
       {:else}
         <div class="flex items-center justify-between">
-          <span>I speak: </span>
+          <span>Theme </span>
+          <Toggle bind:checked={$userTheme} let:checked let:labelFor>
+            <label for={labelFor} class="inline" slot="left">
+              <i class="las text-[25px] la-moon" />
+            </label>
+            <label for={labelFor} class="inline" slot="right">
+              <i class="las text-[25px] la-sun" />
+            </label>
+          </Toggle>
+        </div>
+        <div class="flex items-center justify-between mt-4">
+          <span>I speak </span>
           <select
             class="block flex outline-none items-center px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 duration-300 rounded-sm"
-            on:change={nativeLanguageSelected}
+            bind:value={$nativeLanguage}
           >
-            {#each nativeLanguages as language}
+            {#each supportedLanguages as language}
               <option value={language.value}>
                 {language.label || language.value}
               </option>
             {/each}
           </select>
         </div>
-        <div class="flex items-center justify-between mt-2">
-          <span>I want to learn:</span>
+        <div class="flex items-center justify-between mt-4">
+          <span>I want to learn&nbsp;</span>
           <select
             class="block flex outline-none items-center px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 duration-300 rounded-sm"
-            on:change={desiredLanguageSelected}
+            bind:value={$desiredLanguage}
           >
-            {#each desiredLanguages as language}
+            {#each supportedLanguages as language}
               <option value={language.value}>
                 {language.label || language.value}
               </option>
@@ -185,10 +151,7 @@
           </button>
         </div>
         {#if currentTab === 'showWord'}
-          <RepetitionListSettings
-            settings={userSettings}
-            on:settings={(event) => nextRepetitionListSettings(event.detail)}
-          />
+          <RepetitionListSettings bind:settings={$repetitionListSettings} />
         {:else}
           <AutoTranslationSettings />
         {/if}

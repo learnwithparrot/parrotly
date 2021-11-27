@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Route } from 'svelte-navigator';
-  import { Sidenav } from '../../components';
+  import { Header } from '../../components';
   import Modal from '../../components/Modal.svelte';
   import Redirect from '../../components/Redirect.svelte';
   import MyRepetitionLists from './MyRepetitionLists.svelte';
@@ -15,7 +15,7 @@
   }
 </script>
 
-<Sidenav on:settings={handleSettings} />
+<Header on:settings={handleSettings} />
 <div class="flex flex-col max-w-screen-xl mx-auto w-full">
   <Route path="my_list" component={MyRepetitionLists} />
   <Route path="my_list/:id" component={RepetitionListDetails} />
