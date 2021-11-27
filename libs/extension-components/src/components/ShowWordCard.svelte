@@ -80,7 +80,7 @@
         on:click={onKnowWord}
         text="I know this word"
         color="success"
-        variant="flat"
+        variant="filled"
       />
       <span class="flex-1" />
       <Button
@@ -99,6 +99,7 @@
       <Button
         on:click={onCloseClicked}
         color="accent"
+        variant="filled"
         iconSuffix="las la-times"
         title="Sign out"
       >

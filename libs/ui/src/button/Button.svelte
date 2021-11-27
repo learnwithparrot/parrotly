@@ -58,6 +58,8 @@
     @apply outline-none font-roboto flex-none flex text-base items-center;
     @apply justify-center px-2 h-9 rounded-sm duration-300 transition;
   }
+
+
   .btn--filled,
   .btn--flat {
     @apply border-0;
@@ -69,48 +71,32 @@
     }
   }
 
-  .btn--filled{
+  .btn--filled {
     background-color: var(--bg-flat);
   }
 
-  .dark .btn--accent {
-    --text-flat: theme('colors.accent.500');
-    --focus-bg-flat: theme('colors.accent.200');
-    --bg-flat: theme('colors.transparent');
-  }
+  .dark .btn--accent,
   .btn--accent {
-    --focus-bg-flat: theme('colors.accent.200');
     --text-flat: theme('colors.accent.500');
+    --focus-bg-flat: theme('colors.accent.200');
     --bg-flat: theme('colors.accent.100');
   }
 
-  .dark .btn--warning {
-    --text-flat: theme('colors.warning.500');
-    --focus-bg-flat: theme('colors.warning.200');
-    --bg-flat: theme('colors.transparent');
-  }
+  .dark .btn--warning,
   .btn--warning {
-    --focus-bg-flat: theme('colors.warning.200');
     --text-flat: theme('colors.warning.500');
+    --focus-bg-flat: theme('colors.warning.200');
     --bg-flat: theme('colors.warning.100');
   }
 
-  .dark .btn--danger {
-    --text-flat: theme('colors.danger.500');
-    --focus-bg-flat: theme('colors.danger.200');
-    --bg-flat: theme('colors.transparent');
-  }
+  .dark .btn--danger,
   .btn--danger {
-    --focus-bg-flat: theme('colors.danger.200');
     --text-flat: theme('colors.danger.500');
+    --focus-bg-flat: theme('colors.danger.200');
     --bg-flat: theme('colors.danger.100');
   }
 
-  .dark .btn--success {
-    --text-flat: theme('colors.success.500');
-    --focus-bg-flat: theme('colors.success.200');
-    --bg-flat: theme('colors.transparent');
-  }
+  .dark .btn--success,
   .btn--success {
     --focus-bg-flat: theme('colors.success.200');
     --text-flat: theme('colors.success.500');

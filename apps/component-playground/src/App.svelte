@@ -5,7 +5,7 @@
   export let url = '';
 </script>
 
-<main class="light">
+<main class="dark">
   <Router {url}>
     <nav>
       <Link to="/welcome">Welcome</Link>
