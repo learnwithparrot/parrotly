@@ -9,7 +9,7 @@
   }
 </script>
 
-<div class="flex justify-end items-center gap-4">
+<div class="flex justify-end items-center gap-4 dark:text-primary-300">
   <slot name="right" {checked} {labelFor} />
   <div
     class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in"
@@ -27,10 +27,9 @@
       class="toggle-label block transition-all duration-700 overflow-hidden h-6 rounded-full bg-primary-200 cursor-pointer"
     />
   </div>
-  <slot name="left" {checked} {labelFor} />
-  {#if !$$slots.left}
+  <slot name="left" {checked} {labelFor}>
     <slot {checked} {labelFor} />
-  {/if}
+  </slot>
 </div>
 
 <style lang="postcss">

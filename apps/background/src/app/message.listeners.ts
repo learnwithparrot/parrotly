@@ -1,21 +1,35 @@
 import browser from 'webextension-polyfill';
 import { EXTENSION_MESSAGES } from "@parrotly.io/constants"
-import { playWord, translate } from './common-functions';
+import { MESSAGES } from "@parrotly.io/types"
+import { playWord, translate, getCurrentTheme } from './common-functions';
 import {
   deleteRepetitionWord, saveToRepetitionList, signInWithGoogle,
   updateUserSettings,
 } from './firebase'
 
+async function changeTheme() {
+  const isDarkTheme = await getCurrentTheme()
+  const tabs = await browser.tabs.query({});
+  if (tabs?.length)
+    for (const tab of tabs)
+      try {
+        browser.tabs.sendMessage(
+          tab.id,
+          { type: EXTENSION_MESSAGES.CHANGE_THEME, isDarkTheme }
+        )
+      } catch (err) { console.warn(err) }
+
+}
 
 browser.runtime.onMessage.addListener(
-  async function (request, sender, sendResponse) {
+  async function (request: MESSAGES[keyof MESSAGES], sender, sendResponse) {
     switch (request.type) {
       case EXTENSION_MESSAGES.PLAY_TEXT:
-        playWord(request.translation, request.lang ?? 'de');
+        playWord(request.text, request.lang);
         break;
       case EXTENSION_MESSAGES.TRANSLATE_TEXT:
         translate(
-          'en', 'de', request.text,
+          request.languageWord, request.languageTranslation, request.text,
           async ({ translation }: { translation: string, isTranslated: boolean, alternatives: string[] }) => {
             const tabs = await browser.tabs.query({ "active": true, "currentWindow": true });
             browser.tabs.sendMessage(tabs[0].id, {
@@ -43,7 +57,9 @@ browser.runtime.onMessage.addListener(
       case EXTENSION_MESSAGES.UPDATE_USER_SETTINGS:
         updateUserSettings(request.settings, request.id)
         break;
-
+      case EXTENSION_MESSAGES.GET_CURRENT_THEME:
+        changeTheme()
+        break;
     }
   }
 );

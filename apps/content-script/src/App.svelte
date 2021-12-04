@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import {
     AddToRepetitionListWrapper,
     SideNavWrapper,
@@ -6,32 +7,63 @@
   } from './components';
   import browser from 'webextension-polyfill';
   import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
+  import type {
+    MESSAGE_AUTH_CREDENTIAL,
+    MESSAGE_TRIGGER_SHOW_WORD,
+    MESSAGE_CHANGE_THEME,
+  } from '@parrotly.io/types';
   import { shortcut } from './actions';
 
+  let isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
   // let globalHref = browser.extension.getURL('global.css');
   let lineAwesomeHref = browser.extension.getURL('line-awesome.min.css');
   let robotoHref =
     'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap';
 
+  /**
+   * Used to authenticate the extension once
+   * we authenticate on the dashboard
+   */
   function onMessage(event) {
     // We only accept messages from ourselves
     if (event.source != window) return;
 
     if (event.data.type && event.data.type == 'FROM_PAGE') {
-      browser.runtime.sendMessage({
+      const message: MESSAGE_AUTH_CREDENTIAL = {
         type: EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS,
         credential: event.data.credential,
-      });
+      };
+      browser.runtime.sendMessage(message);
     }
   }
 
   function triggerShowWord() {
-    browser.runtime.sendMessage({
+    const message: MESSAGE_TRIGGER_SHOW_WORD = {
       type: EXTENSION_MESSAGES.TRIGGER_SHOW_WORD,
+    };
+    browser.runtime.sendMessage(message);
+  }
+
+  function setupListeners() {
+    window.addEventListener('message', onMessage);
+    browser.runtime.onMessage.addListener(function (request) {
+      if (request.type === EXTENSION_MESSAGES.CHANGE_THEME) {
+        isDarkTheme = request.isDarkTheme;
+      }
     });
   }
 
-  // window.addEventListener('message', onMessage);
+  function getCurrentTheme() {
+    const message: MESSAGE_CHANGE_THEME = {
+      type: EXTENSION_MESSAGES.GET_CURRENT_THEME,
+    };
+    browser.runtime.sendMessage(message);
+  }
+
+  onMount(() => {
+    setupListeners();
+    getCurrentTheme();
+  });
 </script>
 
 <svelte:window on:message={onMessage} />
@@ -42,12 +74,12 @@
     code: 'Digit2',
     callback: triggerShowWord,
   }} />
+
 <template>
-  <!-- <link rel="stylesheet" href={globalHref} /> -->
   <link rel="stylesheet" href={lineAwesomeHref} />
   <link rel="stylesheet" href={robotoHref} />
 
-  <main id="parrot-root" class="z-modal">
+  <main id="parrot-root" class="z-modal" class:dark={isDarkTheme}>
     <AddToRepetitionListWrapper />
     <SideNavWrapper />
     <ShowWordCardWrapper />

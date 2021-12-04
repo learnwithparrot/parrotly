@@ -1,6 +1,7 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
+  import { Button } from '@parrotly.io/ui';
 
   export let translation: string;
   let selected_words: string;
@@ -67,7 +68,8 @@
     dispatch('close');
   };
 
-  const playWords = async () => {
+  const playWords = async (event) => {
+    event.stopPropagation();
     dispatch('playWord', {
       translation,
     });
@@ -79,13 +81,12 @@
 
 <template>
   <div
-    class="flex absolute bg-white rounded-md p-6 shadow-xl z-modal w-popup"
+    class="flex absolute dark:bg-primary-800 bg-primary-100 dark:bg-primary-100 dark:text-primary-300 rounded-md p-6 shadow-xl z-modal w-popup backdrop-blur-sm"
     style="left:{dimens.left}; top:{dimens.top};"
     bind:this={section}
     on:click|stopPropagation
     transition:fly={{ y: 20, duration: 300 }}
   >
-    <!-- on:click|stopPropagation -->
     <form
       class="flex-auto"
       on:submit|preventDefault|stopPropagation={addToRepetitionList}
@@ -94,17 +95,19 @@
         <input
           type="text"
           bind:value={selected_words}
-          class="flex-auto font-roboto text-base px-2 transition duration-300 py-2 outline-none capitalize focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2"
+          class="flex-auto dark:bg-primary-700 bg-primary-100 dark:bg-primary-100 hover:bg-primary-200 focus:bg-primary-200 font-roboto text-base px-2 transition duration-300 py-2 outline-none capitalize focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2"
         />
 
         <input
           type="text"
           bind:value={translation}
-          class="flex-auto font-roboto text-base px-2 transition duration-300 py-2 capitalize outline-none focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2"
+          class="flex-auto dark:bg-primary-700 bg-primary-100 dark:bg-primary-100 hover:bg-primary-200 focus:bg-primary-200 font-roboto text-base px-2 transition duration-300 py-2 capitalize outline-none focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2"
         />
       </div>
       <div class="flex space-x-3 font-medium">
-        <div class="relative inline-block text-left ml-auto flex items-baseline">
+        <div
+          class="relative text-left ml-auto flex items-center"
+        >
           <div>
             <div
               class=" text-sm text-gray-500 underline height flex items-end"
@@ -114,78 +117,15 @@
               Default category
             </div>
           </div>
-
-          <!--
-            Dropdown menu, show/hide based on menu state.
-
-            Entering: "transition ease-out duration-100"
-              From: "transform opacity-0 scale-95"
-              To: "transform opacity-100 scale-100"
-            Leaving: "transition ease-in duration-75"
-              From: "transform opacity-100 scale-100"
-              To: "transform opacity-0 scale-95"
-          -->
-          {#if false}
-            <div
-              class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="menu-button"
-              tabindex="-1"
-            >
-              <div class="py-1" role="none">
-                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                <a
-                  href="#"
-                  class="text-gray-700 block px-4 py-2 text-sm"
-                  role="menuitem"
-                  tabindex="-1"
-                  id="menu-item-0">Account settings</a
-                >
-                <a
-                  href="#"
-                  class="text-gray-700 block px-4 py-2 text-sm"
-                  role="menuitem"
-                  tabindex="-1"
-                  id="menu-item-1">Support</a
-                >
-                <a
-                  href="#"
-                  class="text-gray-700 block px-4 py-2 text-sm"
-                  role="menuitem"
-                  tabindex="-1"
-                  id="menu-item-2">License</a
-                >
-                <form method="POST" action="#" role="none">
-                  <button
-                    type="submit"
-                    class="text-gray-700 block w-full text-left px-4 py-2 text-sm"
-                    role="menuitem"
-                    tabindex="-1"
-                    id="menu-item-3"
-                  >
-                    Sign out
-                  </button>
-                </form>
-              </div>
-            </div>
-          {/if}
         </div>
         <div class="flex-auto flex space-x-3 justify-end">
-          <button
-            on:click|stopPropagation={playWords}
-            class="flex-none flex text-base items-center justify-center w-9 h-9 rounded-sm text-gray-900 border hover:bg-gray-200 hover:text-black transition duration-300"
-            type="button"
-            aria-label="like"
-          >
-            <i class="las la-volume-down text-[30]" />
-          </button>
-          <button
-            class="w-1/2 flex text-base items-center justify-center font-alegreya rounded-sm bg-black text-white hover:bg-gray-800"
+          <Button on:click={playWords} type="button" icon="la-volume-down" />
+          <Button
+            text="Submit"
             type="submit"
-          >
-            Save
-          </button>
+            color="success"
+            className="font-alegreya"
+          />
         </div>
       </div>
     </form>

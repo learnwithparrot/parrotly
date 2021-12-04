@@ -8,12 +8,12 @@
     IUserReptitionListSettings,
     IUserSettings,
   } from '@parrotly.io/types';
-  import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
-  import { debounceTime, takeUntil } from 'rxjs/operators';
   import { SUPPORTED_LANGUAGES } from '@parrotly.io/constants';
   import type { Language } from '@parrotly.io/constants';
   import { onMount } from 'svelte';
   import SideNavLogin from './SideNavLogin.svelte';
+  import { BehaviorSubject, combineLatest, Operator, Subject } from 'rxjs';
+  import { takeUntil, debounceTime, skip } from 'rxjs/operators';
 
   export let userSettings = {} as IUserSettings;
 
@@ -23,9 +23,29 @@
   let currentTab: 'showWord' | 'autoTranslation' = 'showWord';
   const repetitionListSettings =
     new BehaviorSubject<IUserReptitionListSettings>(userSettings);
-  const nativeLanguage = new BehaviorSubject<Language>('en');
-  const desiredLanguage = new BehaviorSubject<Language>('de');
-  const userTheme = new BehaviorSubject<boolean>(true);
+  const nativeLanguage = new BehaviorSubject<Language>(
+    userSettings.languageSpoken
+  );
+  const desiredLanguage = new BehaviorSubject<Language>(
+    userSettings.languageLearned
+  );
+  const userTheme = new BehaviorSubject<boolean>(userSettings.theme === 'dark');
+
+  /**
+   * For some weird reason, importing svelte subjects here
+   * prevents content-script project from compilling without
+   * any proper error hence we're using behaviour subjects as below
+   */
+
+  //@ts-ignore
+  repetitionListSettings.set = repetitionListSettings.next;
+  //@ts-ignore
+  nativeLanguage.set = nativeLanguage.next;
+  //@ts-ignore
+  desiredLanguage.set = desiredLanguage.next;
+  //@ts-ignore
+  userTheme.set = userTheme.next;
+
   const supportedLanguages = Object.keys(SUPPORTED_LANGUAGES).map((key) => ({
     value: key,
     label: SUPPORTED_LANGUAGES[key],
@@ -45,65 +65,64 @@
       desiredLanguage,
       userTheme,
     ])
-      .pipe(debounceTime(1500), takeUntil(destroy))
+      .pipe(skip(1), debounceTime(300), takeUntil(destroy))
       .subscribe(
         ([repetitionList, languageSpoken, languageLearned, isDarkMode]) => {
-          const _settings = {
+          const settings = {
             ...repetitionList,
             theme: isDarkMode ? 'dark' : 'light',
             languageSpoken,
             languageLearned,
           };
-          dispatch('settings', _settings);
-          Object.keys(_settings).forEach((key) => {
-            userSettings[key] = _settings[key];
+          dispatch('settings', settings);
+          Object.keys(settings).forEach((key) => {
+            userSettings[key] = settings[key];
           });
         }
       );
-    return destroy.next;
   });
 </script>
 
 <svelte:window on:click={onWindowClick} />
 <template>
   <div
-    class="fixed flex items-stretch right-0 top-0 z-modal max-w-popup h-full w-[350px]"
+    class="fixed flex items-stretch right-0 top-0 z-modal max-w-popup h-full w-[350px] dark:bg-primary-800 bg-primary-100 dark:text-primary-300"
     bind:this={container}
     on:click|stopPropagation
     transition:fly={{ x: 30, duration: 300 }}
   >
     <div class="drop-shadow" />
     <div
-      class="relative flex-grow flex p-4 pt-1 flex-col bg-white  items-stretch justify-start "
+      class="relative flex-grow flex p-4 pt-1 flex-col  items-stretch justify-start "
     >
       <div class="flex items-center justify-start mb-4">
         <a
-          class="outline-none font-alegreya text-2xl font-medium flex-none flex items-center justify-center dark:text-primary-300"
+          class="outline-none font-alegreya dark:text-primary-300 text-2xl font-medium flex-none flex items-center justify-center hover:underline focus:underline"
           href="https://learnwithparrot.io"
           target="_blank"
         >
-          <span>Learn with Parrot</span>
-          <i class="lab la-earlybirds text-[30px]" />
+          <span class="text-current">Learn with Parrot</span>
+          <i class="lab la-earlybirds dark:text-primary-300 text-[30px]" />
         </a>
       </div>
       {#if !userSettings}
         <SideNavLogin />
       {:else}
-        <div class="flex items-center justify-between">
-          <span>Theme </span>
-          <Toggle bind:checked={$userTheme} let:checked let:labelFor>
+        <div class="flex items-center justify-between dark:text-primary-300">
+          <span class="dark:text-primary-300">Theme </span>
+          <Toggle bind:checked={$userTheme} let:labelFor>
             <label for={labelFor} class="inline" slot="left">
-              <i class="las text-[25px] la-moon" />
+              <i class="las text-[25px] text-current la-moon" />
             </label>
             <label for={labelFor} class="inline" slot="right">
-              <i class="las text-[25px] la-sun" />
+              <i class="las text-[25px] text-current la-sun" />
             </label>
           </Toggle>
         </div>
         <div class="flex items-center justify-between mt-4">
-          <span>I speak </span>
+          <span class="dark:text-primary-300">I speak </span>
           <select
-            class="block flex outline-none items-center px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 duration-300 rounded-sm"
+            class="block bg-transparent dark:text-primary-300 text-justify flex outline-none items-center px-4 py-2 text-sm hover:bg-primary-100 hover:text-primary-900 focus:bg-primary-100 focus:text-primary-900 duration-300 rounded-sm"
             bind:value={$nativeLanguage}
           >
             {#each supportedLanguages as language}
@@ -114,9 +133,9 @@
           </select>
         </div>
         <div class="flex items-center justify-between mt-4">
-          <span>I want to learn&nbsp;</span>
+          <span class="dark:text-primary-300">I want to learn&nbsp;</span>
           <select
-            class="block flex outline-none items-center px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 duration-300 rounded-sm"
+            class="block bg-transparent dark:text-primary-300 text-justify flex outline-none items-center px-4 py-2 text-sm hover:bg-primary-100 hover:text-primary-900 focus:bg-primary-100 focus:text-primary-900 duration-300 rounded-sm"
             bind:value={$desiredLanguage}
           >
             {#each supportedLanguages as language}

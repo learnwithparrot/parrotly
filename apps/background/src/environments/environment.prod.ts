@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  site_url:'http://localhost:4200',
+  site_url: 'https://app.learnwithparrot.com',
 };

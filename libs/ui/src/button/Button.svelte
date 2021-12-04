@@ -6,6 +6,7 @@
   export let color: 'default' | 'success' | 'danger' | 'warning' | 'accent' =
     'default';
   export let text = '';
+  export let type = '';
   export let iconPrefix = '';
   export let iconSuffix = '';
   export let icon = '';
@@ -25,7 +26,7 @@
     class:btn--filled={variant === 'filled'}
     class:btn--outlined={variant === 'outlined'}
     class:btn--flat={variant === 'flat'}
-    type="button"
+    {type}
     {disabled}
     {title}
     aria-label="Delete repetition list"
@@ -41,7 +42,7 @@
       </slot>
       <slot>
         {#if text}
-          <span class="mx-2">{text}</span>
+          <span class="mx-2 text-current">{text}</span>
         {/if}
       </slot>
       <slot name="icon-suffix">
@@ -55,10 +56,9 @@
 
 <style lang="scss" global>
   .btn {
-    @apply outline-none font-roboto flex-none flex text-base items-center;
+    @apply outline-none font-alegreya flex-none flex text-base items-center;
     @apply justify-center px-2 h-9 rounded-sm duration-300 transition;
   }
-
 
   .btn--filled,
   .btn--flat {

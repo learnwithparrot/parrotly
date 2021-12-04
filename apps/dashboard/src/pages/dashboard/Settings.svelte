@@ -1,11 +1,9 @@
 <script lang="ts">
-  import type {
-    IUserReptitionListSettings,
-  } from '@parrotly.io/types';
+  import type { IUserReptitionListSettings } from '@parrotly.io/types';
   import { onMount } from 'svelte';
   import { SettingsService } from '../../services';
   import { RepetitionListSettings } from '@parrotly.io/extension-components';
-  import { SvelteSubject } from '../../utils';
+  import { SvelteSubject } from '@parrotly.io/ui/utils';
   import { SUPPORTED_LANGUAGES, Language } from '@parrotly.io/constants';
   import { Toggle } from '@parrotly.io/ui';
   import { combineLatest, Subject } from 'rxjs';
@@ -62,7 +60,7 @@
             theme: theme ? 'dark' : 'light',
           })
       );
-    return destroy.next;
+    return () => destroy.next();
   });
 </script>
 

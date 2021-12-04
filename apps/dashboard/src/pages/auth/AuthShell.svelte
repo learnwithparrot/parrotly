@@ -6,6 +6,7 @@
   import Redirect from '../../components/Redirect.svelte';
   import Login from './Login.svelte';
   import SignOut from './SignOut.svelte';
+  import LoginWithGoogle from './LoginWithGoogle.svelte';
 
   const navigate = useNavigate();
   const auth = getAuth();
@@ -19,6 +20,7 @@
 
 <div class="flex flex-col max-w-screen-xl mx-auto w-full">
   <Route path="login" component={Login} />
+  <Route path="login__google" component={LoginWithGoogle} />
   <Route path="signout" component={SignOut} />
   <Route component={Redirect} to="login" />
 </div>

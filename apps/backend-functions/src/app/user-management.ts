@@ -1,6 +1,6 @@
-import { AuthFunctionType } from './utils';
+import type { AuthFunctionType } from './utils';
 import * as admin from 'firebase-admin'
-import { IRepetitionList, IUser, IUserSettings } from '@parrotly.io/types';
+import type { IRepetitionList, IUser, IUserSettings } from '@parrotly.io/types';
 import { defaultUserList, FirebaseRefs } from '@parrotly.io/constants';
 
 /**
@@ -35,7 +35,7 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
     showCardDurationSeconds: 6,
     showCardIntervalDurationMinutes: 30,
     enableNotifications: true,
-    theme: 'rotate'
+    theme: null
   }
 
   batch.set(db.doc(`${FirebaseRefs.users}/${id}`), userData)

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-export function isDarkMode(onDestroy: Observable<boolean>): Observable<boolean> {
+export function isDarkMode(onDestroy?: Observable<boolean>): Observable<boolean> {
   return new Observable<boolean>(subscriber => {
 
     if (!window.matchMedia) {
@@ -14,10 +14,11 @@ export function isDarkMode(onDestroy: Observable<boolean>): Observable<boolean> 
 
     const mediaListQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    onDestroy.pipe(first()).subscribe(() => {
-      mediaListQuery.removeEventListener('change', emitValue)
-      !subscriber.closed && subscriber.complete()
-    })
+    if (onDestroy)
+      onDestroy.pipe(first()).subscribe(() => {
+        mediaListQuery.removeEventListener('change', emitValue)
+        !subscriber.closed && subscriber.complete()
+      })
 
     mediaListQuery.addEventListener('change', emitValue);
     subscriber.next(mediaListQuery.matches);

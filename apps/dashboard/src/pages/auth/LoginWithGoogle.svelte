@@ -1,6 +1,6 @@
 <script>
-  import { Button } from '@parrotly.io/ui';
   import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+  import { onMount } from 'svelte';
 
   const signInWithGoogle = () => {
     const auth = getAuth();
@@ -26,14 +26,12 @@
         const credential = GoogleAuthProvider.credentialFromError(error);
       });
   };
+
+  onMount(signInWithGoogle);
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-between">
-    <div
-      class="bg-primary-700 shadow-sm rounded-sm max-w-[500px] max-h-[500px] flex flex-col items-center"
-    >
-      <Button text="Sign in with Google" on:click={signInWithGoogle} variant="flat" />
-    </div>
+    <span>Login in progress</span>
   </div>
 </template>

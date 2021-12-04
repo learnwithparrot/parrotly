@@ -1,4 +1,4 @@
-import type { LanguageType } from "@parrotly.io/constants";
+import type { Language } from "@parrotly.io/constants";
 
 export interface IUser {
   isAdmin?: boolean,
@@ -22,8 +22,8 @@ export interface IUserAutoTranslationSettings {
 }
 
 export interface IUserLanguageSettings {
-  languageSpoken: LanguageType;
-  languageLearned: LanguageType;
+  languageSpoken: Language;
+  languageLearned: Language;
 }
 
 export interface IUserSettings extends IUserLanguageSettings, IUserReptitionListSettings, IUserAutoTranslationSettings {

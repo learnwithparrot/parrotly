@@ -7,7 +7,7 @@
   import type { IRepetitionWord } from '@parrotly.io/types';
   import { Button, Chip } from '@parrotly.io/ui';
   import { useParams } from 'svelte-navigator';
-  import { storeToObservable, SvelteSubject } from '../../utils';
+  import { storeToObservable, SvelteSubject } from '@parrotly.io/ui/utils';
 
   let toDelete: IRepetitionWord = null;
   let toView: IRepetitionWord = null;

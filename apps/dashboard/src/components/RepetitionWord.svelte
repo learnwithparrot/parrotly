@@ -1,6 +1,4 @@
 <script lang="ts">
-import { SUPPORTED_LANGUAGES } from '@parrotly.io/constants';
-
   import type { IRepetitionWord } from '@parrotly.io/types';
   import { Button, Chip } from '@parrotly.io/ui';
   import { createEventDispatcher } from 'svelte';

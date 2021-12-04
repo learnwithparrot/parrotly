@@ -368,18 +368,12 @@
       "targets": {
         "build": {
           "executor": "@nrwl/workspace:run-script",
-          "output": [
-            "apps/dashboard/node_modules/.vite"
-          ],
           "options": {
             "script": "build"
           }
         },
         "serve": {
           "executor": "@nrwl/workspace:run-script",
-          "output": [
-            "apps/dashboard/node_modules/.vite"
-          ],
           "options": {
             "script": "dev"
           }
@@ -617,6 +611,31 @@
           "options": {
             "jestConfig": "libs/ui/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website": {
+      "root": "apps/website",
+      "projectType": "application",
+      "sourceRoot": "apps/website",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-script",
+          "output": [
+            "apps/website/node_modules/.vite"
+          ],
+          "options": {
+            "script": "build"
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/workspace:run-script",
+          "output": [
+            "apps/website/node_modules/.vite"
+          ],
+          "options": {
+            "script": "dev"
           }
         }
       }

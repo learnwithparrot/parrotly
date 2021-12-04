@@ -1,13 +1,14 @@
+import { Query, CollectionReference } from 'firebase/firestore'
 import {
   getFirestore, collection, runTransaction,
   enableIndexedDbPersistence, doc, clearIndexedDbPersistence,
-  query, where, Query, CollectionReference, increment, updateDoc, deleteDoc, setDoc,
+  query, where, increment, updateDoc, deleteDoc, setDoc,
 } from 'firebase/firestore'
-import { auth$, authOrEMPTY$ } from './auth';
+import { authOrEMPTY$, auth$ } from './auth';
 import {
-  docData, collectionData,
+  docData, collectionData
 } from 'rxfire/firestore';
-import { IRepetitionList, IRepetitionWord, IUserSettings, RepetitionStyle } from '@parrotly.io/types'
+import type { IRepetitionList, IRepetitionWord, IUserSettings, RepetitionStyle } from '@parrotly.io/types'
 import { getAuth } from 'firebase/auth'
 import { first, shareReplay, switchMap } from 'rxjs/operators';
 import { combineLatest, of } from 'rxjs';
@@ -17,44 +18,57 @@ import { FirebaseRefs, userSettingsPath } from '@parrotly.io/constants';
 
 const db = getFirestore();
 
+/**
+ * Here, we aren't using the authWithDelay$ because
+ * authWithDelay$ is delayed to permit the below to run before even the first call
+ * to any firestore functions.
+ * https://firebase.google.com/docs/reference/js/firestore_.md?hl=cs#clearindexeddbpersistence
+ */
 auth$.pipe(first()).subscribe(user => {
-  if (user) return
-  clearIndexedDbPersistence(db)
+  console.log(user ? 'Enabled cache storage' : 'Cleared cache and enabled cache storage')
+  if (!user)
+    clearIndexedDbPersistence(db)
   enableIndexedDbPersistence(db)
 })
 
 
 export const userAndSettings$ = authOrEMPTY$.pipe(
   switchMap(user => {
-    const settingsRef = doc(db, `${FirebaseRefs.settings}/${user.uid}`) as DocumentReference<IUserSettings>;
+    const settingsRef = doc(
+      db, `${FirebaseRefs.settings}/${user.uid}`
+    ) as DocumentReference<IUserSettings>;
+    const settings$ = docData(settingsRef, { idField: 'id' })
     return combineLatest([
       of(user),
-      docData(settingsRef, { idField: 'id' }),
+      settings$,
     ])
   }),
   shareReplay({ bufferSize: 1, refCount: true })
 )
 
-export const categoriesAndLists$ = authOrEMPTY$.pipe(
+export const categories$ = authOrEMPTY$.pipe(
   switchMap(user => {
     const repetitionListCollection = collection(db, FirebaseRefs.repetition_lists);
     const collectionQuerry = query(repetitionListCollection, where("creatorId", "==", user.uid)) as Query<IRepetitionList>;
-    return collectionData(collectionQuerry, { idField: 'id' }).pipe(
-      switchMap(lists => combineLatest(
-        lists.map(list => {
-          const listCollection = collection(
-            db,
-            `${FirebaseRefs.repetition_lists}/${list.id}/${FirebaseRefs.list}`
-          ) as CollectionReference<IRepetitionWord>;
-          const collection$ = collectionData(listCollection, { idField: 'id' })
-          return combineLatest(
-            of(list),
-            collection$
-          )
-        })
-      ))
-    )
+    return collectionData(collectionQuerry, { idField: 'id' })
   }),
+  shareReplay({ bufferSize: 1, refCount: true })
+)
+
+export const categoriesAndLists$ = categories$.pipe(
+  switchMap(lists => combineLatest(
+    lists.map(list => {
+      const listCollection = collection(
+        db,
+        `${FirebaseRefs.repetition_lists}/${list.id}/${FirebaseRefs.list}`
+      ) as CollectionReference<IRepetitionWord>;
+      const collection$ = collectionData(listCollection, { idField: 'id' })
+      return combineLatest(
+        of(list),
+        collection$
+      )
+    })
+  )),
   shareReplay({ bufferSize: 1, refCount: true })
 )
 

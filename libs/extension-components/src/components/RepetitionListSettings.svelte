@@ -1,31 +1,8 @@
 <script lang="ts">
   import type { IUserReptitionListSettings } from '@parrotly.io/types';
-  import { onMount } from 'svelte';
   import { Toggle } from '@parrotly.io/ui';
-  import { createEventDispatcher } from 'svelte';
 
   export let settings: IUserReptitionListSettings;
-  const dispatch = createEventDispatcher();
-
-  // let maximumMCQs = settings.maximumMCQs;
-  // let maximumQuizzes = settings.maximumQuizzes;
-  // let maximumRepetition = settings.maximumRepetition;
-  // let showCardIntervalDurationMinutes =
-  //   settings.showCardIntervalDurationMinutes;
-  // let showCardDurationSeconds = settings.showCardDurationSeconds;
-  // let enableNotifications = settings.enableNotifications;
-
-  // $: {
-  //   settings = {
-  //     maximumMCQs,
-  //     maximumQuizzes,
-  //     maximumRepetition,
-  //     showCardIntervalDurationMinutes,
-  //     showCardDurationSeconds,
-  //     enableNotifications,
-  //   };
-  //   dispatch('settings', settings);
-  // }
 </script>
 
 <template>
@@ -33,11 +10,14 @@
     <div class="flex flex-col items-start justify-stretch mt-2">
       <div class="flex justify-between w-full">
         <span
+          class="dark:text-primary-300"
           title="The maximum number of times we will show you the word and it's translation."
         >
           Number of word displays:
         </span>
-        <span>{settings.maximumRepetition} Displays</span>
+        <span class="dark:text-primary-300">
+          {settings.maximumRepetition} Displays
+        </span>
       </div>
       <input
         type="range"
@@ -51,11 +31,14 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
+          class="dark:text-primary-300"
           title="The maximum number of times we will show you an mcq type question for a word."
         >
           Number of MCQ displays:
         </span>
-        <span>{settings.maximumMCQs} Displays</span>
+        <span class="dark:text-primary-300"
+          >{settings.maximumMCQs} Displays</span
+        >
       </div>
       <input
         type="range"
@@ -69,11 +52,14 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
+          class="dark:text-primary-300"
           title="The maximum number of times we will show you a quiz type question for a word."
         >
           Number of quiz displays:
         </span>
-        <span>{settings.maximumQuizzes} Displays</span>
+        <span class="dark:text-primary-300"
+          >{settings.maximumQuizzes} Displays</span
+        >
       </div>
       <input
         type="range"
@@ -87,10 +73,15 @@
 
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
-        <span title="Interval between 2 consecutive words shown.">
+        <span
+          class="dark:text-primary-300"
+          title="Interval between 2 consecutive words shown."
+        >
           Interval between cards:
         </span>
-        <span>{settings.showCardIntervalDurationMinutes} Minutes</span>
+        <span class="dark:text-primary-300"
+          >{settings.showCardIntervalDurationMinutes} Minutes</span
+        >
       </div>
       <input
         type="range"
@@ -104,11 +95,14 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
+          class="dark:text-primary-300"
           title="The maximum number of times we will show you a quiz type question for a word."
         >
           Duration show card:
         </span>
-        <span>{settings.showCardDurationSeconds} Seconds</span>
+        <span class="dark:text-primary-300"
+          >{settings.showCardDurationSeconds} Seconds</span
+        >
       </div>
       <input
         type="range"
@@ -121,6 +115,7 @@
     </div>
     <div class="flex justify-between items-start justify-stretch mt-2">
       <span
+        class="dark:text-primary-300"
         title="Show browser notification when the browser is not the active window."
       >
         Enable notifications:

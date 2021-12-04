@@ -1,6 +1,5 @@
-import { DatabaseFunctionType } from './utils'
-import { getDoc, setDoc } from './utils/firebase'
-import type { IUser } from '@parrotly.io/types'
+import type { DatabaseFunctionType } from './utils'
+import { setDoc } from './utils/firebase'
 import { FirebaseRefs } from '@parrotly.io/constants'
 
 export const initFirestore: DatabaseFunctionType = async (snapshot, context) => {

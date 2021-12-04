@@ -40,8 +40,8 @@
     closeSubject.next();
   }
 
-  function onPlaySound() {
-    dispatch('playSound');
+  function onPlayWord() {
+    dispatch('playWord');
   }
 
   function onKnowWord() {
@@ -52,7 +52,7 @@
 
 <template>
   <div
-    class="flex flex-col fixed dark:bg-primary-800 bg-primary-100 p-6 left-0 top-0 shadow-lg z-modal max-w-popup w-full h-[350px] dark:text-primary-300"
+    class="flex flex-col fixed dark:bg-primary-800 bg-opacity-80 dark:bg-opacity-80 bg-primary-100 p-4 pb-2 left-0 top-0 shadow-lg backdrop-blur-sm z-modal max-w-popup w-full dark:text-primary-300"
     bind:this={section}
     on:click|stopPropagation
     transition:slide={{ duration: 1500 }}
@@ -63,12 +63,12 @@
         href="https://learnwithparrot.io"
         target="_blank"
       >
-        <span>Learn with Parrot</span>
-        <i class="lab la-earlybirds text-[30]" />
+        <span class="text-current">Learn with Parrot</span>
+        <i class="lab la-earlybirds text-current text-[30]" />
       </a>
     </div>
     <div
-      class="flex-1 font-roboto justify-center items-center flex sm:flex-col"
+      class="flex-1 font-roboto justify-center items-center flex sm:flex-col dark:text-primary-300"
       class:md:flex-col={(word + translation).length > 25}
     >
       <span class=" text-3xl text-current">{word}</span>
@@ -80,30 +80,24 @@
         on:click={onKnowWord}
         text="I know this word"
         color="success"
-        variant="filled"
       />
       <span class="flex-1" />
       <Button
         icon="la-volume-down"
         aria-label="Play sound"
-        on:click={onPlaySound}
+        on:click={onPlayWord}
       />
-      <a
-        href={url}
-        target="_blank"
-        class="btn btn--flat btn--default"
-      >
-        <span> How to use? </span>
-        <i class="las la-long-arrow-alt-up text-[30] rotate-45" />
+      <a href={url} target="_blank" class="btn btn--flat btn--default mx-4">
+        <span class="text-current"> How to use? </span>
+        <i class="las la-long-arrow-alt-up text-[30] rotate-45 text-current" />
       </a>
       <Button
         on:click={onCloseClicked}
         color="accent"
-        variant="filled"
         iconSuffix="las la-times"
         title="Sign out"
       >
-        <span class="mr-2">
+        <span class="mr-2 text-current">
           Close&nbsp;
           {#if $countDown$ > -1}
             ({$countDown$})

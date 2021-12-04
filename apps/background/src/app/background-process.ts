@@ -1,12 +1,13 @@
 import { switchMap, mapTo, first } from 'rxjs/operators';
-import { interval } from 'rxjs';
+import { EMPTY, interval, Observable } from 'rxjs';
 import { userAndSettings$, categoriesAndLists$, incrementWordShowCount } from './firebase';
-import { IRepetitionList, IRepetitionWord, IUserSettings } from '@parrotly.io/types';
+import type { IRepetitionList, IRepetitionWord, IUserSettings, MESSAGE_SHOW_WORD } from '@parrotly.io/types';
 import { setStorageItem, getStorageItem } from './storage';
 import { StorageKeys } from './constants';
 import browser from 'webextension-polyfill'
 import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
 import { NOTIFICATION_TITLE } from '@parrotly.io/env';
+
 /**
  * This is the background process that collects the user/settings and runs determination of word/showCard
  * depending on user settings.
@@ -14,9 +15,12 @@ import { NOTIFICATION_TITLE } from '@parrotly.io/env';
 export function initBackgroundProcess() {
   const triggerShowCardSub = userAndSettings$.pipe(
     switchMap(
-      ([user,settings]) => interval((settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000).pipe(
-        mapTo(settings)
-      )
+      ([user, settings]) => {
+        if (!settings) EMPTY as Observable<IUserSettings>
+        return interval((settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000).pipe(
+          mapTo(settings)
+        )
+      }
     )
   )
     .subscribe(triggerShowCard)
@@ -47,12 +51,15 @@ async function triggerShowCard(settings: IUserSettings) {
   const word = list[randomNumber]
   setStorageItem(StorageKeys.last_word, word.id)
 
-  const tabs = await browser.tabs.query({ "active": true, "currentWindow": true });
+  const tabs = await browser.tabs.query(
+    { active: true, currentWindow: true, lastFocusedWindow: false }
+  );
+  const message: MESSAGE_SHOW_WORD = {
+    type: EXTENSION_MESSAGES.SHOW_WORD,
+    word, category, settings
+  }
   if (tabs?.length)
-    browser.tabs.sendMessage(
-      tabs[0].id,
-      { type: EXTENSION_MESSAGES.SHOW_WORD, word, category, settings }
-    )
+    browser.tabs.sendMessage(tabs[0].id, message)
       .then(() => {
         //@TODO: implement logic too for quiz and mcq fails and passes count
         incrementWordShowCount(word.id, category.id, 'show')
@@ -64,7 +71,7 @@ async function triggerShowCard(settings: IUserSettings) {
          * -firefox: about:addons
          * -chrome: chrome://extensions
          */
-        console.log({ err })
+        console.error({ err })
         showNotification(word, category)
       });
   /**Browser window isn't the active window */

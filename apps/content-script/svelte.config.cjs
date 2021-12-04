@@ -15,6 +15,7 @@ module.exports = {
     }
   }),
   //Setting the below causes svelte to inline the styles in the attaching node in main.ts.
-  //This prevents (inheritable and general selector styles eg:'*')styles leaking out of this shadowroot onto the elements
+  //This prevents (inheritable and general selector styles eg:'*')styles leaking out of
+  //this shadowroot onto the elements
   emitCss: false,
 };

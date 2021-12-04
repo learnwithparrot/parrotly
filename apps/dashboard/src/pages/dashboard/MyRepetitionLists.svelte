@@ -4,10 +4,9 @@
   import { useNavigate } from 'svelte-navigator';
   import { RepetitionListService } from '../../services';
   import { authState } from 'rxfire/auth';
-  import { getAuth, User } from '@firebase/auth';
+  import { getAuth } from '@firebase/auth';
   import { map, startWith, switchMap } from 'rxjs/operators';
-  import type { Query } from '@firebase/firestore';
-  import { SvelteSubject } from '../../utils';
+  import { SvelteSubject } from '@parrotly.io/ui/utils';
   import { combineLatest } from 'rxjs';
   import { SUPPORTED_LANGUAGES } from '@parrotly.io/constants';
 
