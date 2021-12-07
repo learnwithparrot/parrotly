@@ -52,7 +52,7 @@ async function triggerShowCard(settings: IUserSettings) {
   setStorageItem(StorageKeys.last_word, word.id)
 
   const tabs = await browser.tabs.query(
-    { active: true, currentWindow: true, lastFocusedWindow: false }
+    { active: true, currentWindow: true, }
   );
   const message: MESSAGE_SHOW_WORD = {
     type: EXTENSION_MESSAGES.SHOW_WORD,

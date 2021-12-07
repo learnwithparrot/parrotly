@@ -1,8 +1,9 @@
 {
-  "name": "Parrotly",
-  "version": "1.0.0",
+  "name": "LearnWithParrot",
+  "version": "0.0.0.2",
   "manifest_version": 2,
-  "description": "Parrotly",
+  "offline_enabled": true,
+  "description": "Learn vocabulary with learnwithparrot.com",
   "icons": {
     "512": "images/parrot_4.png",
     "16": "images/parrot_1.png"
@@ -37,7 +38,10 @@
     "persistent": true
   },
   "permissions": [
-    "tabs","notifications","storage","unlimitedStorage","contextMenus",
+    "activeTab",
+    "notifications",
+    "storage",
+    "contextMenus",
     "*://*/*"
   ],
   "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://apis.google.com https://www.googleapis.com https://translate.googleapis.com; object-src 'self'"

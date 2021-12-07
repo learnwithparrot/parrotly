@@ -73,6 +73,7 @@
 
   .btn--filled {
     background-color: var(--bg-flat);
+    @apply shadow;
   }
 
   .dark .btn--accent,

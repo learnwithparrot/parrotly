@@ -36,8 +36,8 @@
     isDarkMode(destroy).pipe(first()),
     userSettingsTheme$
   ).subscribe((isDarkTheme) => {
-    if (isDarkTheme) document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
+    // if (isDarkTheme) document.documentElement.classList.add('dark');
+    // else document.documentElement.classList.remove('dark');
   });
 
   onDestroy(() =>destroy.next());

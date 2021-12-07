@@ -18,9 +18,9 @@
   });
 </script>
 
-<div class="flex flex-col max-w-screen-xl mx-auto w-full">
+<template>
   <Route path="login" component={Login} />
   <Route path="login__google" component={LoginWithGoogle} />
   <Route path="signout" component={SignOut} />
   <Route component={Redirect} to="login" />
-</div>
+</template>
