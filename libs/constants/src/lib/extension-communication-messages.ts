@@ -1,7 +1,8 @@
 const EXTENSION_MESSAGES = {
   ADD_WORD_TO_REPETITION_LIST: 'add_word_to_selection_list',
   SHOW_ADD_WORD_TO_SELECTION_LIST: 'show_add_word_to_selection_list',
-  ON_AUTH_CREDENTIALS: 'on_autho_credentials',
+  ON_AUTH_CREDENTIALS: 'on_auth_credentials',
+  ON_SIGN_OUT: 'on_sign_out',
   TRIGGER_SHOW_WORD:'trigger_show_word',
   SHOW_WORD:'show_word',
   CHANGE_THEME:'change_theme',

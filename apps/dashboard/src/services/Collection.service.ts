@@ -7,7 +7,7 @@ import type { CollectionReference, Query } from 'firebase/firestore'
 import { collectionData, docData, } from 'rxfire/firestore'
 import { combineLatest, Subject } from "rxjs";
 import type { Observable } from 'rxjs'
-import { map, takeUntil } from 'rxjs/operators'
+import { filter, map, shareReplay, takeUntil } from 'rxjs/operators'
 
 export type GetQuery<T> = (query: Query<T>) => Query<T>
 export type ValueChanges<S, T = any> = T extends string ? Observable<S> : Observable<S[]>
@@ -49,7 +49,8 @@ export abstract class CollectionService<T, S = T> {
 
     return docData(docRef, { idField: 'id' }).pipe(
       map(_ => this.formatFromFirestore(_)),
-      takeUntil(this.unsubscribe.asObservable())
+      takeUntil(this.unsubscribe.asObservable()),
+      shareReplay({ bufferSize: 1, refCount: true })
     )
   }
 
@@ -91,11 +92,12 @@ export abstract class CollectionService<T, S = T> {
     }
     return collectionData(collectionQuery, { idField: 'id' }).pipe(
       takeUntil(this.unsubscribe.asObservable()),
+      shareReplay({ bufferSize: 1, refCount: true }),
       map(
         fromFirestoreList => fromFirestoreList.map(
           fromFirestore => this.formatFromFirestore(fromFirestore)
-        )
-      ),
+        )),
+
     )
   }
 

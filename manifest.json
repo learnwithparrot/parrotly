@@ -2,7 +2,6 @@
   "name": "LearnWithParrot",
   "version": "0.0.0.2",
   "manifest_version": 2,
-  "offline_enabled": true,
   "description": "Learn vocabulary with learnwithparrot.com",
   "icons": {
     "512": "images/parrot_4.png",
@@ -38,7 +37,7 @@
     "persistent": true
   },
   "permissions": [
-    "activeTab",
+    "tabs",
     "notifications",
     "storage",
     "contextMenus",

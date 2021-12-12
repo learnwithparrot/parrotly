@@ -11,6 +11,7 @@
     MESSAGE_AUTH_CREDENTIAL,
     MESSAGE_TRIGGER_SHOW_WORD,
     MESSAGE_CHANGE_THEME,
+    MESSAGE_SIGN_OUT,
   } from '@parrotly.io/types';
   import { shortcut } from './actions';
 
@@ -28,12 +29,21 @@
     // We only accept messages from ourselves
     if (event.source != window) return;
 
-    if (event.data.type && event.data.type == 'FROM_PAGE') {
-      const message: MESSAGE_AUTH_CREDENTIAL = {
-        type: EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS,
-        credential: event.data.credential,
-      };
-      browser.runtime.sendMessage(message);
+    if (event.data?.type == 'FROM_PAGE') {
+      if (event.data?.event === EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS) {
+        const message: MESSAGE_AUTH_CREDENTIAL = {
+          type: EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS,
+          idToken: event.data.idToken,
+          password: event.data?.password,
+          email: event.data?.email,
+        };
+        browser.runtime.sendMessage(message);
+      } else if (event.data?.event === EXTENSION_MESSAGES.ON_SIGN_OUT) {
+        const message: MESSAGE_SIGN_OUT = {
+          type: EXTENSION_MESSAGES.ON_SIGN_OUT,
+        };
+        browser.runtime.sendMessage(message);
+      }
     }
   }
 

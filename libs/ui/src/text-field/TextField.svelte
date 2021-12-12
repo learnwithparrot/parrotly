@@ -13,9 +13,19 @@
   export let value = '';
 
   let mouseover = false;
+  let input: HTMLInputElement;
 
   const onFocus = () => (mouseover = true);
   const onBlur = () => (mouseover = false);
+
+  /**
+   * Reason why we are foced to change
+   * the type here is because current
+   * version of svelte doesn't permits us to
+   * bind to both the input and value at once
+   * on an input.
+   */
+  $: if (input) input.type = type;
 </script>
 
 <template>
@@ -39,6 +49,7 @@
 
     <input
       bind:value
+      bind:this={input}
       {id}
       {name}
       class="outline-none  flex-auto p-2 rounded-sm "
@@ -48,7 +59,11 @@
       class:input__warning={warning}
     />
     {#if error || warning || hint}
-      <small class:hint__error={error} class:hint__warning={warning}>
+      <small
+        class:hint__error={error}
+        class:hint__warning={warning}
+        class:hint__default={hint}
+      >
         {error || warning || hint}
       </small>
     {/if}

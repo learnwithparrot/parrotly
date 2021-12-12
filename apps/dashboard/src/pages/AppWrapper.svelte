@@ -6,7 +6,13 @@
   import { onDestroy } from 'svelte';
   import { authState } from 'rxfire/auth';
   import {
-    filter, first, map, pluck, shareReplay, switchMap, takeUntil,
+    filter,
+    first,
+    map,
+    pluck,
+    shareReplay,
+    switchMap,
+    takeUntil,
   } from 'rxjs/operators';
   import { isDarkMode } from '@parrotly.io/ui/utils';
   import { SettingsService } from '../services';
@@ -24,23 +30,24 @@
     if (!user) navigate('/auth');
   });
 
-  const userSettingsTheme$ = auth$.pipe(
+  const userTheme$ = auth$.pipe(
+    filter((user) => Boolean(user)),
     switchMap((user) => settingsService.docData$(user.uid)),
     pluck('theme'),
-    filter(theme => Boolean(theme)),
+    filter((theme) => Boolean(theme)),
     map((theme) => theme === 'dark'),
     takeUntil(destroy)
   );
 
   const darkTheme$ = merge(
     isDarkMode(destroy).pipe(first()),
-    userSettingsTheme$
+    userTheme$
   ).subscribe((isDarkTheme) => {
-    // if (isDarkTheme) document.documentElement.classList.add('dark');
-    // else document.documentElement.classList.remove('dark');
+    if (isDarkTheme) document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
   });
 
-  onDestroy(() =>destroy.next());
+  onDestroy(() => destroy.next());
 </script>
 
 <main

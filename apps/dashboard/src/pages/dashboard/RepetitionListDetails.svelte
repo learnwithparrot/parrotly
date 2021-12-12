@@ -20,12 +20,13 @@
     map((_) => `repetition_lists/${_.id}/list`)
   );
   const service = new RepetitionWordService(path$);
-  const words$ = combineLatest([
-    service.valueChanges().pipe(startWith<IRepetitionWord[]>([])),
+  const words$ = service.valueChanges().pipe(startWith<IRepetitionWord[]>([]));
+  const filteredWords$ = combineLatest([
+    words$,
     search.asObservable().pipe(debounceTime(300), startWith('')),
   ]).pipe(
     map(([words, searchKey]) => {
-      return words.filter(word => word.word.indexOf(searchKey) !== -1)
+      return words.filter((word) => word.word.indexOf(searchKey) !== -1);
     })
   );
 
@@ -63,15 +64,32 @@
         class="outline-none bg-primary-600 min-w-[200px] bg-opacity-30 p-2"
       />
     </header>
-    <ul class="word_list">
-      {#each $words$ as word}
-        <RepetitionWord
-          {word}
-          on:delete={(_) => handleDelete(_.detail)}
-          on:view={(_) => handleView(_.detail)}
-        />
-      {/each}
-    </ul>
+    {#if $words$.length}
+      {#if $filteredWords$.length}
+        <ul class="word_list">
+          {#each $filteredWords$ as word}
+            <RepetitionWord
+              {word}
+              on:delete={(_) => handleDelete(_.detail)}
+              on:view={(_) => handleView(_.detail)}
+            />
+          {/each}
+        </ul>
+      {:else}
+        <span>No results found for search keyword: {$search}</span><br />
+        <span>Please try a different keyword</span>
+      {/if}
+    {:else}
+      <span>There are no items in your list.</span> <br />
+      <div>
+        <span>To add an Item to your list:</span>
+        <ol>
+          <li>Select any word on this page.</li>
+          <li>Right click and select parrotly</li>
+          <li>Click save and your word and it's translation shall appear.</li>
+        </ol>
+      </div>
+    {/if}
   </section>
   <Modal
     open={Boolean(toDelete)}

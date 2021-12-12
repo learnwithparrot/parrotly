@@ -60,7 +60,7 @@
     <div class="flex-initial flex ">
       <a
         class="outline-none font-alegreya text-base flex-none flex items-center justify-center px-5 h-9 rounded-sm border-0 text-primary-900 hover:bg-primary-200 focus:bg-primary-200 hover:text-black transition duration-300 -translate-x-6 -translate-y-4 dark:text-primary-300"
-        href="https://learnwithparrot.io"
+        href="https://app.leanrwithparrot.com"
         target="_blank"
       >
         <span class="text-current">Learn with Parrot</span>

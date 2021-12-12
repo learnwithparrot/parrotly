@@ -23,6 +23,7 @@ build() {
     cp -r ./extension-images ./dist/extension
     mv ./dist/extension/extension-images ./dist/extension/images
     mv ./dist/extension/index.html ./dist/extension/popup.html
+    npm run extension:package
 }
 
 build

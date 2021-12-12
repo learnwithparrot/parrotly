@@ -10,8 +10,6 @@
   import { combineLatest } from 'rxjs';
   import { SUPPORTED_LANGUAGES } from '@parrotly.io/constants';
 
-  type ViewInterface = 'my_word_list' | 'public_word_list';
-
   const service = new RepetitionListService();
   const auth$ = authState(getAuth());
   const search = new SvelteSubject<string>('');
@@ -55,12 +53,29 @@
     </header>
 
     <ul class="grid gap-4">
-      {#each $filteredList$ as repetitionList}
-        <RepetitionListItem
-          {repetitionList}
-          on:view={({ detail }) => onView(detail)}
-        />
-      {/each}
+      {#if $list.length}
+        {#each $filteredList$ as repetitionList}
+          {#if repetitionList}
+            <RepetitionListItem
+              {repetitionList}
+              on:view={({ detail }) => onView(detail)}
+            />
+          {:else}
+            <span>No results found for search keyword: {$search}</span><br />
+            <span>Please try a different keyword</span>
+          {/if}
+        {/each}
+      {:else}
+        <span>There are no items in your list.</span> <br />
+        <div>
+          <span>To add an Item to your list:</span>
+          <ol>
+            <li>Select any word on this page.</li>
+            <li>Right click and select parrotly</li>
+            <li>Click save and your word and it's translation shall appear.</li>
+          </ol>
+        </div>
+      {/if}
     </ul>
   </section>
 </template>

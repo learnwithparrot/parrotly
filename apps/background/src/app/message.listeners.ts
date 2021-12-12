@@ -3,22 +3,25 @@ import { EXTENSION_MESSAGES } from "@parrotly.io/constants"
 import { MESSAGES } from "@parrotly.io/types"
 import { playWord, translate, getCurrentTheme } from './common-functions';
 import {
-  deleteRepetitionWord, saveToRepetitionList, signInWithGoogle,
-  updateUserSettings,
+  deleteRepetitionWord, saveToRepetitionList,
+  updateUserSettings, signIn, logout
 } from './firebase'
 
 async function changeTheme() {
-  const isDarkTheme = await getCurrentTheme()
-  const tabs = await browser.tabs.query({});
-  if (tabs?.length)
-    for (const tab of tabs)
-      try {
-        browser.tabs.sendMessage(
-          tab.id,
-          { type: EXTENSION_MESSAGES.CHANGE_THEME, isDarkTheme }
-        )
-      } catch (err) { console.warn(err) }
-
+  try {
+    const isDarkTheme = await getCurrentTheme()
+    const tabs = await browser.tabs.query({});
+    if (tabs?.length)
+      for (const tab of tabs)
+        try {
+          browser.tabs.sendMessage(
+            tab.id,
+            { type: EXTENSION_MESSAGES.CHANGE_THEME, isDarkTheme }
+          )
+        } catch (err) { console.warn(err) }
+  } catch (err) {
+    console.warn({ err, here: 'get current theme' })
+  }
 }
 
 browser.runtime.onMessage.addListener(
@@ -42,7 +45,10 @@ browser.runtime.onMessage.addListener(
         saveToRepetitionList(request.text, request.translation);
         break;
       case EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS:
-        signInWithGoogle(request.credential);
+        signIn(request.idToken, request?.email, request?.password);
+        break;
+      case EXTENSION_MESSAGES.ON_SIGN_OUT:
+        logout();
         break;
       case EXTENSION_MESSAGES.TRIGGER_SHOW_WORD:
         browser.tabs.query({ "active": true, "currentWindow": true }).then(tabs => {
@@ -63,4 +69,3 @@ browser.runtime.onMessage.addListener(
     }
   }
 );
-

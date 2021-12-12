@@ -51,13 +51,14 @@ async function triggerShowCard(settings: IUserSettings) {
   const word = list[randomNumber]
   setStorageItem(StorageKeys.last_word, word.id)
 
-  const tabs = await browser.tabs.query(
-    { active: true, currentWindow: true, }
-  );
+  const tabs = await browser.tabs.query({ active: true, currentWindow: true });
   const message: MESSAGE_SHOW_WORD = {
     type: EXTENSION_MESSAGES.SHOW_WORD,
     word, category, settings
   }
+
+  console.log('Showing word')
+
   if (tabs?.length)
     browser.tabs.sendMessage(tabs[0].id, message)
       .then(() => {
@@ -71,14 +72,14 @@ async function triggerShowCard(settings: IUserSettings) {
          * -firefox: about:addons
          * -chrome: chrome://extensions
          */
-        console.error({ err })
+        console.error({ err, here: 'trigger show word' })
         showNotification(word, category)
       });
   /**Browser window isn't the active window */
   else showNotification(word, category)
 }
 
-function showNotification(word: IRepetitionWord, category: IRepetitionList) {
+async function showNotification(word: IRepetitionWord, category: IRepetitionList) {
   const options = {
     type: "basic",
     title: NOTIFICATION_TITLE,
@@ -87,7 +88,10 @@ function showNotification(word: IRepetitionWord, category: IRepetitionList) {
     // requireInteraction: true,
     priority: 2
   }
+
+  console.log('showing notification')
   const _notificationId = "parrotly.io" + Math.floor(Math.random() * 9999999);
-  browser.notifications.create(_notificationId, options);
+  const data = await browser.notifications.create(_notificationId, options);
+  console.log({ notification: data })
   incrementWordShowCount(word.id, category.id, 'show')
 }

@@ -98,7 +98,7 @@
       <div class="flex items-center justify-start mb-4">
         <a
           class="outline-none font-alegreya dark:text-primary-300 text-2xl font-medium flex-none flex items-center justify-center hover:underline focus:underline"
-          href="https://learnwithparrot.io"
+          href="https://app.leanrwithparrot.com"
           target="_blank"
         >
           <span class="text-current">Learn with Parrot</span>

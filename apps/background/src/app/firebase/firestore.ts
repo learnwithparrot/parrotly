@@ -34,8 +34,9 @@ auth$.pipe(first()).subscribe(user => {
 
 export const userAndSettings$ = authOrEMPTY$.pipe(
   switchMap(user => {
+    console.log({ user, here: 'userAndSettings$' })
     const settingsRef = doc(
-      db, `${FirebaseRefs.settings}/${user.uid}`
+      db, `${FirebaseRefs.settings}/${user?.uid}`
     ) as DocumentReference<IUserSettings>;
     const settings$ = docData(settingsRef, { idField: 'id' })
     return combineLatest([

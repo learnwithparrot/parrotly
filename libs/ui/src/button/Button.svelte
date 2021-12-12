@@ -113,6 +113,6 @@
   .dark .btn--default {
     --focus-bg-flat: theme('colors.primary.900');
     --text-flat: theme('colors.primary.300');
-    --bg-flat: theme('colors.primary.100');
+    --bg-flat: theme('colors.primary.700');
   }
 </style>
