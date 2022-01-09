@@ -1,6 +1,6 @@
 import { switchMap, mapTo, first } from 'rxjs/operators';
 import { interval, Observable, NEVER } from 'rxjs';
-import { userAndSettings$, categoriesAndLists$, incrementWordShowCount } from './firebase';
+import { userAndSettings$, categoriesAndLists$, incrementWordDisplayCount } from './firebase';
 import type { IRepetitionList, IRepetitionWord, IUserSettings, MESSAGE_SHOW_WORD } from '@parrotly.io/types';
 import { setStorageItem, getStorageItem } from './storage';
 import { StorageKeys } from './constants';
@@ -42,6 +42,7 @@ async function triggerShowCard(settings: IUserSettings) {
   const [category, list] = categoriesAndLists[0]
 
   let randomNumber = Math.floor(Math.random() * list.length);
+
   if (list[randomNumber].id === lastWordDocId) {
     if (category.wordCount > 1) {
       randomNumber = Math.floor(Math.random() * list.length);
@@ -52,18 +53,23 @@ async function triggerShowCard(settings: IUserSettings) {
   setStorageItem(StorageKeys.last_word, word.id)
 
   const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+  const showMCQ = word.countShows >= settings.maximumRepetition && list.length > 7
   const message: MESSAGE_SHOW_WORD = {
-    type: EXTENSION_MESSAGES.SHOW_WORD,
+    type: showMCQ ? EXTENSION_MESSAGES.SHOW_MCQ : EXTENSION_MESSAGES.SHOW_WORD,
     word, category, settings
   }
-
-  console.log('Showing word')
+  if (showMCQ) {
+    const index1 = Math.floor(Math.random() * list.length);
+    const index2 = Math.floor(Math.random() * list.length);
+    const options = [index1,index2].map(i => list[i].translation);
+    message.options = options
+  }
 
   if (tabs?.length)
     browser.tabs.sendMessage(tabs[0].id, message)
       .then(() => {
         //@TODO: implement logic too for quiz and mcq fails and passes count
-        incrementWordShowCount(word.id, category.id, 'show')
+        incrementWordDisplayCount(word.id, category.id, 'show')
       })
       .catch(err => {
         /**
@@ -72,7 +78,6 @@ async function triggerShowCard(settings: IUserSettings) {
          * -firefox: about:addons
          * -chrome: chrome://extensions
          */
-        console.error({ err, here: 'trigger show word' })
         showNotification(word, category)
       });
   /**Browser window isn't the active window */
@@ -93,5 +98,5 @@ async function showNotification(word: IRepetitionWord, category: IRepetitionList
   const _notificationId = "parrotly.io" + Math.floor(Math.random() * 9999999);
   const data = await browser.notifications.create(_notificationId, options);
   console.log({ notification: data })
-  incrementWordShowCount(word.id, category.id, 'show')
+  incrementWordDisplayCount(word.id, category.id, 'show')
 }

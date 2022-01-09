@@ -4,7 +4,8 @@ import { MESSAGES } from "@parrotly.io/types"
 import { playWord, translate, getCurrentTheme } from './common-functions';
 import {
   deleteRepetitionWord, saveToRepetitionList,
-  updateUserSettings, signIn, logout
+  updateUserSettings, signIn, logout,
+  incrementWordDisplayCount,
 } from './firebase'
 
 async function changeTheme() {
@@ -43,6 +44,9 @@ browser.runtime.onMessage.addListener(
         break;
       case EXTENSION_MESSAGES.ADD_WORD_TO_REPETITION_LIST:
         saveToRepetitionList(request.text, request.translation);
+        break;
+      case EXTENSION_MESSAGES.MCQ_ANSWER:
+        incrementWordDisplayCount(request.id, request.categoryId, 'mcq', request.isRightAnswer);
         break;
       case EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS:
         signIn(request.idToken, request?.email, request?.password);
