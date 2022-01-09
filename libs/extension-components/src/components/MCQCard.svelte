@@ -52,10 +52,11 @@
   }
 
   function onOptionClicked(option: string) {
+    if(selectedOption) return;
     selectedOption = option;
     if (selectedOption === translation) dispatch('rightAnswer');
     else dispatch('wrongAnswer');
-    // setTimeout(() => onCloseClicked(), 1000);
+    setTimeout(() => onCloseClicked(), 1000);
   }
 
 </script>
