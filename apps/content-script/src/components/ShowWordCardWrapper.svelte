@@ -11,7 +11,6 @@
     IRepetitionList,
     MESSAGE_PLAY_TEXT,
   } from '@parrotly.io/types';
-  import McqCard from 'libs/extension-components/src/components/MCQCard.svelte';
 
   let _word: IRepetitionWord;
   let _category: IRepetitionList;
@@ -80,7 +79,7 @@
         on:close={handleClose}
         on:playWord={playText}
         on:knowWord={knowWord}
-        showWordDurationSeconds={_settings?.showCardDurationSeconds ?? 500}
+        showWordDurationSeconds={_settings?.showCardDurationSeconds ?? 6}
         languageTo={_category?.languageTranslation ?? 'en'}
         word={_word?.word ?? 'lksdoiwelksd'}
         translation={_word?.translation ?? 'lksdoiweosd'}
@@ -92,7 +91,7 @@
         on:rightAnswer={() => onAnswer(true)}
         on:wrongAnswer={() => onAnswer(false)}
         options={_options}
-        showWordDurationSeconds={_settings?.showMCQDurationSeconds ?? 500}
+        showWordDurationSeconds={_settings?.showMCQDurationSeconds ?? 16}
         word={_word?.word ?? 'lksdoiwelksd'}
         translation={_word?.translation ?? 'lksdoiweosd'}
       />
