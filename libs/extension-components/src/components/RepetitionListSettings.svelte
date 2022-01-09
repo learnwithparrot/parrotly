@@ -113,6 +113,27 @@
         bind:value={settings.showCardDurationSeconds}
       />
     </div>
+    <div class="flex flex-col items-start justify-stretch mt-6">
+      <div class="flex justify-between w-full">
+        <span
+          class="dark:text-primary-300"
+          title="The maximum number of times we will show you a quiz type question for a word."
+        >
+          Duration show MCQS:
+        </span>
+        <span class="dark:text-primary-300"
+          >{settings.showMCQDurationSeconds} Seconds</span
+        >
+      </div>
+      <input
+        type="range"
+        min="5"
+        max="60"
+        step="1"
+        class="h-8"
+        bind:value={settings.showMCQDurationSeconds}
+      />
+    </div>
     <div class="flex justify-between items-start justify-stretch mt-2">
       <span
         class="dark:text-primary-300"

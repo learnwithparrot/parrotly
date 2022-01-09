@@ -92,7 +92,7 @@
         on:rightAnswer={() => onAnswer(true)}
         on:wrongAnswer={() => onAnswer(false)}
         options={_options}
-        showWordDurationSeconds={_settings?.showCardDurationSeconds ?? 500}
+        showWordDurationSeconds={_settings?.showMCQDurationSeconds ?? 500}
         word={_word?.word ?? 'lksdoiwelksd'}
         translation={_word?.translation ?? 'lksdoiweosd'}
       />
