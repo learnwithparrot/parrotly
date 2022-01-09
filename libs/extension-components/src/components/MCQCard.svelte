@@ -55,14 +55,9 @@
     selectedOption = option;
     if (selectedOption === translation) dispatch('rightAnswer');
     else dispatch('wrongAnswer');
-    setTimeout(onCloseClicked, 1000);
+    // setTimeout(() => onCloseClicked(), 1000);
   }
 
-  function determineColor(option: string) {
-    if (translation === option && selectedOption === option) return 'success';
-    if (selectedOption === option) return 'danger';
-    return 'default';
-  }
 </script>
 
 <template>
@@ -92,7 +87,7 @@
             on:click={() => onOptionClicked(mcq)}
             text={mcq}
             variant="filled"
-            color={determineColor(mcq)}
+            color={[translation, selectedOption].every(_ => _=== mcq)? 'success':  selectedOption === mcq ? 'danger': 'default'}
           />
         {/each}
       </div>
