@@ -4,6 +4,7 @@ import ExtensionSideNav from './components/ExtensionSideNav.svelte';
 import RepetitionListSettings from './components/RepetitionListSettings.svelte'
 import FloatingPanel from './components/FloatingPanel.svelte'
 import LoginPrompt from './components/LoginPrompt.svelte'
+import MCQCard from './components/MCQCard.svelte'
 
 export {
   ExtensionSideNav,
@@ -12,4 +13,5 @@ export {
   RepetitionListSettings,
   FloatingPanel,
   LoginPrompt,
+  MCQCard,
 }
