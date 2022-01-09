@@ -1,5 +1,5 @@
-import { EXTENSION_MESSAGES } from "@parrotly.io/constants";
-import type {  Language } from "@parrotly.io/constants";
+import type { EXTENSION_MESSAGES } from "@parrotly.io/constants";
+import type { Language } from "@parrotly.io/constants";
 import type { IRepetitionList, IRepetitionWord, IUserSettings } from "..";
 
 export type MESSAGE_PLAY_TEXT = {
@@ -23,7 +23,7 @@ export type MESSAGE_ADD_WORD_TO_REPETITION_LIST = {
 
 export type MESSAGE_AUTH_CREDENTIAL = {
   type: typeof EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS,
-  idToken: string, password?:string, email?:string
+  idToken: string, password?: string, email?: string
 }
 
 export type MESSAGE_SIGN_OUT = {
@@ -39,6 +39,11 @@ export type MESSAGE_KNOW_WORD = {
   id: string, categoryId: string,
 }
 
+export type MESSAGE_MCQ_ANSWER = {
+  type: typeof EXTENSION_MESSAGES.MCQ_ANSWER,
+  id: string, categoryId: string, isRightAnswer: boolean,
+}
+
 export type MESSAGE_UPDATE_USER_SETTINGS = {
   type: typeof EXTENSION_MESSAGES.UPDATE_USER_SETTINGS,
   settings: IUserSettings,
@@ -50,8 +55,9 @@ export type MESSAGE_CHANGE_THEME = {
 }
 
 export type MESSAGE_SHOW_WORD = {
-  type: typeof EXTENSION_MESSAGES.SHOW_WORD,
+  type: typeof EXTENSION_MESSAGES.SHOW_WORD | typeof EXTENSION_MESSAGES.SHOW_MCQ;
   word: IRepetitionWord;
+  options?: string[];
   settings: IUserSettings;
   category: IRepetitionList;
 }
@@ -69,6 +75,7 @@ export interface MESSAGES {
   [EXTENSION_MESSAGES.TRIGGER_SHOW_WORD]: MESSAGE_TRIGGER_SHOW_WORD,
   [EXTENSION_MESSAGES.SHOW_WORD]: MESSAGE_SHOW_WORD,
   [EXTENSION_MESSAGES.KNOW_WORD]: MESSAGE_KNOW_WORD,
+  [EXTENSION_MESSAGES.MCQ_ANSWER]: MESSAGE_MCQ_ANSWER,
   [EXTENSION_MESSAGES.UPDATE_USER_SETTINGS]: MESSAGE_UPDATE_USER_SETTINGS,
   [EXTENSION_MESSAGES.CHANGE_THEME]: MESSAGE_CHANGE_THEME,
   [EXTENSION_MESSAGES.SHOW_SIDE_NAV]: MESSAGE_SHOW_SIDENAV,

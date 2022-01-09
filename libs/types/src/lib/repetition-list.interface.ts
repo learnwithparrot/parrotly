@@ -21,7 +21,7 @@ export type RepetitionStyle = 'show' | 'mcq' | 'quiz'
 export interface IRepetitionWord {
   word: string,
   translation: string,
-  countShows: number,
+  countShows: number, //The number of times the word has been shown.
   id?: string,
   countQuizzes: {
     passed: number,

@@ -33,6 +33,7 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
     quantityOfTranslations: 'small',
     maximumRepetition: 100,
     showCardDurationSeconds: 6,
+    showMCQDurationSeconds: 16,
     showCardIntervalDurationMinutes: 30,
     enableNotifications: true,
     theme: null

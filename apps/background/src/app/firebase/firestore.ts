@@ -38,10 +38,10 @@ export const userAndSettings$ = authOrNEVER.pipe(
       db, `${FirebaseRefs.settings}/${user?.uid}`
     ) as DocumentReference<IUserSettings>;
     const settings$ = docData(settingsRef, { idField: 'id' })
-      return combineLatest([
-        of(user),
-        settings$,
-      ])
+    return combineLatest([
+      of(user),
+      settings$,
+    ])
   }),
   shareReplay({ bufferSize: 1, refCount: true })
 )
@@ -111,7 +111,7 @@ export const saveToRepetitionList = async (word: string, translation: string, ca
   }
 }
 
-export const incrementWordShowCount = async (repetitionWordId: string, category_id: string, type: RepetitionStyle, passedQuizOrMcq = false) => {
+export const incrementWordDisplayCount = async (repetitionWordId: string, category_id: string, type: RepetitionStyle, passedQuizOrMcq = false) => {
   const countShows = increment(1)
   const wordRef = doc(db, FirebaseRefs.repetition_lists, category_id, FirebaseRefs.list, repetitionWordId) as DocumentReference<IRepetitionWord>
   switch (type) {

@@ -14,6 +14,7 @@ export interface IUserReptitionListSettings {
   maximumQuizzes: number,
   maximumMCQs: number,
   showCardDurationSeconds: number,
+  showMCQDurationSeconds: number,
   enableNotifications: boolean,
 }
 
