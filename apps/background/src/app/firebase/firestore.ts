@@ -4,7 +4,7 @@ import {
   enableIndexedDbPersistence, doc, clearIndexedDbPersistence,
   query, where, increment, updateDoc, deleteDoc, setDoc,
 } from 'firebase/firestore'
-import { authOrEMPTY$, auth$ } from './auth';
+import { authWithDelay$, auth$, authOrNEVER } from './auth';
 import {
   docData, collectionData
 } from 'rxfire/firestore';
@@ -32,22 +32,21 @@ auth$.pipe(first()).subscribe(user => {
 })
 
 
-export const userAndSettings$ = authOrEMPTY$.pipe(
+export const userAndSettings$ = authOrNEVER.pipe(
   switchMap(user => {
-    console.log({ user, here: 'userAndSettings$' })
     const settingsRef = doc(
       db, `${FirebaseRefs.settings}/${user?.uid}`
     ) as DocumentReference<IUserSettings>;
     const settings$ = docData(settingsRef, { idField: 'id' })
-    return combineLatest([
-      of(user),
-      settings$,
-    ])
+      return combineLatest([
+        of(user),
+        settings$,
+      ])
   }),
   shareReplay({ bufferSize: 1, refCount: true })
 )
 
-export const categories$ = authOrEMPTY$.pipe(
+export const categories$ = authOrNEVER.pipe(
   switchMap(user => {
     const repetitionListCollection = collection(db, FirebaseRefs.repetition_lists);
     const collectionQuerry = query(repetitionListCollection, where("creatorId", "==", user.uid)) as Query<IRepetitionList>;

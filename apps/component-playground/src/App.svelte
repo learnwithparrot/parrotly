@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
     ExtensionSideNavPage,
-    WelcomePage,
+    WelcomePage,ExtensionSideNavLoginPage,
     ShowWordPage,
     AddToRepetitionList,
   } from './pages';
@@ -17,11 +17,13 @@
       <Link to="/sidenav">Sidenav</Link>
       <Link to="/show_word">Show Word</Link>
       <Link to="/add_to_repetition_list">Add to repetition list</Link>
+      <Link to="/sidenav_login">Sidenav Login</Link>
     </nav>
     <div>
       <Route path="/sidenav" component={ExtensionSideNavPage} />
       <Route path="/show_word" component={ShowWordPage} />
       <Route path="/add_to_repetition_list" component={AddToRepetitionList} />
+      <Route path="/sidenav_login" component={ExtensionSideNavLoginPage} />
       <Route component={WelcomePage} />
     </div>
   </Router>

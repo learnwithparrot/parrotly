@@ -1,7 +1,9 @@
 <script lang="ts">
-  import {AddToRepetitionList} from '@parrotly.io/extension-components'
+  import {AddToRepetitionList, FloatingPanel} from '@parrotly.io/extension-components'
 
   const translation = 'Translation here';
 </script>
 
-<AddToRepetitionList {translation}/>
+<FloatingPanel>
+  <AddToRepetitionList {translation}/>
+</FloatingPanel>

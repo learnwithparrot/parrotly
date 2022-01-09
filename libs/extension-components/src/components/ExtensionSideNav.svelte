@@ -11,8 +11,8 @@
   import { SUPPORTED_LANGUAGES } from '@parrotly.io/constants';
   import type { Language } from '@parrotly.io/constants';
   import { onMount } from 'svelte';
-  import SideNavLogin from './SideNavLogin.svelte';
-  import { BehaviorSubject, combineLatest, Operator, Subject } from 'rxjs';
+  import LoginPrompt from './LoginPrompt.svelte';
+  import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
   import { takeUntil, debounceTime, skip } from 'rxjs/operators';
 
   export let userSettings = {} as IUserSettings;
@@ -58,6 +58,10 @@
     }
   };
 
+  function handleLoginClick() {
+    dispatch('close');
+  }
+
   onMount(() => {
     const sub = combineLatest([
       repetitionListSettings,
@@ -98,15 +102,15 @@
       <div class="flex items-center justify-start mb-4">
         <a
           class="outline-none font-alegreya dark:text-primary-300 text-2xl font-medium flex-none flex items-center justify-center hover:underline focus:underline"
-          href="https://app.leanrwithparrot.com"
+          href="https://app.learnwithparrot.com"
           target="_blank"
         >
           <span class="text-current">Learn with Parrot</span>
           <i class="lab la-earlybirds dark:text-primary-300 text-[30px]" />
         </a>
       </div>
-      {#if !userSettings}
-        <SideNavLogin />
+      {#if !Object.keys(userSettings).length}
+        <LoginPrompt on:click={handleLoginClick} />
       {:else}
         <div class="flex items-center justify-between dark:text-primary-300">
           <span class="dark:text-primary-300">Theme </span>

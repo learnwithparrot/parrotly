@@ -61,7 +61,7 @@
   <div class="flex sm:flex-row justify-between mb-4">
     <a
       class="outline-none font-alegreya text-3xl font-medium flex-none flex items-center justify-center dark:text-primary-300"
-      href="https://app.leanrwithparrot.com"
+      href="https://app.learnwithparrot.com"
       target="_blank"
     >
       <i class="lab la-earlybirds text-[30px]" />

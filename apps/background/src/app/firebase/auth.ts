@@ -7,7 +7,7 @@ import { StorageKeys } from "../constants";
 import { removeStorageItem, setStorageItem } from "../storage";
 import { authState, idToken } from 'rxfire/auth';
 import { delay, shareReplay, switchMap } from "rxjs/operators";
-import { EMPTY, Observable, of } from "rxjs";
+import { NEVER, Observable, of } from "rxjs";
 
 
 const auth = getAuth();
@@ -16,8 +16,8 @@ export const authWithDelay$ = auth$.pipe(delay(100))
 
 saveUserToLocalStorage(authWithDelay$)
 
-export const authOrEMPTY$ = authWithDelay$.pipe(
-  switchMap(user => user ? of(user) : EMPTY),
+export const authOrNEVER = authWithDelay$.pipe(
+  switchMap(user => user ? of(user) : NEVER),
   shareReplay({bufferSize:1, refCount:true}),
 )
 

@@ -1,5 +1,5 @@
 import { switchMap, mapTo, first } from 'rxjs/operators';
-import { EMPTY, interval, Observable } from 'rxjs';
+import { interval, Observable, NEVER } from 'rxjs';
 import { userAndSettings$, categoriesAndLists$, incrementWordShowCount } from './firebase';
 import type { IRepetitionList, IRepetitionWord, IUserSettings, MESSAGE_SHOW_WORD } from '@parrotly.io/types';
 import { setStorageItem, getStorageItem } from './storage';
@@ -13,10 +13,10 @@ import { NOTIFICATION_TITLE } from '@parrotly.io/env';
  * depending on user settings.
  */
 export function initBackgroundProcess() {
-  const triggerShowCardSub = userAndSettings$.pipe(
+  userAndSettings$.pipe(
     switchMap(
       ([user, settings]) => {
-        if (!settings) EMPTY as Observable<IUserSettings>
+        if (!settings) NEVER as Observable<IUserSettings>
         return interval((settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000).pipe(
           mapTo(settings)
         )

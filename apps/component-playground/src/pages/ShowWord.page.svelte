@@ -7,7 +7,6 @@
   on:close={() => {}}
   on:playWord={() => {}}
   on:knowWord={() => {}}
-  id="lksdklsdlsdlsd"
   word="Long word standing here."
   translation="Long word translation standing here."
 />
