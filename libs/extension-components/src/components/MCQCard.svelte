@@ -88,7 +88,7 @@
             on:click={() => onOptionClicked(mcq)}
             text={mcq}
             variant="filled"
-            color={[translation, selectedOption].every(_ => _=== mcq)? 'success':  selectedOption === mcq ? 'danger': 'default'}
+            color={(selectedOption && mcq === translation)? 'success':  selectedOption === mcq ? 'danger': 'default'}
           />
         {/each}
       </div>
