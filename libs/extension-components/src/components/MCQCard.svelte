@@ -52,13 +52,16 @@
   }
 
   function onOptionClicked(option: string) {
-    if(selectedOption) return;
+    if (selectedOption) return;
     selectedOption = option;
-    if (selectedOption === translation) dispatch('rightAnswer');
-    else dispatch('wrongAnswer');
-    setTimeout(() => onCloseClicked(), 1000);
+    if (selectedOption === translation) {
+      dispatch('rightAnswer');
+      setTimeout(() => onCloseClicked(), 1000);
+    } else {
+      dispatch('wrongAnswer');
+      setTimeout(() => onCloseClicked(), 2000);
+    }
   }
-
 </script>
 
 <template>
@@ -88,7 +91,11 @@
             on:click={() => onOptionClicked(mcq)}
             text={mcq}
             variant="filled"
-            color={(selectedOption && mcq === translation)? 'success':  selectedOption === mcq ? 'danger': 'default'}
+            color={selectedOption && mcq === translation
+              ? 'success'
+              : selectedOption === mcq
+              ? 'danger'
+              : 'default'}
           />
         {/each}
       </div>
