@@ -6,7 +6,8 @@ import {
   deleteRepetitionWord, saveToRepetitionList,
   updateUserSettings, signIn, logout,
   incrementWordDisplayCount,
-} from './firebase'
+} from './firebase';
+import { notificationTimeOut } from './background-process'
 
 async function changeTheme() {
   try {
@@ -44,6 +45,11 @@ browser.runtime.onMessage.addListener(
         break;
       case EXTENSION_MESSAGES.ADD_WORD_TO_REPETITION_LIST:
         saveToRepetitionList(request.text, request.translation);
+        break;
+      case EXTENSION_MESSAGES.ON_WORD_SHOWN:
+        clearTimeout(notificationTimeOut);
+        if(request.trigger === EXTENSION_MESSAGES.SHOW_WORD)
+          incrementWordDisplayCount(request.id, request.categoryId, 'show');
         break;
       case EXTENSION_MESSAGES.MCQ_ANSWER:
         incrementWordDisplayCount(request.id, request.categoryId, 'mcq', request.isRightAnswer);

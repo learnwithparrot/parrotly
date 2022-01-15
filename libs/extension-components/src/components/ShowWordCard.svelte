@@ -25,7 +25,7 @@
   const close$ = merge(
     countDown$.pipe(toArray()),
     closeSubject.asObservable()
-  ).pipe(take(1));
+  ).pipe(take(2));
 
   $: {
     url = `https://www.google.com/search?q=how+to+use+%22${translation}%22+in+${languageTo}`;

@@ -10,29 +10,30 @@
     MESSAGE_MCQ_ANSWER,
     IRepetitionList,
     MESSAGE_PLAY_TEXT,
+    MESSAGE_ON_WORD_SHOWN,
   } from '@parrotly.io/types';
 
   let _word: IRepetitionWord;
   let _category: IRepetitionList;
   let _settings: IUserSettings;
   let _type: MESSAGE_SHOW_WORD['type'];
-  let _options:string[];
+  let _options: string[];
 
   let isModalVisible = false;
 
   browser.runtime.onMessage.addListener(function (request: MESSAGE_SHOW_WORD) {
-    if (
-      [EXTENSION_MESSAGES.SHOW_WORD, EXTENSION_MESSAGES.SHOW_MCQ].includes(
-        request.type
-      )
-    ) {
-      _word = request.word;
-      _category = request.category;
-      _settings = request.settings;
-      _options = request.options
-      _type = request.type;
-      toggleShowModal();
-    }
+    const validTypes = [
+      EXTENSION_MESSAGES.SHOW_WORD,
+      EXTENSION_MESSAGES.SHOW_MCQ,
+    ];
+    if (document.hidden || !validTypes.includes(request.type)) return;
+    notifyWordShown();
+    _word = request.word;
+    _category = request.category;
+    _settings = request.settings;
+    _options = request.options;
+    _type = request.type;
+    toggleShowModal();
   });
 
   const toggleShowModal = () => {
@@ -57,9 +58,19 @@
     browser.runtime.sendMessage(message);
   };
 
-  const onAnswer = async (isRightAnswer:boolean= false) => {
+  const notifyWordShown = async (isRightAnswer: boolean = false) => {
+    const message: MESSAGE_ON_WORD_SHOWN = {
+      type: EXTENSION_MESSAGES.ON_WORD_SHOWN,
+      trigger: _type,
+      id: _word.id,
+      categoryId: _category.id,
+    };
+    browser.runtime.sendMessage(message);
+  };
+
+  const onAnswer = async (isRightAnswer: boolean = false) => {
     const message: MESSAGE_MCQ_ANSWER = {
-      type:   EXTENSION_MESSAGES.MCQ_ANSWER,
+      type: EXTENSION_MESSAGES.MCQ_ANSWER,
       id: _word.id,
       categoryId: _category.id,
       isRightAnswer,
@@ -81,8 +92,8 @@
         on:knowWord={knowWord}
         showWordDurationSeconds={_settings?.showCardDurationSeconds ?? 6}
         languageTo={_category?.languageTranslation ?? 'en'}
-        word={_word?.word ?? 'lksdoiwelksd'}
-        translation={_word?.translation ?? 'lksdoiweosd'}
+        word={_word?.word}
+        translation={_word?.translation}
       />
     {:else}
       <MCQCard
@@ -92,8 +103,8 @@
         on:wrongAnswer={() => onAnswer(false)}
         options={_options}
         showWordDurationSeconds={_settings?.showMCQDurationSeconds ?? 16}
-        word={_word?.word ?? 'lksdoiwelksd'}
-        translation={_word?.translation ?? 'lksdoiweosd'}
+        word={_word?.word}
+        translation={_word?.translation}
       />
     {/if}
   {/if}

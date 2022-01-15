@@ -8,6 +8,8 @@ import browser from 'webextension-polyfill'
 import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
 import { NOTIFICATION_TITLE } from '@parrotly.io/env';
 
+export let notificationTimeOut;
+
 /**
  * This is the background process that collects the user/settings and runs determination of word/showCard
  * depending on user settings.
@@ -61,16 +63,12 @@ async function triggerShowCard(settings: IUserSettings) {
   if (showMCQ) {
     const index1 = Math.floor(Math.random() * list.length);
     const index2 = Math.floor(Math.random() * list.length);
-    const options = [index1,index2].map(i => list[i].translation);
+    const options = [index1, index2].map(i => list[i].translation);
     message.options = options
   }
 
-  if (tabs?.length)
-    browser.tabs.sendMessage(tabs[0].id, message)
-      .then(() => {
-        //@TODO: implement logic too for quiz and mcq fails and passes count
-        incrementWordDisplayCount(word.id, category.id, 'show')
-      })
+  if (tabs?.length) {
+    browser.tabs.sendMessage(tabs[0]?.id, message)
       .catch(err => {
         /**
          * User is on a page within which content script can't be loaded.
@@ -78,8 +76,20 @@ async function triggerShowCard(settings: IUserSettings) {
          * -firefox: about:addons
          * -chrome: chrome://extensions
          */
-        showNotification(word, category)
       });
+    notificationTimeOut = setTimeout(() => {
+      showNotification(word, category)
+    }, 1000);
+  }
+  /**
+   * We will need to remove this from here and
+   * 1. Increment the word show count exactly the way we do for mcqs, that is with a different even
+   * 2. in showWordCardWrapper, only show the word if document.hidden is false
+   * https://developer.mozilla.org/en-US/docs/Web/API/Document/hidden
+   * and then call the event to increment the show count. when it's onclose is called.
+   * 3. Add functionality to pause showing the words for the next [1,4,8] hours.
+   * This will entail creating a drop down component.
+   */
   /**Browser window isn't the active window */
   else showNotification(word, category)
 }
@@ -90,13 +100,11 @@ async function showNotification(word: IRepetitionWord, category: IRepetitionList
     title: NOTIFICATION_TITLE,
     message: `${word.word} - ${word.translation}`,
     iconUrl: "images/parrot_4.png",
-    // requireInteraction: true,
     priority: 2
   }
 
   console.log('showing notification')
   const _notificationId = "parrotly.io" + Math.floor(Math.random() * 9999999);
-  const data = await browser.notifications.create(_notificationId, options);
-  console.log({ notification: data })
+  await browser.notifications.create(_notificationId, options);
   incrementWordDisplayCount(word.id, category.id, 'show')
 }
