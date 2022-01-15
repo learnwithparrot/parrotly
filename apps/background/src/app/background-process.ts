@@ -81,15 +81,6 @@ async function triggerShowCard(settings: IUserSettings) {
       showNotification(word, category)
     }, 1000);
   }
-  /**
-   * We will need to remove this from here and
-   * 1. Increment the word show count exactly the way we do for mcqs, that is with a different even
-   * 2. in showWordCardWrapper, only show the word if document.hidden is false
-   * https://developer.mozilla.org/en-US/docs/Web/API/Document/hidden
-   * and then call the event to increment the show count. when it's onclose is called.
-   * 3. Add functionality to pause showing the words for the next [1,4,8] hours.
-   * This will entail creating a drop down component.
-   */
   /**Browser window isn't the active window */
   else showNotification(word, category)
 }
