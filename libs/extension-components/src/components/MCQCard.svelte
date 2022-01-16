@@ -2,8 +2,9 @@
   import { slide } from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
   import { timer, merge, Subject } from 'rxjs';
-  import { take, map, toArray, every } from 'rxjs/operators';
-  import { Button } from '@parrotly.io/ui';
+  import { take, map, toArray } from 'rxjs/operators';
+  import { Button, Dropdown } from '@parrotly.io/ui';
+  import type { DropdownItem } from '@parrotly.io/ui';
 
   // bind props
   export let showWordDurationSeconds = 4;
@@ -14,6 +15,13 @@
   let selectedOption: string;
 
   let mcqs: string[] = [];
+
+  let disableOptions: DropdownItem[] = [
+    { label: 'For 1 Hour', value: 1 },
+    { label: 'For 2 Hour', value: 2 },
+    { label: 'For 4 Hour', value: 4 },
+    { label: 'For 8 Hour', value: 8 },
+  ];
 
   $: {
     mcqs = shuffle([...options, translation]);
@@ -67,7 +75,6 @@
 <template>
   <div
     class="flex flex-col fixed dark:bg-primary-800 bg-opacity-80 dark:bg-opacity-80 bg-primary-100 p-4 pb-2 left-0 top-0 shadow-lg backdrop-blur-sm z-modal max-w-popup w-full dark:text-primary-300"
-    on:click|stopPropagation
     transition:slide={{ duration: 1500 }}
   >
     <div class="flex-initial flex ">
@@ -101,6 +108,51 @@
       </div>
     </div>
     <div class="flex-initial flex ">
+      <Dropdown horizontal="left" items={disableOptions}>
+        <!-- This is not an error ref:https://svelte.dev/tutorial/slot-props -->
+        <Button
+          let:toggleVisible
+          let:active
+          on:click={toggleVisible}
+          slot="trigger"
+        >
+          <span>
+            {active?.value
+              ? `Pause showing words ( ${active.label} )`
+              : 'Pause showing words'}
+          </span>
+          <svg
+            class="-mr-1 ml-2 h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </Button>
+
+        <a
+          slot="item"
+          href="#"
+          let:classActive
+          let:active
+          let:item
+          let:click
+          on:click={click}
+          class="text-gray-700 block px-4 py-2 text-sm dark:hover:bg-primary-700 hover:bg-primary-200"
+          class:[classActive]={active?.value === item.value}
+          role="menuitem"
+          tabindex="-1"
+          id="menu-item-0"
+        >
+          {item.label}
+        </a>
+      </Dropdown>
       <Button on:click={onKnowWord} text="I know this word" color="success" />
       <span class="flex-1" />
       <Button
