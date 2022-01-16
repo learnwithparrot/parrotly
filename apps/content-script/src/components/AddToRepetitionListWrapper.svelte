@@ -66,16 +66,15 @@
     };
     browser.runtime.sendMessage(message);
   }
-
 </script>
 
 <template>
   {#if isModalVisible}
-    <FloatingPanel>
+    <FloatingPanel on:close={toggleModal}>
       {#if userSignedIn}
         <AddToRepetitionList
-          {translation}
           on:close={toggleModal}
+          {translation}
           on:addToRepetitionList={(event) =>
             addToRepetitionList(event.detail.text, event.detail.translation)}
           on:playWord={(event) => playText(event.detail.translation)}
