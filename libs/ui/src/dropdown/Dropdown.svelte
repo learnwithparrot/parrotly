@@ -16,6 +16,10 @@
   let visible = false;
   let container: HTMLDivElement;
 
+  $: {
+    console.log({ visible });
+  }
+
   const dispatch = createEventDispatcher();
 
   function toggleVisible() {
@@ -40,6 +44,7 @@
         <slot name="trigger" {toggleVisible} {active}>
           <Button on:click={toggleVisible}>
             {active?.label ?? 'Dropdown'}
+            <i class="las la-angle-down ml-2 text-[20px]" />
           </Button>
         </slot>
       </div>

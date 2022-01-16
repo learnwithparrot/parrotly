@@ -1,5 +1,5 @@
 import { switchMap, mapTo, first } from 'rxjs/operators';
-import { interval, Observable, NEVER } from 'rxjs';
+import { timer, Observable, NEVER } from 'rxjs';
 import { userAndSettings$, categoriesAndLists$, incrementWordDisplayCount } from './firebase';
 import type { IRepetitionList, IRepetitionWord, IUserSettings, MESSAGE_SHOW_WORD } from '@parrotly.io/types';
 import { setStorageItem, getStorageItem } from './storage';
@@ -19,7 +19,10 @@ export function initBackgroundProcess() {
     switchMap(
       ([user, settings]) => {
         if (!settings) NEVER as Observable<IUserSettings>
-        return interval((settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000).pipe(
+        const period = (settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000;
+        const initialDelay: Date | number = settings.disableUntil?.showWord?.toDate() ?? 0;
+        console.log({ initialDelay })
+        return timer(initialDelay, period).pipe(
           mapTo(settings)
         )
       }

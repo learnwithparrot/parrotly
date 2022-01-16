@@ -2,12 +2,10 @@
   import { createEventDispatcher } from 'svelte';
   export let container: HTMLElement;
 
-  const dispatch = createEventDispatcher();
-
   const onWindowClick = (e: Event) => {
     //@ts-ignore
     if (!container.contains(e.target)) {
-      dispatch('clickOutside');
+      dispatch('clickOutside')
     }
   };
 </script>
