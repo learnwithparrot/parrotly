@@ -1,8 +1,12 @@
 <script lang="ts">
   import { Button, ClickOutside } from '..';
   import { slide } from 'svelte/transition';
-  import type { DropdownItem } from '.';
   import { createEventDispatcher } from 'svelte';
+
+  interface DropdownItem {
+    value?: any;
+    label: string;
+  }
 
   export let items: DropdownItem[];
   export let vertical: 'top' | 'bottom' = 'bottom';

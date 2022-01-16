@@ -4,7 +4,6 @@
   import { timer, merge, Subject } from 'rxjs';
   import { take, map, toArray } from 'rxjs/operators';
   import { Button, Dropdown } from '@parrotly.io/ui';
-  import type { DropdownItem } from '@parrotly.io/ui';
 
   // bind props
   export let showWordDurationSeconds = 4;
@@ -16,7 +15,7 @@
 
   let mcqs: string[] = [];
 
-  let disableOptions: DropdownItem[] = [
+  let disableOptions = [
     { label: 'For 1 Hour', value: 1 },
     { label: 'For 2 Hour', value: 2 },
     { label: 'For 4 Hour', value: 4 },

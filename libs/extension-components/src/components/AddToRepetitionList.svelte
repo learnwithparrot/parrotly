@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
   import { Button } from '@parrotly.io/ui';
 
@@ -32,7 +31,7 @@
     class="flex-auto text-current"
     on:submit|preventDefault|stopPropagation={addToRepetitionList}
   >
-    <div class="flex flex-wrap -ml-2 text-current">
+    <div class="flex flex-wrap text-current">
       <input
         type="text"
         bind:value={selected_words}

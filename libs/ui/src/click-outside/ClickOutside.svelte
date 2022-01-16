@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  export let container: HTMLDivElement;
+  export let container: HTMLElement;
 
   const dispatch = createEventDispatcher();
 

@@ -1,17 +1,15 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
+  import { ClickOutside } from '@parrotly.io/ui';
 
   const dispatch = createEventDispatcher();
 
-  const onWindowClick = (e: Event) => {
-    //@ts-ignore
-    if (!section.contains(e.target)) {
-      dispatch('close');
-    }
-  };
+  function handleClickOutside() {
+    dispatch('close');
+  }
 
-  let section: HTMLElement;
+  let container: HTMLDivElement;
 
   let selection = window.getSelection();
 
@@ -22,10 +20,10 @@
 
   //Find position of window
   $: {
-    if (selection.rangeCount > 0 && section) {
+    if (selection.rangeCount > 0 && container) {
       let selectionCoords = selection.getRangeAt(0).getBoundingClientRect();
-      let windowWidth = section.clientWidth;
-      let windowHeight = section.clientHeight;
+      let windowWidth = container.clientWidth;
+      let windowHeight = container.clientHeight;
       let left =
         selectionCoords.left - windowWidth / 2 + selectionCoords.width / 2;
       let top = selectionCoords.bottom + 10;
@@ -56,16 +54,16 @@
   }
 </script>
 
-<svelte:window on:click={onWindowClick} />
-
 <template>
-  <div
-    class="flex absolute dark:bg-primary-800 bg-primary-100 bg-opacity-95 dark:bg-opacity-95  dark:text-primary-300 rounded-md p-6 shadow-xl z-modal w-popup backdrop-blur-sm"
-    style="left:{dimens.left}; top:{dimens.top};"
-    bind:this={section}
-    on:click|stopPropagation
-    transition:fly={{ y: 20, duration: 300 }}
-  >
-  <slot></slot>
-  </div>
+  <ClickOutside {container} on:clickOutside={handleClickOutside}>
+    <div
+      class="flex absolute dark:bg-primary-800 bg-primary-100 bg-opacity-95 dark:bg-opacity-95  dark:text-primary-300 rounded-md p-6 pb-2 shadow-xl z-modal w-popup backdrop-blur-sm"
+      style="left:{dimens.left}; top:{dimens.top};"
+      bind:this={container}
+      on:click|stopPropagation
+      transition:fly={{ y: 20, duration: 300 }}
+    >
+      <slot />
+    </div>
+  </ClickOutside>
 </template>
