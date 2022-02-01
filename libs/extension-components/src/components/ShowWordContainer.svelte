@@ -52,7 +52,7 @@
 <template>
   <div
     class="flex flex-col fixed dark:bg-primary-800 bg-opacity-80 dark:bg-opacity-80 bg-primary-100 p-4 pb-2 left-0 top-0 shadow-lg backdrop-blur-sm z-modal max-w-popup w-full dark:text-primary-300"
-    transition:slide={{ duration: 1500 }}
+    transition:slide={{ duration: TIME_PADDING*1000 }}
     on:click|stopPropagation
   >
     <div class="flex-initial flex ">
