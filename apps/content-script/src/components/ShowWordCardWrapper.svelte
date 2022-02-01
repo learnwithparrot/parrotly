@@ -11,6 +11,7 @@
     IRepetitionList,
     MESSAGE_PLAY_TEXT,
     MESSAGE_ON_WORD_SHOWN,
+    MESSAGE_DISABLE_SHOW_WORD,
   } from '@parrotly.io/types';
 
   let _word: IRepetitionWord;
@@ -78,6 +79,18 @@
     browser.runtime.sendMessage(message);
   };
 
+  const handleDisable = async (
+    event: CustomEvent<{ durationHours: number }>
+  ) => {
+    const durationHours = event.detail?.durationHours;
+    if (!durationHours) return;
+    const message: MESSAGE_DISABLE_SHOW_WORD = {
+      type: EXTENSION_MESSAGES.DISABLE_SHOW_WORD,
+      durationHours,
+    };
+    browser.runtime.sendMessage(message);
+  };
+
   const handleClose = () => {
     isModalVisible = false;
   };
@@ -89,6 +102,7 @@
       <ShowWordCard
         on:close={handleClose}
         on:playWord={playText}
+        on:disable={handleDisable}
         on:knowWord={knowWord}
         showWordDurationSeconds={_settings?.showCardDurationSeconds ?? 6}
         languageTo={_category?.languageTranslation ?? 'en'}
@@ -99,6 +113,7 @@
       <MCQCard
         on:close={handleClose}
         on:knowWord={knowWord}
+        on:disable={handleDisable}
         on:rightAnswer={() => onAnswer(true)}
         on:wrongAnswer={() => onAnswer(false)}
         options={_options}

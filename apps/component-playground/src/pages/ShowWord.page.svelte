@@ -5,6 +5,7 @@
 <ShowWordCard
   languageTo="en"
   on:close={() => {}}
+  on:disable={() => {}}
   on:playWord={() => {}}
   on:knowWord={() => {}}
   word="Long word standing here."

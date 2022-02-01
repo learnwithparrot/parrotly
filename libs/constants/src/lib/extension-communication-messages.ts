@@ -5,6 +5,7 @@ const EXTENSION_MESSAGES = {
   ON_SIGN_OUT: 'on_sign_out',
   TRIGGER_SHOW_WORD: 'trigger_show_word',
   SHOW_WORD: 'show_word',
+  DISABLE_SHOW_WORD: 'disable_show_word',
   SHOW_MCQ: 'show_mcq',
   CHANGE_THEME: 'change_theme',
   GET_CURRENT_THEME: 'get_current_theme',

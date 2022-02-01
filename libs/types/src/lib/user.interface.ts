@@ -1,4 +1,5 @@
 import type { Language } from "@parrotly.io/constants";
+import type { Timestamp } from 'firebase/firestore'
 
 export interface IUser {
   isAdmin?: boolean,
@@ -27,8 +28,12 @@ export interface IUserLanguageSettings {
   languageLearned: Language;
 }
 
-export interface IUserSettings extends IUserLanguageSettings, IUserReptitionListSettings, IUserAutoTranslationSettings {
+export interface IUserSettings<T extends Date | Timestamp = Timestamp> extends IUserLanguageSettings, IUserReptitionListSettings, IUserAutoTranslationSettings {
   id: string,
-  theme: 'light' | 'dark' ,
+  theme: 'light' | 'dark',
   forbiddenUrls: string[],
+  disableUntil: {
+    showWord: T,
+    autoTranslation: T
+  }
 }

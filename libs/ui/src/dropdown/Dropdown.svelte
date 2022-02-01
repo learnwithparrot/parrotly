@@ -38,7 +38,11 @@
     <ClickOutside {container} on:clickOutside={clickOutside}>
       <div bind:this={container} id="another one">
         <slot name="trigger" {toggleVisible} {active}>
-          <Button on:click={toggleVisible}>
+          <Button
+            on:click={toggleVisible}
+            iconSuffix="las la-angle-down"
+            className="ml-2"
+          >
             {active?.label ?? 'Dropdown'}
           </Button>
         </slot>

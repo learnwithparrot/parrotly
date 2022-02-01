@@ -5,7 +5,7 @@ import { playWord, translate, getCurrentTheme } from './common-functions';
 import {
   deleteRepetitionWord, saveToRepetitionList,
   updateUserSettings, signIn, logout,
-  incrementWordDisplayCount,
+  incrementWordDisplayCount, disableShowWord,
 } from './firebase';
 import { notificationTimeOut } from './background-process'
 
@@ -53,6 +53,9 @@ browser.runtime.onMessage.addListener(
         break;
       case EXTENSION_MESSAGES.MCQ_ANSWER:
         incrementWordDisplayCount(request.id, request.categoryId, 'mcq', request.isRightAnswer);
+        break;
+      case EXTENSION_MESSAGES.DISABLE_SHOW_WORD:
+        disableShowWord(request.durationHours);
         break;
       case EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS:
         signIn(request.idToken, request?.email, request?.password);

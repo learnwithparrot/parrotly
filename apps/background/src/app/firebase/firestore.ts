@@ -2,12 +2,10 @@ import { Query, CollectionReference } from 'firebase/firestore'
 import {
   getFirestore, collection, runTransaction,
   enableIndexedDbPersistence, doc, clearIndexedDbPersistence,
-  query, where, increment, updateDoc, deleteDoc, setDoc,
+  query, where, increment, updateDoc, deleteDoc, setDoc, Timestamp
 } from 'firebase/firestore'
-import { authWithDelay$, auth$, authOrNEVER } from './auth';
-import {
-  docData, collectionData
-} from 'rxfire/firestore';
+import { auth$, authOrNEVER } from './auth';
+import { docData, collectionData } from 'rxfire/firestore';
 import type { IRepetitionList, IRepetitionWord, IUserSettings, RepetitionStyle } from '@parrotly.io/types'
 import { getAuth } from 'firebase/auth'
 import { first, shareReplay, switchMap } from 'rxjs/operators';
@@ -78,37 +76,46 @@ categoriesAndLists$.subscribe(() => null)
 export const saveToRepetitionList = async (word: string, translation: string, category_id?: string) => {
   const auth = getAuth();
   const user = auth.currentUser;
-  if (user) { // user is signed in.
-    return runTransaction(db, async (transaction) => {
-      const id = user.uid;
-      const repetitionListRef = doc(db, FirebaseRefs.repetition_lists, category_id || `${id}_default`) as DocumentReference<IRepetitionList>
-      const repetitionListSnapshot = await transaction.get(repetitionListRef)
-      const wordsSample = repetitionListSnapshot.data().wordsSample ?? []
-      const repetitionWordRef = doc(collection(repetitionListRef, FirebaseRefs.list))
-      const wordCount = increment(1)
-      if (wordsSample.length > 9) {
-        wordsSample.splice(0, 1)
-        wordsSample.push({ word, translation })
-      } else {
-        wordsSample.push({ word, translation })
-      }
-      const data: IRepetitionWord = {
-        word, translation,
-        countMCQs: {
-          passed: 0, failed: 0,
-        },
-        countQuizzes: {
-          passed: 0, failed: 0
-        },
-        countShows: 0,
-        isExpression: false,
-        // languageTranslation: 'de',
-        // languageWord: 'en',
-      };
-      transaction.update(repetitionListRef, { wordCount, wordsSample })
-      transaction.set(repetitionWordRef, data)
-    })
-  }
+  if (!user) return;// user is not signed in.
+  return runTransaction(db, async (transaction) => {
+    const id = user.uid;
+    const repetitionListRef = doc(db, FirebaseRefs.repetition_lists, category_id || `${id}_default`) as DocumentReference<IRepetitionList>
+    const repetitionListSnapshot = await transaction.get(repetitionListRef)
+    const wordsSample = repetitionListSnapshot.data().wordsSample ?? []
+    const repetitionWordRef = doc(collection(repetitionListRef, FirebaseRefs.list))
+    const wordCount = increment(1)
+    if (wordsSample.length > 9) {
+      wordsSample.splice(0, 1)
+      wordsSample.push({ word, translation })
+    } else {
+      wordsSample.push({ word, translation })
+    }
+    const data: IRepetitionWord = {
+      word, translation,
+      countMCQs: {
+        passed: 0, failed: 0,
+      },
+      countQuizzes: {
+        passed: 0, failed: 0
+      },
+      countShows: 0,
+      isExpression: false,
+      // languageTranslation: 'de',
+      // languageWord: 'en',
+    };
+    transaction.update(repetitionListRef, { wordCount, wordsSample })
+    transaction.set(repetitionWordRef, data)
+  })
+}
+
+export const disableShowWord = async (durationHours: number) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) return;// user is not signed in.
+  const settings = doc(db, userSettingsPath(user.uid)) as DocumentReference<IUserSettings>
+  const now = new Date();
+  now.setHours(now.getHours() + durationHours);
+  updateDoc(settings, { "disableUntil.showWord": Timestamp.fromDate(now) })
 }
 
 export const incrementWordDisplayCount = async (repetitionWordId: string, category_id: string, type: RepetitionStyle, passedQuizOrMcq = false) => {
