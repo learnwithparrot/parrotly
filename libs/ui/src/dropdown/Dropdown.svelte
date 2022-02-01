@@ -16,10 +16,6 @@
   let visible = false;
   let container: HTMLDivElement;
 
-  $: {
-    console.log({ visible });
-  }
-
   const dispatch = createEventDispatcher();
 
   function toggleVisible() {
@@ -42,9 +38,12 @@
     <ClickOutside {container} on:clickOutside={clickOutside}>
       <div bind:this={container} id="another one">
         <slot name="trigger" {toggleVisible} {active}>
-          <Button on:click={toggleVisible}>
+          <Button
+            on:click={toggleVisible}
+            iconSuffix="las la-angle-down"
+            className="ml-2"
+          >
             {active?.label ?? 'Dropdown'}
-            <i class="las la-angle-down ml-2 text-[20px]" />
           </Button>
         </slot>
       </div>
