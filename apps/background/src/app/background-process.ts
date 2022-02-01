@@ -20,7 +20,7 @@ export function initBackgroundProcess() {
       ([user, settings]) => {
         if (!settings) NEVER as Observable<IUserSettings>
         const period = (settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000;
-        const initialDelay: Date | number = settings.disableUntil?.showWord?.toDate() ?? 0;
+        const initialDelay: Date | number = settings.disableUntil?.showWord?.toDate() ?? period;
         console.log({ initialDelay })
         return timer(initialDelay, period).pipe(
           mapTo(settings)
