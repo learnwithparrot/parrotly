@@ -22,12 +22,8 @@ export abstract class CollectionService<T, S = T> {
   public db = getFirestore()
   public baseRef: CollectionReference<S>;
 
-  constructor(public path: string | Observable<string>) {
-    if (typeof path === 'string') this.initializeBaseRef(path)
-    else
-      path.pipe(
-        takeUntil(this.unsubscribe.asObservable())
-      ).subscribe(_ => this.initializeBaseRef(_))
+  constructor(public path: string) {
+    this.initializeBaseRef(path)
   }
 
   formatFromFirestore(_: S): T { return _ as unknown as T };
@@ -134,6 +130,6 @@ export abstract class CollectionService<T, S = T> {
   }
 
   unsubscribeAll() {
-    // this.unsubscribe.next(null)
+    this.unsubscribe.next(null)
   }
 }

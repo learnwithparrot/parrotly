@@ -17,10 +17,11 @@ export let notificationTimeOut;
 export function initBackgroundProcess() {
   userAndSettings$.pipe(
     switchMap(
-      ([user, settings]) => {
+      ([, settings]) => {
         if (!settings) NEVER as Observable<IUserSettings>
         const period = (settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000;
-        const initialDelay: Date | number = settings.disableUntil?.showWord?.toDate() ?? period;
+        const delayShowWord = settings.disableUntil?.showWord;
+        const initialDelay: Date | number = delayShowWord ? delayShowWord.toDate() : period;
         return timer(initialDelay, period).pipe(
           mapTo(settings)
         )
@@ -81,7 +82,7 @@ async function triggerShowCard(settings: IUserSettings) {
       });
     notificationTimeOut = setTimeout(() => {
       showNotification(word, category)
-    }, 1000);
+    }, 3000);
   }
   /**Browser window isn't the active window */
   else showNotification(word, category)
@@ -96,8 +97,7 @@ async function showNotification(word: IRepetitionWord, category: IRepetitionList
     priority: 2
   }
 
-  console.log('showing notification')
-  const _notificationId = "parrotly.io" + Math.floor(Math.random() * 9999999);
+  const _notificationId = `learn_with_parrot_${word.id}`;
   await browser.notifications.create(_notificationId, options);
   incrementWordDisplayCount(word.id, category.id, 'show')
 }

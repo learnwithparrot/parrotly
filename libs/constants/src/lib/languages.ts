@@ -1,4 +1,3 @@
-
 export const SUPPORTED_LANGUAGES = {
   "af": "Afrikaans",
   "sq": "Albanian",

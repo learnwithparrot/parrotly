@@ -10,6 +10,7 @@
   import {
     debounceTime,
     first,
+    map,
     shareReplay,
     switchMap,
     takeUntil,
@@ -31,17 +32,21 @@
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  auth$
-    .pipe(
-      switchMap((user) => settingsService.getDocData(user.uid)),
-      first()
-    )
-    .subscribe((userSettings) => {
-      settings.next(userSettings);
-      userTheme.next(userSettings.theme === 'dark');
-      nativeLanguage.next(userSettings.languageSpoken);
-      desiredLanguage.next(userSettings.languageLearned);
-    });
+  const userSettings$ = auth$.pipe(
+    switchMap((user) => settingsService.getDocData(user.uid)),
+    shareReplay({ refCount: true, bufferSize: 1 })
+  );
+
+  const welcomeMode$ = userSettings$.pipe(
+    map((settings) => !settings.languageLearned || !settings.languageSpoken)
+  );
+
+  userSettings$.pipe(first()).subscribe((userSettings) => {
+    settings.next(userSettings);
+    userTheme.next(userSettings.theme === 'dark');
+    nativeLanguage.next(userSettings.languageSpoken);
+    desiredLanguage.next(userSettings.languageLearned);
+  });
 
   const supportedLanguages = Object.keys(SUPPORTED_LANGUAGES).map((key) => ({
     value: key,
@@ -65,6 +70,16 @@
 </script>
 
 <template>
+  {#if $welcomeMode$}
+    <span
+      class="font-alegreya text-left text-md max-w-[620px] mb-4  text-success-500 bg-success-100 p-2"
+    >
+      Hi, welcome.<br />
+      So stoked to help you passively learn the vocabulary of any language. Please
+      save your language and theme preferences below and we can start having some
+      fun learning.
+    </span>
+  {/if}
   <div class="container">
     <div class="flex flex-col">
       <h3 class="font-alegreya font-semibold text-lg">General</h3>
@@ -94,7 +109,7 @@
         </select>
       </div>
       <div class="flex items-center justify-between mt-4">
-        <span>I want to learn&nbsp;</span>
+        <span>I want to learn </span>
         <select
           class="block flex outline-none items-center px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 duration-300 rounded-sm"
           bind:value={$desiredLanguage}
@@ -118,7 +133,7 @@
   .container {
     display: grid;
     grid-template-columns: repeat(auto-fit, 300px);
-    justify-content: center;
+    justify-content: space-between;
     align-items: start;
     @apply gap-4 flex-wrap;
   }

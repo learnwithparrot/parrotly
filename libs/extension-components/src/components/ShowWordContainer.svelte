@@ -34,6 +34,7 @@
   function onClose() {
     dispatch('close');
   }
+
   function onCloseClicked() {
     closeSubject.next();
   }
@@ -52,7 +53,7 @@
 <template>
   <div
     class="flex flex-col fixed dark:bg-primary-800 bg-opacity-80 dark:bg-opacity-80 bg-primary-100 p-4 pb-2 left-0 top-0 shadow-lg backdrop-blur-sm z-modal max-w-popup w-full dark:text-primary-300"
-    transition:slide={{ duration: TIME_PADDING*1000 }}
+    transition:slide={{ duration: TIME_PADDING * 1000 }}
     on:click|stopPropagation
   >
     <div class="flex-initial flex ">
@@ -77,7 +78,7 @@
           let:toggleVisible
           let:active
           on:click={toggleVisible}
-          iconSuffix="la-angle-down"
+          iconSuffix=" ml-1 la-angle-down"
           slot="trigger"
           className="mr-2"
         >
@@ -86,9 +87,8 @@
             : 'Pause showing words'}
         </Button>
 
-        <a
+        <span
           slot="item"
-          href="#"
           let:classActive
           let:active
           let:item
@@ -101,7 +101,7 @@
           id="menu-item-0"
         >
           {item.label}
-        </a>
+        </span>
       </Dropdown>
       <Button on:click={onKnowWord} text="I know this word" color="success" />
       <span class="flex-1" />

@@ -30,9 +30,12 @@
     if (!user) navigate('/auth');
   });
 
-  const userTheme$ = auth$.pipe(
+  const userSettings$ = auth$.pipe(
     filter((user) => Boolean(user)),
-    switchMap((user) => settingsService.docData$(user.uid)),
+    switchMap((user) => settingsService.docData$(user.uid))
+  );
+
+  const userTheme$ = userSettings$.pipe(
     pluck('theme'),
     filter((theme) => Boolean(theme)),
     map((theme) => theme === 'dark'),
@@ -54,6 +57,6 @@
   class="flex flex-col max-w-screen-2xl items-stretch dark:bg-primary-800 bg-primary-100 w-screen p-3 pr-0 h-screen"
 >
   <Route path="/auth/*" component={AuthShell} />
-  <Route path="/dashboard/*" component={Dashboard} />
+  <Route path="/dashboard/*" component={Dashboard} userSettings={$userSettings$}/>
   <Route component={Redirect} to="auth" />
 </main>

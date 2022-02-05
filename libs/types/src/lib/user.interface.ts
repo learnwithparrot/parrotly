@@ -24,15 +24,15 @@ export interface IUserAutoTranslationSettings {
 }
 
 export interface IUserLanguageSettings {
-  languageSpoken: Language;
-  languageLearned: Language;
+  languageSpoken?: Language;
+  languageLearned?: Language;
 }
 
 export interface IUserSettings<T extends Date | Timestamp = Timestamp> extends IUserLanguageSettings, IUserReptitionListSettings, IUserAutoTranslationSettings {
   id: string,
   theme: 'light' | 'dark',
   forbiddenUrls: string[],
-  disableUntil: {
+  disableUntil?: {
     showWord: T,
     autoTranslation: T
   }

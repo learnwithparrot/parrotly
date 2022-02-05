@@ -1,6 +1,6 @@
 <script lang="ts">
   import { debounceTime, map, startWith } from 'rxjs/operators';
-  import { combineLatest, pipe, Subject } from 'rxjs';
+  import { combineLatest,  Subject } from 'rxjs';
   import { onDestroy } from 'svelte';
   import { RepetitionWord, Modal } from '../../components';
   import { RepetitionWordService } from './../../services';
@@ -14,12 +14,14 @@
   const unsubscribe = new Subject<boolean>();
   const search = new SvelteSubject<string>('');
 
+
   const params = useParams();
 
   const path$ = storeToObservable(params).pipe(
-    map((_) => `repetition_lists/${_.id}/list`)
+    map((_) => `repetition_lists/${_.id}_default/list`)
   );
-  const service = new RepetitionWordService(path$);
+
+  const service = new RepetitionWordService($path$);
   const words$ = service.valueChanges().pipe(startWith<IRepetitionWord[]>([]));
   const filteredWords$ = combineLatest([
     words$,
@@ -38,6 +40,7 @@
 
   function deleteWord(word: IRepetitionWord) {
     service.delete(word.id);
+    toDelete =null;
   }
 
   function handleDelete(word: IRepetitionWord) {

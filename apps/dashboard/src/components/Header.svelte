@@ -12,7 +12,7 @@
   const menuItems$ = authState(getAuth()).pipe(
     map((user) => [
       {
-        path: `./my_list/${user?.uid}_default`,
+        path: `./${user?.uid}_default`,
         icon: 'lar la-copy',
         label: 'My List',
       },

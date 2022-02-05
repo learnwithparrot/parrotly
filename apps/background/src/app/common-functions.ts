@@ -81,7 +81,7 @@ export function translate(from: Language, to: Language, text, after) {
 
 export async function getCurrentTheme() {
   return userAndSettings$.pipe(
-    map(([user, settings]) => settings.theme),
+    map(([, settings]) => settings.theme),
     filter(theme => Boolean(theme)),
     map((theme) => theme === 'dark'),
     first(),

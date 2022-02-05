@@ -26,8 +26,6 @@ export const onNewUser: AuthFunctionType = async (user, context) => {
 
   const defaultUserSettings: IUserSettings = {
     id, forbiddenUrls: [],
-    languageLearned: 'de',
-    languageSpoken: 'en',
     maximumMCQs: 50,
     maximumQuizzes: 50,
     quantityOfTranslations: 'small',

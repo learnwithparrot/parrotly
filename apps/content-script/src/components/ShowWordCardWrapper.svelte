@@ -28,12 +28,12 @@
       EXTENSION_MESSAGES.SHOW_MCQ,
     ];
     if (document.hidden || !validTypes.includes(request.type)) return;
-    notifyWordShown();
+    notifyWordShown(request.type);
     _word = request.word;
+    _type = request.type;
     _category = request.category;
     _settings = request.settings;
     _options = request.options;
-    _type = request.type;
     toggleShowModal();
   });
 
@@ -59,10 +59,10 @@
     browser.runtime.sendMessage(message);
   };
 
-  const notifyWordShown = async (isRightAnswer: boolean = false) => {
+  const notifyWordShown = async (type: MESSAGE_SHOW_WORD['type']) => {
     const message: MESSAGE_ON_WORD_SHOWN = {
       type: EXTENSION_MESSAGES.ON_WORD_SHOWN,
-      trigger: _type,
+      trigger: type,
       id: _word.id,
       categoryId: _category.id,
     };

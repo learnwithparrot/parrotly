@@ -13,7 +13,12 @@
 
   onMount(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) navigate(`/dashboard/my_list/${user.uid}_default`);
+      if (user) {
+        navigate(`/dashboard/my_words/${user.uid}`);
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      }
     });
   });
 </script>

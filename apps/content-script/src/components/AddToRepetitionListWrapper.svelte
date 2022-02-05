@@ -17,6 +17,7 @@
   let defaultCategory: IRepetitionList;
   let translation = '';
   let userSignedIn = false;
+
   browser.runtime.onMessage.addListener(function (request) {
     switch (request.type) {
       /** This listener shows the window to add word from context menu. */
