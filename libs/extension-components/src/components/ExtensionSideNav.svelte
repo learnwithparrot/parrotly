@@ -87,7 +87,7 @@
 <template>
   <ClickOutside {container} on:clickOutside={handleClickOutside}>
     <div
-      class="fixed flex items-stretch right-0 top-0 z-modal max-w-popup h-full w-[350px] dark:bg-primary-800 bg-primary-100 dark:text-primary-300"
+      class="fixed flex items-stretch right-0 top-0 z-modal max-w-popup h-full w-[350px] dark:bg-primary-800 bg-primary-100 text-primary-700 dark:text-primary-300"
       bind:this={container}
       on:click|stopPropagation
       transition:fly={{ x: 30, duration: 300 }}
@@ -98,32 +98,32 @@
       >
         <div class="flex items-center justify-start mb-4">
           <a
-            class="outline-none font-alegreya dark:text-primary-300 text-2xl font-medium flex-none flex items-center justify-center hover:underline focus:underline"
+            class="outline-none font-alegreya text-primary-700 dark:text-primary-300 text-2xl font-medium flex-none flex items-center justify-center hover:underline focus:underline"
             href="https://app.learnwithparrot.com"
             target="_blank"
           >
             <span class="text-current">Learn with Parrot</span>
-            <i class="lab la-earlybirds dark:text-primary-300 text-[30px]" />
+            <i class="lab la-earlybirds text-primary-700 dark:text-primary-300 text-[30px]" />
           </a>
         </div>
         {#if !Object.keys(userSettings).length}
           <LoginPrompt on:click={handleLoginClick} />
         {:else}
-          <div class="flex items-center justify-between dark:text-primary-300">
-            <span class="dark:text-primary-300">Theme </span>
+          <div class="flex items-center justify-between text-primary-700 dark:text-primary-300">
+            <span class="text-primary-700 dark:text-primary-300">Theme </span>
             <Toggle bind:checked={$userTheme} let:labelFor>
               <label for={labelFor} class="inline" slot="left">
-                <i class="las text-[25px] text-current la-moon" />
+                <i class="las text-[25px] text-primary-700 dark:text-primary-300 la-moon" />
               </label>
               <label for={labelFor} class="inline" slot="right">
-                <i class="las text-[25px] text-current la-sun" />
+                <i class="las text-[25px] text-primary-700 dark:text-primary-300 la-sun" />
               </label>
             </Toggle>
           </div>
           <div class="flex items-center justify-between mt-4">
-            <span class="dark:text-primary-300">I speak </span>
+            <span class="text-primary-700 dark:text-primary-300">I speak </span>
             <select
-              class="block bg-transparent dark:text-primary-300 text-justify flex outline-none items-center px-4 py-2 text-sm hover:bg-primary-100 hover:text-primary-900 focus:bg-primary-100 focus:text-primary-900 duration-300 rounded-sm"
+              class="block bg-transparent text-primary-700 dark:text-primary-300 text-justify flex outline-none items-center px-4 py-2 text-sm hover:bg-primary-100 hover:text-primary-900 focus:bg-primary-100 focus:text-primary-900 duration-300 rounded-sm"
               bind:value={$nativeLanguage}
             >
               {#each supportedLanguages as language}
@@ -134,9 +134,9 @@
             </select>
           </div>
           <div class="flex items-center justify-between mt-4">
-            <span class="dark:text-primary-300">I want to learn&nbsp;</span>
+            <span class="text-primary-700 dark:text-primary-300">I want to learn&nbsp;</span>
             <select
-              class="block bg-transparent dark:text-primary-300 text-justify flex outline-none items-center px-4 py-2 text-sm hover:bg-primary-100 hover:text-primary-900 focus:bg-primary-100 focus:text-primary-900 duration-300 rounded-sm"
+              class="block bg-transparent text-primary-700 dark:text-primary-300 text-justify flex outline-none items-center px-4 py-2 text-sm hover:bg-primary-100 hover:text-primary-900 focus:bg-primary-100 focus:text-primary-900 duration-300 rounded-sm"
               bind:value={$desiredLanguage}
             >
               {#each supportedLanguages as language}

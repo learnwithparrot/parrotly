@@ -10,12 +10,12 @@
     <div class="flex flex-col items-start justify-stretch mt-2">
       <div class="flex justify-between w-full">
         <span
-          class="dark:text-primary-300"
+          class="text-primary-700 dark:text-primary-300"
           title="The maximum number of times we will show you the word and it's translation."
         >
           Number of word displays:
         </span>
-        <span class="dark:text-primary-300">
+        <span class="text-primary-700 dark:text-primary-300">
           {settings.maximumRepetition} Displays
         </span>
       </div>
@@ -31,12 +31,12 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
-          class="dark:text-primary-300"
+          class="text-primary-700 dark:text-primary-300"
           title="The maximum number of times we will show you an mcq type question for a word."
         >
           Number of MCQ displays:
         </span>
-        <span class="dark:text-primary-300"
+        <span class="text-primary-700 dark:text-primary-300"
           >{settings.maximumMCQs} Displays</span
         >
       </div>
@@ -52,12 +52,12 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
-          class="dark:text-primary-300"
+          class="text-primary-700 dark:text-primary-300"
           title="The maximum number of times we will show you a quiz type question for a word."
         >
           Number of quiz displays:
         </span>
-        <span class="dark:text-primary-300"
+        <span class="text-primary-700 dark:text-primary-300"
           >{settings.maximumQuizzes} Displays</span
         >
       </div>
@@ -74,12 +74,12 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
-          class="dark:text-primary-300"
+          class="text-primary-700 dark:text-primary-300"
           title="Interval between 2 consecutive words shown."
         >
           Interval between cards:
         </span>
-        <span class="dark:text-primary-300"
+        <span class="text-primary-700 dark:text-primary-300"
           >{settings.showCardIntervalDurationMinutes} Minutes</span
         >
       </div>
@@ -95,12 +95,12 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
-          class="dark:text-primary-300"
+          class="text-primary-700 dark:text-primary-300"
           title="The maximum number of times we will show you a quiz type question for a word."
         >
           Duration show card:
         </span>
-        <span class="dark:text-primary-300"
+        <span class="text-primary-700 dark:text-primary-300"
           >{settings.showCardDurationSeconds} Seconds</span
         >
       </div>
@@ -116,12 +116,12 @@
     <div class="flex flex-col items-start justify-stretch mt-6">
       <div class="flex justify-between w-full">
         <span
-          class="dark:text-primary-300"
+          class="text-primary-700 dark:text-primary-300"
           title="The maximum number of times we will show you a quiz type question for a word."
         >
           Duration show MCQS:
         </span>
-        <span class="dark:text-primary-300"
+        <span class="text-primary-700 dark:text-primary-300"
           >{settings.showMCQDurationSeconds} Seconds</span
         >
       </div>
@@ -136,7 +136,7 @@
     </div>
     <div class="flex justify-between items-start justify-stretch mt-2">
       <span
-        class="dark:text-primary-300"
+        class="text-primary-700 dark:text-primary-300"
         title="Show browser notification when the browser is not the active window."
       >
         Enable notifications:
@@ -148,7 +148,9 @@
         let:checked
       >
         <slot name="left">
-          {#if checked} ON {:else} OFF {/if}
+          <span class="dark:text-primary-300 text-primary-700">
+            {#if checked} ON {:else} OFF {/if}
+          </span>
         </slot>
       </Toggle>
     </div>

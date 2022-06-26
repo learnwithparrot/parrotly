@@ -28,9 +28,11 @@ export interface IUserLanguageSettings {
   languageLearned?: Language;
 }
 
+export type AppTheme = 'light' | 'dark';
+
 export interface IUserSettings<T extends Date | Timestamp = Timestamp> extends IUserLanguageSettings, IUserReptitionListSettings, IUserAutoTranslationSettings {
   id: string,
-  theme: 'light' | 'dark',
+  theme: AppTheme,
   forbiddenUrls: string[],
   disableUntil?: {
     showWord: T,

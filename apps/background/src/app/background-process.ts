@@ -1,5 +1,5 @@
-import { switchMap, mapTo, first } from 'rxjs/operators';
-import { timer, Observable, NEVER } from 'rxjs';
+import { switchMap, mapTo, first, delay, tap } from 'rxjs/operators';
+import { timer, Observable, NEVER, Subject, of } from 'rxjs';
 import { userAndSettings$, categoriesAndLists$, incrementWordDisplayCount } from './firebase';
 import type { IRepetitionList, IRepetitionWord, IUserSettings, MESSAGE_SHOW_WORD } from '@parrotly.io/types';
 import { setStorageItem, getStorageItem } from './storage';
@@ -8,7 +8,16 @@ import browser from 'webextension-polyfill'
 import { EXTENSION_MESSAGES } from '@parrotly.io/constants';
 import { NOTIFICATION_TITLE } from '@parrotly.io/env';
 
-export let notificationTimeOut;
+type Notification = {
+  word: IRepetitionWord,
+  category: IRepetitionList
+};
+export const triggerNotification = new Subject<Notification>();
+const SIX_SECONDS = 6000;
+const triggerNotification$ = triggerNotification.pipe(
+  tap(notif => console.log({ notif })),
+  switchMap(notif => notif ? timer(SIX_SECONDS).pipe(mapTo(notif)) : NEVER)
+)
 
 /**
  * This is the background process that collects the user/settings and runs determination of word/showCard
@@ -20,6 +29,7 @@ export function initBackgroundProcess() {
       ([, settings]) => {
         if (!settings) NEVER as Observable<IUserSettings>
         const period = (settings.showCardDurationSeconds + (settings.showCardIntervalDurationMinutes * 60)) * 1000;
+        console.log({ settings })
         const delayShowWord = settings.disableUntil?.showWord;
         const initialDelay: Date | number = delayShowWord ? delayShowWord.toDate() : period;
         return timer(initialDelay, period).pipe(
@@ -29,6 +39,10 @@ export function initBackgroundProcess() {
     )
   )
     .subscribe(triggerShowCard)
+
+  triggerNotification$.subscribe(
+    ({ word, category }) => showNotification(word, category)
+  );
 }
 
 /**
@@ -79,13 +93,11 @@ async function triggerShowCard(settings: IUserSettings) {
          * -firefox: about:addons
          * -chrome: chrome://extensions
          */
+        triggerNotification.next({ word, category });
       });
-    notificationTimeOut = setTimeout(() => {
-      showNotification(word, category)
-    }, 3000);
   }
   /**Browser window isn't the active window */
-  else showNotification(word, category)
+  else triggerNotification.next({ word, category })
 }
 
 async function showNotification(word: IRepetitionWord, category: IRepetitionList) {

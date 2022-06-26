@@ -79,7 +79,7 @@ export function translate(from: Language, to: Language, text, after) {
 }
 
 
-export async function getCurrentTheme() {
+export async function isDarkTheme() {
   return userAndSettings$.pipe(
     map(([, settings]) => settings.theme),
     filter(theme => Boolean(theme)),

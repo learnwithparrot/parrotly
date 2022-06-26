@@ -33,6 +33,14 @@
       case EXTENSION_MESSAGES.TRANSLATION_COMPLETE:
         translation = request.text;
         break;
+      case EXTENSION_MESSAGES.ON_AUTH_CREDENTIALS:
+        if (!isModalVisible) return;
+        userSignedIn = true;
+        translateText();
+        break;
+      case EXTENSION_MESSAGES.ON_SIGN_OUT:
+        userSignedIn = false;
+        break;
     }
   });
 
@@ -76,16 +84,13 @@
         <AddToRepetitionList
           on:close={toggleModal}
           {translation}
-          on:addToRepetitionList={(event) =>
-            addToRepetitionList(event.detail.text, event.detail.translation)}
-          on:playWord={(event) => playText(event.detail.translation)}
+          on:addToRepetitionList={({ detail }) =>
+            addToRepetitionList(detail.text, detail.translation)}
+          on:playWord={({ detail: { translation } }) => playText(translation)}
         />
       {:else}
-        <LoginPrompt on:click={toggleModal} />
+        <LoginPrompt />
       {/if}
     </FloatingPanel>
   {/if}
 </template>
-
-<style lang="scss">
-</style>

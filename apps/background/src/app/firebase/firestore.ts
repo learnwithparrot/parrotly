@@ -86,10 +86,8 @@ export const saveToRepetitionList = async (word: string, translation: string, ca
     const wordCount = increment(1)
     if (wordsSample.length > 9) {
       wordsSample.splice(0, 1)
-      wordsSample.push({ word, translation })
-    } else {
-      wordsSample.push({ word, translation })
     }
+    wordsSample.push({ word, translation })
     const data: IRepetitionWord = {
       word, translation,
       countMCQs: {
@@ -100,8 +98,6 @@ export const saveToRepetitionList = async (word: string, translation: string, ca
       },
       countShows: 0,
       isExpression: false,
-      // languageTranslation: 'de',
-      // languageWord: 'en',
     };
     transaction.update(repetitionListRef, { wordCount, wordsSample })
     transaction.set(repetitionWordRef, data)

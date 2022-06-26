@@ -1,12 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import { Button } from '@parrotly.io/ui';
-
-  const dispatch = createEventDispatcher();
-
-  function handleClick() {
-    dispatch('click');
-  }
 </script>
 
 <template>
@@ -15,7 +8,7 @@
     <span class="text-current text-center"> Please login to save your settings and words. </span>
     <a
       href="https://app.learnwithparrot.com/auth/signout"
-      on:click={handleClick}
+      on:click
       target="_blank"
       style="display:contents"
     >

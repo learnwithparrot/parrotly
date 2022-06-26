@@ -35,13 +35,13 @@
       <input
         type="text"
         bind:value={selected_words}
-        class="flex-auto dark:bg-primary-700 bg-opacity-95 dark:hover:bg-opacity-55 dark:focus:bg-opacity-55 bg-primary-100 hover:bg-primary-200 focus:bg-primary-200 dark:hover:bg-primary-800 dark:focus:bg-primary-800 font-roboto text-base px-2 transition duration-300 py-2 outline-none capitalize focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2 text-current"
+        class="flex-auto dark:bg-primary-700 bg-opacity-95 dark:hover:bg-opacity-55 dark:focus:bg-opacity-55 bg-primary-100 hover:bg-primary-200 focus:bg-primary-200 dark:hover:bg-primary-800 dark:focus:bg-primary-800 font-roboto text-base px-2 transition duration-300 py-2 outline-none capitalize focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2 dark:text-current text-primary-700"
       />
 
       <input
         type="text"
         bind:value={translation}
-        class="flex-auto dark:bg-primary-700 bg-opacity-95 dark:hover:bg-opacity-55 dark:focus:bg-opacity-55 bg-primary-100 hover:bg-primary-200 focus:bg-primary-200 dark:hover:bg-primary-800 dark:focus:bg-primary-800 font-roboto text-base px-2 transition duration-300 py-2 capitalize outline-none focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2 text-current"
+        class="flex-auto dark:bg-primary-700 bg-opacity-95 dark:hover:bg-opacity-55 dark:focus:bg-opacity-55 bg-primary-100 hover:bg-primary-200 focus:bg-primary-200 dark:hover:bg-primary-800 dark:focus:bg-primary-800 font-roboto text-base px-2 transition duration-300 py-2 capitalize outline-none focus:bg-gray-200 hover:bg-gray-200 rounded-sm w-full mb-2 dark:text-current text-primary-700"
       />
     </div>
     <div class="flex space-x-3 font-medium">

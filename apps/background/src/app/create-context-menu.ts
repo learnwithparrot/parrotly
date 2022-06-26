@@ -1,7 +1,7 @@
 import browser from 'webextension-polyfill';
 import { EXTENSION_MESSAGES } from "@parrotly.io/constants"
-import { categories$, userAndSettings$ } from './firebase'
-import { first, timeoutWith } from 'rxjs/operators';
+import { authWithDelay$, categories$ } from './firebase'
+import { first, timeoutWith, toArray } from 'rxjs/operators';
 import { IRepetitionList } from '@parrotly.io/types';
 import { of } from 'rxjs';
 
@@ -26,17 +26,14 @@ browser.contextMenus.create({
       timeoutWith(100, of(undefined as IRepetitionList[])),
       first()
     ).toPromise();
-    const [, settings] = await userAndSettings$.pipe(
-      first()
-    ).toPromise();
-    const userSignedIn = Boolean(categories) || !settings?.languageLearned || !settings?.languageSpoken;
-    browser.tabs.sendMessage(
-      tabs[0].id,
-      {
-        type: EXTENSION_MESSAGES.SHOW_ADD_WORD_TO_SELECTION_LIST,
-        categories, userSignedIn,
-      }
-    );
+    const user = await authWithDelay$.pipe(first()).toPromise();
+    console.log({user})
+    const userSignedIn = Boolean(user);
+    const data = {
+      type: EXTENSION_MESSAGES.SHOW_ADD_WORD_TO_SELECTION_LIST,
+      categories, userSignedIn,
+    };
+    browser.tabs.sendMessage(tabs[0].id, data);
   }
 });
 

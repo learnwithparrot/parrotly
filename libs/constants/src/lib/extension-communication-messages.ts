@@ -19,6 +19,9 @@ const EXTENSION_MESSAGES = {
   UPDATE_USER_SETTINGS: 'update_user_settings',
 } as const
 
+type ExtensionMessage = typeof EXTENSION_MESSAGES[keyof typeof EXTENSION_MESSAGES];
+
 export {
-  EXTENSION_MESSAGES
+  EXTENSION_MESSAGES,
+  ExtensionMessage
 }
