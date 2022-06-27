@@ -1,6 +1,5 @@
 <script>
   import {
-    ShowWordcontainer,
     MCQCard,
   } from '@parrotly.io/extension-components';
 </script>

@@ -29,33 +29,28 @@
     return array.sort(() => Math.random() - 0.5);
   }
 
-  function onKnowWord() {
-    dispatch('knowWord');
-  }
-
   function onOptionClicked(option: string) {
     if (selectedOption) return;
     selectedOption = option;
     if (selectedOption === translation) {
       dispatch('rightAnswer');
-      setTimeout(onClose, 1000);
+      const VIEW_RIGHT_ANSWER_DURATION= 1000;
+      setTimeout(onClose,   VIEW_RIGHT_ANSWER_DURATION);
     } else {
       dispatch('wrongAnswer');
-      setTimeout(onClose, 2000);
+      const VIEW_WRONG_ANSWER_DURATION = 2000;
+      setTimeout(onClose, VIEW_WRONG_ANSWER_DURATION);
     }
   }
 
-  function handleDisable(event){
-    dispatch('disable', {durationHours: event.details.durationHours});
-  }
 </script>
 
 <template>
   <ShowWordcontainer
     {showWordDurationSeconds}
-    on:close{onClose}
-    on:knowWord={onKnowWord}
-    on:disable={handleDisable}
+    on:close={onClose}
+    on:knowWord
+    on:disable
   >
     <div
       class="flex-1 font-roboto justify-center items-center flex flex-col dark:text-primary-300"

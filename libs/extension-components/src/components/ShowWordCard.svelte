@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { slide } from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
-  import { timer, merge, Subject } from 'rxjs';
-  import { take, map, toArray } from 'rxjs/operators';
   import type { Language } from '@parrotly.io/constants';
   import { Button } from '@parrotly.io/ui';
   import { ShowWordcontainer } from '..';
@@ -21,29 +18,18 @@
     url = `https://www.google.com/search?q=how+to+use+%22${translation}%22+in+${languageTo}`;
   }
 
-  function onClose() {
-    dispatch('close');
-  }
-
   function onPlayWord() {
     dispatch('playWord');
   }
 
-  function onKnowWord() {
-    dispatch('knowWord');
-  }
-
-  function handleDisable(event: CustomEvent) {
-    dispatch('disable', { durationHours: event.detail.durationHours });
-  }
 </script>
 
 <template>
   <ShowWordcontainer
     {showWordDurationSeconds}
-    on:close={onClose}
-    on:knowWord={onKnowWord}
-    on:disable={handleDisable}
+    on:disable
+    on:close
+    on:knowWord
   >
     <div
       class="flex-1 font-roboto justify-center items-center flex sm:flex-col dark:text-primary-300"

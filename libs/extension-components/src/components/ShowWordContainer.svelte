@@ -20,7 +20,7 @@
   const TIME_PADDING = 2;
   const durationPlusAnimationDuration = showWordDurationSeconds + TIME_PADDING;
   const countDown$ = timer(0, 1000).pipe(
-    take(durationPlusAnimationDuration + 1),
+    take(durationPlusAnimationDuration + TIME_PADDING),
     map((count) => durationPlusAnimationDuration - count)
   );
   const closeSubject = new Subject<null>();
@@ -73,20 +73,17 @@
         items={disableOptions}
         on:select={handleSelect}
       >
-        <!-- This is not an error ref:https://svelte.dev/tutorial/slot-props -->
-        <Button
-          let:toggleVisible
-          let:active
-          on:click={toggleVisible}
-          iconSuffix=" ml-1 la-angle-down"
-          slot="trigger"
-          className="mr-2"
-        >
-          {active?.value
-            ? `Pause showing words ( ${active.label} )`
-            : 'Pause showing words'}
-        </Button>
-
+        <svelte:fragment slot="trigger" let:toggleVisible let:active>
+          <Button
+            on:click={toggleVisible}
+            iconSuffix=" ml-1 la-angle-down"
+            className="mr-2"
+          >
+            {active?.value
+              ? `Pause showing words ( ${active.label} )`
+              : 'Pause showing words'}
+          </Button>
+        </svelte:fragment>
         <span
           slot="item"
           let:classActive
@@ -105,7 +102,7 @@
       </Dropdown>
       <Button on:click={onKnowWord} text="I know this word" color="success" />
       <span class="flex-1" />
-      <slot name="actions"><!-- optional fallback --></slot>
+      <slot name="actions" />
       <Button
         on:click={onCloseClicked}
         color="accent"
