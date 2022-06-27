@@ -1,6 +1,6 @@
 <script lang="ts">
   import { debounceTime, map, startWith } from 'rxjs/operators';
-  import { combineLatest,  Subject } from 'rxjs';
+  import { combineLatest, Subject } from 'rxjs';
   import { onDestroy } from 'svelte';
   import { RepetitionWord, Modal } from '../../components';
   import { RepetitionWordService } from './../../services';
@@ -14,11 +14,10 @@
   const unsubscribe = new Subject<boolean>();
   const search = new SvelteSubject<string>('');
 
-
   const params = useParams();
 
   const path$ = storeToObservable(params).pipe(
-    map((_) => `repetition_lists/${_.id}_default/list`)
+    map((route) => `repetition_lists/${route.id}_default/list`)
   );
 
   const service = new RepetitionWordService($path$);
@@ -40,7 +39,7 @@
 
   function deleteWord(word: IRepetitionWord) {
     service.delete(word.id);
-    toDelete =null;
+    toDelete = null;
   }
 
   function handleDelete(word: IRepetitionWord) {
@@ -55,21 +54,27 @@
 </script>
 
 <template>
-  <section class="flex flex-col flex-1 pt-1 justify-start gap-4 w-full">
-    <header class="flex justify-between w-full">
-      <h1 class="font-alegreya text-2xl font-semibold dark:text-primary-300">
-        Repetition List Default
-      </h1>
-      <input
-        type="text"
-        placeholder="search"
-        bind:value={$search}
-        class="outline-none bg-primary-600 min-w-[200px] bg-opacity-30 p-2"
-      />
-    </header>
+  <section class="flex flex-col flex-1 justify-start gap-4 w-full">
     {#if $words$.length}
-      {#if $filteredWords$.length}
-        <ul class="word_list">
+      <ul class="word_list">
+        <li class="full_row header-wrapper">
+          <header
+            class="flex sm:flex-row flex-col justify-between w-full dark:bg-primary-800 bg-primary-100 pb-4"
+          >
+            <h1
+              class="font-alegreya text-2xl font-semibold dark:text-primary-300"
+            >
+              Repetition List Default
+            </h1>
+            <input
+              type="text"
+              placeholder="search"
+              bind:value={$search}
+              class="outline-none bg-primary-600 min-w-[200px] bg-opacity-30 p-2"
+            />
+          </header>
+        </li>
+        {#if $filteredWords$.length}
           {#each $filteredWords$ as word}
             <RepetitionWord
               {word}
@@ -77,11 +82,13 @@
               on:view={(_) => handleView(_.detail)}
             />
           {/each}
-        </ul>
-      {:else}
-        <span>No results found for search keyword: {$search}</span><br />
-        <span>Please try a different keyword</span>
-      {/if}
+        {:else}
+          <span class="full_row"
+            >No results found for search keyword: {$search}</span
+          ><br />
+          <span class="full_row">Please try a different keyword</span>
+        {/if}
+      </ul>
     {:else}
       <span>There are no items in your list.</span> <br />
       <div>
@@ -179,5 +186,19 @@
     grid-template-columns: repeat(auto-fit, 300px);
     grid-gap: 16px;
     grid-auto-rows: min-content;
+    justify-content: center;
+  }
+  .full_row {
+    grid-column: 1/-1;
+  }
+
+  li.header-wrapper {
+    position: sticky;
+    top: 0;
+  }
+
+  section {
+    max-height: calc(100vh - 70px);
+    overflow: auto;
   }
 </style>
