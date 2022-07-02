@@ -36,9 +36,9 @@
       class:md:flex-col={(word + translation).length > 25}
       slot="main-content"
     >
-      <span class=" text-3xl text-current">{word}</span>
-      <span class=" text-3xl text-current">-</span>
-      <span class=" text-3xl text-current">{translation}</span>
+      <span class="text-3xl text-current">{word}</span>
+      <span class="text-3xl text-current">-</span>
+      <span class="text-3xl text-current">{translation}</span>
     </div>
 
     <svelte:fragment slot="actions">
@@ -49,7 +49,7 @@
       />
       <a href={url} target="_blank" class="btn btn--flat btn--default mx-4">
         <span class="text-current"> How to use? </span>
-        <i class="las la-long-arrow-alt-up text-[30] rotate-45 text-current" />
+        <i class="las la-long-arrow-alt-up text-[30px] rotate-45 text-current" />
       </a>
     </svelte:fragment>
   </ShowWordcontainer>
